@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">WPI_CSA</string>
+
+    <string name="life_tab">Life</string>
+    <string name="sg_tab">Survival Guide</string>
+    <string name="setting_tab">Setting</string>
+    <string name="title_activity_life">Life</string>
 </resources>

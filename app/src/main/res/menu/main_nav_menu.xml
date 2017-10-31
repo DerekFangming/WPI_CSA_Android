@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_life"
+        android:enabled="true"
+        android:icon="@drawable/life_tab"
+        android:title="@string/life_tab"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_sg"
+        android:enabled="true"
+        android:icon="@drawable/sg_tab"
+        android:title="@string/sg_tab"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_setting"
+        android:enabled="true"
+        android:icon="@drawable/setting_tab"
+        android:title="@string/setting_tab"
+        app:showAsAction="ifRoom" />
+</menu>
