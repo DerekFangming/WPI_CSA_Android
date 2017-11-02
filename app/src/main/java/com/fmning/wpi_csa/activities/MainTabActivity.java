@@ -4,12 +4,18 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.fragments.LifeFragment;
 import com.fmning.wpi_csa.helpers.BottomBarAdapter;
 import com.fmning.wpi_csa.helpers.NoSwipePager;
+import com.fmning.wpi_csa.http.OnJsonCompleteListener;
+import com.fmning.wpi_csa.http.WCService;
+import com.fmning.wpi_csa.http.WCUtils;
+
+import org.json.JSONObject;
 
 public class MainTabActivity extends AppCompatActivity {
 
@@ -57,6 +63,26 @@ public class MainTabActivity extends AppCompatActivity {
 
                 }
                 return true;
+            }
+        });
+
+        WCUtils.initSetup(this);
+
+        WCService.checkSoftwareVersion("1.03.001", new OnJsonCompleteListener() {
+            @Override
+            public void onJsonComplete(JSONObject jsonObject) {
+                try{
+                    Log.d("haha", "Got responds 22 " + jsonObject.getString("status"));
+                } catch(Exception e){}
+            }
+        });
+
+        WCService.checkSoftwareVersion("1.00.001", new OnJsonCompleteListener() {
+            @Override
+            public void onJsonComplete(JSONObject jsonObject) {
+                try{
+                    Log.d("haha", "Got responds " + jsonObject.getString("status"));
+                } catch(Exception e){}
             }
         });
     }

@@ -12,4 +12,9 @@
         android:layout_height="match_parent"
         android:text="@string/hello_blank_fragment" />
 
+    <ImageView
+        android:id="@+id/testImg"
+        android:layout_width="100px"
+        android:layout_height="100px" />
+
 </FrameLayout>

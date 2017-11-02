@@ -6,16 +6,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fmning.wpi_csa.R;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
+import com.fmning.wpi_csa.http.WCUtils;
 
-import org.json.JSONObject;
-
-import cz.msebera.android.httpclient.Header;
+//import com.loopj.android.http.
 
 
 public class LifeFragment extends Fragment {
@@ -58,22 +55,41 @@ public class LifeFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
     }*/
+    ImageView iv;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_life, container, false);
+        iv = (ImageView) view.findViewById(R.id.testImg);
         TextView tv = (TextView) view.findViewById(R.id.helloText);
         tv.setText(this.mParam1);
         tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("haha", "mmmmmmm");
-                AsyncHttpClient client = new AsyncHttpClient();
-                RequestParams params = new RequestParams();
-                params.put("version", "1.00.001");
-                client.setResponseTimeout(5);
-                client.get("http://wc.fmning.com/get_version_info", params, new JsonHttpResponseHandler(){
+                Log.d("haha", "mmmmmmm" + (WCUtils.isNetworkAvailable() ? "available" : "no internet"));
+//                //iv.setImageResource(R.drawable.life_tab);
+//                AsyncHttpClient client = new AsyncHttpClient();
+//                RequestParams params = new RequestParams();
+//                params.put("version", "1.00.001");
+//                params.put("id", 1);
+//
+//                client.get("https://wcservice.fmning.com/get_image", params, new AsyncHttpResponseHandler() {
+//                    @Override
+//                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+//                        Bitmap image = BitmapFactory.decodeByteArray(responseBody, 0, responseBody.length);
+//                        iv.setImageBitmap(image);
+//                    }
+//
+//                    @Override
+//                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+//                        Log.d("haha", "111mmmmmmm");
+//                    }
+//                });
+            };
+
+                //client.get("", params, new )
+                /*client.get("http://wc.fmning.com/get_version_info", params, new JsonHttpResponseHandler(){
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         // Root JSON in response is an dictionary i.e { "data : [ ... ] }
@@ -88,9 +104,10 @@ public class LifeFragment extends Fragment {
                         // called when response HTTP status is "4XX" (eg. 401, 403, 404)
                         Log.d("haha", res);
                     }
-                });
-            }
+                });*/
+
         });
+
         return view;
     }
 
