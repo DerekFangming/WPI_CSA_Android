@@ -9,8 +9,9 @@ import android.view.MenuItem;
 
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.fragments.LifeFragment;
-import com.fmning.wpi_csa.helpers.BottomBarAdapter;
-import com.fmning.wpi_csa.helpers.NoSwipePager;
+import com.fmning.wpi_csa.fragments.SGFragment;
+import com.fmning.wpi_csa.adapters.BottomBarAdapter;
+import com.fmning.wpi_csa.adapters.NoSwipePager;
 import com.fmning.wpi_csa.http.OnJsonCompleteListener;
 import com.fmning.wpi_csa.http.WCService;
 import com.fmning.wpi_csa.http.WCUtils;
@@ -27,7 +28,7 @@ public class MainTabActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_tab);
 
-        viewPager = (NoSwipePager) findViewById(R.id.viewpager);
+        viewPager = (NoSwipePager) findViewById(R.id.mainTabPager);
         viewPager.setPagingEnabled(false);
         pagerAdapter = new BottomBarAdapter(getSupportFragmentManager());
 
@@ -35,11 +36,11 @@ public class MainTabActivity extends AppCompatActivity {
 
         pagerAdapter.addFragments(fragment);
 
-        LifeFragment fragment1 = new LifeFragment().newInstance("hahahah1", "jajajaj");
+        SGFragment fragment1 = new SGFragment();
 
         pagerAdapter.addFragments(fragment1);
 
-        LifeFragment fragment2 = new LifeFragment().newInstance("hahahah2", "jajajaj");
+        SGFragment fragment2 = new SGFragment();
 
         pagerAdapter.addFragments(fragment2);
 
@@ -52,13 +53,13 @@ public class MainTabActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_life:
-                        viewPager.setCurrentItem(0);
+                        viewPager.setCurrentItem(0, false);
                         break;
                     case R.id.action_sg:
-                        viewPager.setCurrentItem(1);
+                        viewPager.setCurrentItem(1, false);
                         break;
                     case R.id.action_setting:
-                        viewPager.setCurrentItem(2);
+                        viewPager.setCurrentItem(2, false);
                         break;
 
                 }
@@ -77,13 +78,8 @@ public class MainTabActivity extends AppCompatActivity {
             }
         });
 
-        WCService.checkSoftwareVersion("1.00.001", new OnJsonCompleteListener() {
-            @Override
-            public void onJsonComplete(JSONObject jsonObject) {
-                try{
-                    Log.d("haha", "Got responds " + jsonObject.getString("status"));
-                } catch(Exception e){}
-            }
-        });
+
+
     }
+
 }

@@ -1,4 +1,4 @@
-package com.fmning.wpi_csa.helpers;
+package com.fmning.wpi_csa.adapters;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;

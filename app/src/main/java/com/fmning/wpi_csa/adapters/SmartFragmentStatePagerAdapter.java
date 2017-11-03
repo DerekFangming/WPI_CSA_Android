@@ -1,4 +1,4 @@
-package com.fmning.wpi_csa.helpers;
+package com.fmning.wpi_csa.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

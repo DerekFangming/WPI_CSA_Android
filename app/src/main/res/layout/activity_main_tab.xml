@@ -6,13 +6,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.fmning.wpi_csa.helpers.NoSwipePager
-        android:id="@+id/viewpager"
+    <com.fmning.wpi_csa.adapters.NoSwipePager
+        android:id="@+id/mainTabPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottom_navigation"
+        android:layout_above="@+id/mainTabSeparator"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:background="#EFEFEF"/>
+
+    <View
+        android:id="@+id/mainTabSeparator"
+        android:layout_width="match_parent"
+        android:layout_above="@+id/bottom_navigation"
+        android:layout_height="1dp"
+        android:background="@color/gray"/>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation"

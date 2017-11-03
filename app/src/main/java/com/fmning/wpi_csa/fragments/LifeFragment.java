@@ -1,16 +1,21 @@
 package com.fmning.wpi_csa.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.fmning.wpi_csa.R;
-import com.fmning.wpi_csa.http.WCUtils;
+import com.fmning.wpi_csa.adapters.LifeListAdapter;
+import com.fmning.wpi_csa.http.objects.WCFeed;
+
+import java.util.ArrayList;
 
 //import com.loopj.android.http.
 
@@ -60,55 +65,24 @@ public class LifeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_life, container, false);
-        iv = (ImageView) view.findViewById(R.id.testImg);
-        TextView tv = (TextView) view.findViewById(R.id.helloText);
-        tv.setText(this.mParam1);
-        tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("haha", "mmmmmmm" + (WCUtils.isNetworkAvailable() ? "available" : "no internet"));
-//                //iv.setImageResource(R.drawable.life_tab);
-//                AsyncHttpClient client = new AsyncHttpClient();
-//                RequestParams params = new RequestParams();
-//                params.put("version", "1.00.001");
-//                params.put("id", 1);
-//
-//                client.get("https://wcservice.fmning.com/get_image", params, new AsyncHttpResponseHandler() {
-//                    @Override
-//                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-//                        Bitmap image = BitmapFactory.decodeByteArray(responseBody, 0, responseBody.length);
-//                        iv.setImageBitmap(image);
-//                    }
-//
-//                    @Override
-//                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-//                        Log.d("haha", "111mmmmmmm");
-//                    }
-//                });
-            };
+        RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_life, container, false);
 
-                //client.get("", params, new )
-                /*client.get("http://wc.fmning.com/get_version_info", params, new JsonHttpResponseHandler(){
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        // Root JSON in response is an dictionary i.e { "data : [ ... ] }
-                        // Handle resulting parsed JSON response here
-                        Log.d("haha", response.toString());
-                    }
+        Context context = recyclerView.getContext();
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
 
+        //adding data to arraylist
+        ArrayList feedItemList = new ArrayList<WCFeed>();
+        for (int i = 0; i < 20; i++) {
+            WCFeed getterSetter = new WCFeed();
+            feedItemList.add(getterSetter);
+        }
 
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
-                        // called when response HTTP status is "4XX" (eg. 401, 403, 404)
-                        Log.d("haha", res);
-                    }
-                });*/
 
-        });
+        recyclerView.setAdapter(new LifeListAdapter(context, feedItemList));
 
-        return view;
+        return recyclerView;
     }
 
 
