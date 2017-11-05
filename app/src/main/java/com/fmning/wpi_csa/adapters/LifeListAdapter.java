@@ -23,12 +23,9 @@ import java.util.List;
 
 public class LifeListAdapter extends RecyclerView.Adapter<LifeListAdapter.CustomViewHolder> {
 
-    private List<WCFeed> feedItemList;
-    private Context mContext;
-
-    public LifeListAdapter(Context context, ArrayList<WCFeed> feedItemList) {
-        this.feedItemList = feedItemList;
-        this.mContext = context;
+    private List<WCFeed> feedList;
+    public LifeListAdapter( ArrayList<WCFeed> feedItemList) {
+        this.feedList = feedItemList;
 
     }
 
@@ -63,21 +60,13 @@ public class LifeListAdapter extends RecyclerView.Adapter<LifeListAdapter.Custom
 
     @Override
     public void onBindViewHolder(CustomViewHolder holder, int position) {
-        WCFeed dc_list = feedItemList.get(position);
-
-        final int pos = position * 3;
-
 
     }
 
-    private void setAnimation(FrameLayout container, int position) {
-        Animation animation = AnimationUtils.loadAnimation(mContext, android.R.anim.slide_in_left);
-        container.startAnimation(animation);
-    }
 
     @Override
     public int getItemCount() {
-        return (null != feedItemList ? feedItemList.size() : 0 / 0);
+        return feedList.size() + 1;
     }
 
     class CustomViewHolder extends RecyclerView.ViewHolder {

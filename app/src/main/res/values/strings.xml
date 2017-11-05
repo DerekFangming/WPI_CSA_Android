@@ -5,7 +5,16 @@
     <string name="sg_tab">Survival Guide</string>
     <string name="setting_tab">Setting</string>
     <string name="title_activity_life">Life</string>
+    <string name="feed_loading">  Loading ...</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+    <!-- Image View content descriptions -->
+    <string name="feed_cover_desc">Feed cover</string>
+    <string name="feed_avatar_desc">Feed avatar</string>
+
+    <!-- The following are default texts -->
+    <string name="d_name">Fangming Ning</string>
+    <string name="d_feed_title">Dragon Night 2018</string>
+    <string name="d_feed_type">Event</string>
+    <string name="d_feed_date">2017/9/20 16:00:45</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

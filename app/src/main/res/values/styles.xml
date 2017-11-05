@@ -12,6 +12,10 @@
         <item name="android:layout_width">wrap_content</item>
     </style>
 
+    <style name="ProgressBarGray" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/darkGray</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
