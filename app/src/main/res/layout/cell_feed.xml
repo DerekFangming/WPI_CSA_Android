@@ -15,6 +15,7 @@
         android:contentDescription="@string/feed_cover_desc"/>
 
     <TextView
+        android:id="@+id/feedTitle"
         android:layout_width="match_parent"
         android:layout_height="28dp"
         android:text="@string/d_feed_title"

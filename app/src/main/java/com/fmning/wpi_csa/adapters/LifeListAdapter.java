@@ -32,10 +32,10 @@ public class LifeListAdapter extends RecyclerView.Adapter<LifeListAdapter.Custom
     @Override
     public int getItemViewType(int position) {
 
-        if (position % 3 == 0) {
-            return 1;
-        } else {
+        if (position == feedList.size()) {
             return 2;
+        } else {
+            return 1;
         }
     }
 
@@ -60,7 +60,11 @@ public class LifeListAdapter extends RecyclerView.Adapter<LifeListAdapter.Custom
 
     @Override
     public void onBindViewHolder(CustomViewHolder holder, int position) {
-
+        if(position < feedList.size()) {
+            View view = holder.itemView;
+            TextView tv = (TextView) view.findViewById(R.id.feedTitle);
+            tv.setText("wtf ahahahhahaha");
+        }
     }
 
 
