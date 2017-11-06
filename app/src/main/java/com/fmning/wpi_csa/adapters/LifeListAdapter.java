@@ -1,17 +1,13 @@
 package com.fmning.wpi_csa.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fmning.wpi_csa.R;
+import com.fmning.wpi_csa.fragments.LifeFragment.OnFeedClickListener;
 import com.fmning.wpi_csa.http.objects.WCFeed;
 
 import java.util.ArrayList;
@@ -24,9 +20,11 @@ import java.util.List;
 public class LifeListAdapter extends RecyclerView.Adapter<LifeListAdapter.CustomViewHolder> {
 
     private List<WCFeed> feedList;
-    public LifeListAdapter( ArrayList<WCFeed> feedItemList) {
-        this.feedList = feedItemList;
+    private OnFeedClickListener listener;
 
+    public LifeListAdapter( ArrayList<WCFeed> feedItemList,  OnFeedClickListener listener) {
+        this.feedList = feedItemList;
+        this.listener = listener;
     }
 
     @Override
@@ -59,11 +57,21 @@ public class LifeListAdapter extends RecyclerView.Adapter<LifeListAdapter.Custom
 
 
     @Override
-    public void onBindViewHolder(CustomViewHolder holder, int position) {
+    public void onBindViewHolder(CustomViewHolder holder, final int position) {
         if(position < feedList.size()) {
             View view = holder.itemView;
             TextView tv = (TextView) view.findViewById(R.id.feedTitle);
             tv.setText("wtf ahahahhahaha");
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(listener != null){
+                        listener.OnFeedClick(position);
+                    }
+                }
+            });
+
         }
     }
 
@@ -75,9 +83,7 @@ public class LifeListAdapter extends RecyclerView.Adapter<LifeListAdapter.Custom
 
     class CustomViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView imgl;
-        TextView tvspecies;
-        FrameLayout container;
+        //WCFeed feed;
 
         public CustomViewHolder(View itemView) {
             super(itemView);

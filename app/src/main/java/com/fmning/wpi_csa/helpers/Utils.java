@@ -2,6 +2,7 @@ package com.fmning.wpi_csa.helpers;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -48,6 +49,10 @@ public class Utils {
 
         loadingDialog.hide();
         loadingDialog = null;
+    }
+
+    public static void logMsg(String msg){
+        Log.d("haha", msg);
     }
 }
 

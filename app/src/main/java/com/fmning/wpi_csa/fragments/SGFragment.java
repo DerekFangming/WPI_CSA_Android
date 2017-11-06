@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.fragments.dummy.DummyContent;
 import com.fmning.wpi_csa.fragments.dummy.DummyContent.DummyItem;
+import com.fmning.wpi_csa.helpers.Utils;
 
 /**
  * A fragment representing a list of Items.
@@ -60,7 +61,12 @@ public class SGFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) view;
 
 
-        recyclerView.setAdapter(new MyParagraphRecyclerViewAdapter(DummyContent.ITEMS, null));
+        recyclerView.setAdapter(new MyParagraphRecyclerViewAdapter(DummyContent.ITEMS, new OnListFragmentInteractionListener() {
+            @Override
+            public void onListFragmentInteraction(DummyItem item) {
+                Utils.logMsg("Gets here");
+            }
+        }));
 
 
 

@@ -6,6 +6,7 @@
     <string name="setting_tab">Setting</string>
     <string name="title_activity_life">Life</string>
     <string name="feed_loading">  Loading ...</string>
+    <string name="feed_no_more">There are no more articles.</string>
 
     <!-- Image View content descriptions -->
     <string name="feed_cover_desc">Feed cover</string>
