@@ -1,6 +1,7 @@
 package com.fmning.wpi_csa.fragments;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -76,7 +77,20 @@ public class LifeFragment extends Fragment {
             }
         }, 5000);*/
 
-        CacheManager.localDirInitiateSetup(getActivity());
+        //CacheManager.localDirInitiateSetup(getActivity());
+
+        //Database.test1(getActivity());
+
+        CacheManager.getImage("", new CacheManager.OnCacheGetImageDoneListener() {
+            @Override
+            public void OnCacheGetImageDone(String error, Bitmap image) {
+                if (error.equals("")){
+                    Utils.logMsg("ok");
+                } else {
+                    Utils.logMsg(error);
+                }
+            }
+        });
 
         return recyclerView;
     }

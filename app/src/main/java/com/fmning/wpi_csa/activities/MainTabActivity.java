@@ -21,7 +21,6 @@ import org.json.JSONObject;
 public class MainTabActivity extends AppCompatActivity {
 
     private NoSwipePager viewPager;
-    private BottomBarAdapter pagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +29,7 @@ public class MainTabActivity extends AppCompatActivity {
 
         viewPager = (NoSwipePager) findViewById(R.id.mainTabPager);
         viewPager.setPagingEnabled(false);
-        pagerAdapter = new BottomBarAdapter(getSupportFragmentManager());
+        BottomBarAdapter pagerAdapter = new BottomBarAdapter(getSupportFragmentManager());
 
         LifeFragment fragment = new LifeFragment().newInstance("hahahah", "jajajaj");
 
