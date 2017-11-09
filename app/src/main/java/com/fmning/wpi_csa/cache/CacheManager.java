@@ -4,20 +4,17 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.helpers.Utils;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by fangmingning
@@ -26,6 +23,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class CacheManager {
     private static final String IMG_CACHE = "imageCache";
+    private static final String IMG_CACHE_SUB_PATH = "/imageCache/";
     //private static final String PDF_CACHE = "pdfCache";
 
     public static void localDirInitiateSetup(Context context){
@@ -68,22 +66,66 @@ public class CacheManager {
         }
     }
 
-    public static void getImage(String name, final OnCacheGetImageDoneListener listener){
-        AsyncHttpClient client = new AsyncHttpClient();
+    public static void getImage(String name, final Context context, final OnCacheGetImageDoneListener listener){
+        int id = 0;
+        if (name.startsWith("WCImage_")){
+            try {
+                id = Integer.parseInt(name.replace("WCImage_", ""));
+            } catch (NumberFormatException e) {
+                listener.OnCacheGetImageDone(context.getString(R.string.number_format_error), null);
+                return;
+            }
+
+        }else {
+            int resourceId = context.getResources().getIdentifier(
+                    FilenameUtils.removeExtension(name), "drawable", context.getPackageName());
+            Bitmap bm = BitmapFactory.decodeResource(context.getResources(), resourceId);
+            listener.OnCacheGetImageDone("", bm);
+            return;
+        }
+        String appRootPath = context.getApplicationInfo().dataDir;
+
+        /*Bitmap bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_avatar);
+
+
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(appRootPath + IMG_CACHE_SUB_PATH + "test.jpg");
+            bm.compress(Bitmap.CompressFormat.PNG, 100, out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }*/
+
+        /*AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-        params.put("id", 1000);
+        params.put("id", 1);
         client.get("https://wcservice.fmning.com/get_image", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 Bitmap image = BitmapFactory.decodeByteArray(responseBody, 0, responseBody.length);
-                listener.OnCacheGetImageDone("", image);
+                String error = "";
+                if (image == null) {
+                    error = new String(responseBody);
+                    if(error == null || error.equals("")){
+                        error = context.getString(R.string.unknown_error);
+                    }
+                }
+                listener.OnCacheGetImageDone(error, image);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                listener.OnCacheGetImageDone(responseBody.toString(), null);
+                listener.OnCacheGetImageDone(context.getString(R.string.server_down_error), null);
             }
-        });
+        });*/
     }
 
 

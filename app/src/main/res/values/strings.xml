@@ -8,6 +8,11 @@
     <string name="feed_loading">  Loading ...</string>
     <string name="feed_no_more">There are no more articles.</string>
 
+    <!--Error messages-->
+    <string name="unknown_error">Unknown error. Please contact support at admin@fmning.com</string>
+    <string name="server_down_error">The server is down. Please contact support at admin@fmning.com</string>
+    <string name="number_format_error">Malformated WCService image id</string>
+
     <!-- Image View content descriptions -->
     <string name="feed_cover_desc">Feed cover</string>
     <string name="feed_avatar_desc">Feed avatar</string>

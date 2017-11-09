@@ -4,14 +4,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.fmning.wpi_csa.R;
-import com.fmning.wpi_csa.fragments.LifeFragment;
-import com.fmning.wpi_csa.fragments.SGFragment;
 import com.fmning.wpi_csa.adapters.BottomBarAdapter;
 import com.fmning.wpi_csa.adapters.NoSwipePager;
+import com.fmning.wpi_csa.fragments.LifeFragment;
+import com.fmning.wpi_csa.fragments.SGFragment;
+import com.fmning.wpi_csa.helpers.Utils;
 import com.fmning.wpi_csa.http.OnJsonCompleteListener;
 import com.fmning.wpi_csa.http.WCService;
 import com.fmning.wpi_csa.http.WCUtils;
@@ -72,7 +72,7 @@ public class MainTabActivity extends AppCompatActivity {
             @Override
             public void onJsonComplete(JSONObject jsonObject) {
                 try{
-                    Log.d("haha", "Got responds 22 " + jsonObject.getString("status"));
+                    Utils.logMsg("Got responds 22 " + jsonObject.getString("status"));
                 } catch(Exception e){}
             }
         });

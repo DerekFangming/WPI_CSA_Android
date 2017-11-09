@@ -52,7 +52,7 @@ public class Utils {
     }
 
     public static void logMsg(String msg){
-        Log.d("haha", msg);
+        Log.d("csa.debug", msg);
     }
 }
 

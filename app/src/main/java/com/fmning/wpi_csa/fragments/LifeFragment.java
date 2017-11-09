@@ -81,7 +81,7 @@ public class LifeFragment extends Fragment {
 
         //Database.test1(getActivity());
 
-        CacheManager.getImage("", new CacheManager.OnCacheGetImageDoneListener() {
+        CacheManager.getImage("test.jpg", getActivity(), new CacheManager.OnCacheGetImageDoneListener() {
             @Override
             public void OnCacheGetImageDone(String error, Bitmap image) {
                 if (error.equals("")){
