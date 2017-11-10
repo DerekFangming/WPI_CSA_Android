@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.helpers.Utils;
+import com.fmning.wpi_csa.http.WCImageManager;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -79,30 +80,56 @@ public class CacheManager {
         }else {
             int resourceId = context.getResources().getIdentifier(
                     FilenameUtils.removeExtension(name), "drawable", context.getPackageName());
-            Bitmap bm = BitmapFactory.decodeResource(context.getResources(), resourceId);
-            listener.OnCacheGetImageDone("", bm);
+            Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resourceId);
+            listener.OnCacheGetImageDone("", bitmap);
             return;
         }
         String appRootPath = context.getApplicationInfo().dataDir;
+        final String imgFileName = appRootPath + IMG_CACHE_SUB_PATH + Integer.toString(id) + ".jpg";
+
+        if (Database.getCache(context, CacheType.IMAGE, id) != null) {
+            File imgFile = new  File(imgFileName);
+
+            if(imgFile.exists()){
+                Utils.logMsg("image from local");
+                Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                Database.imageHit(context, id);
+                listener.OnCacheGetImageDone("", bitmap);
+                return;
+            } else {
+                Database.deleteCache(context, id);
+            }
+        }
+
+        Utils.logMsg("image from server");
+
+        final int imageId = id;
+        WCImageManager.getImage(context, imageId, new WCImageManager.OnGetImageDoneListener() {
+            @Override
+            public void OnGetImageDone(String error, Bitmap image) {
+                if (error == "" ){
+                    FileOutputStream out = null;
+                    try {
+                        out = new FileOutputStream(imgFileName);
+                        image.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                        out.close();
+
+                        Database.createOrUpdateImageCache(context, imageId);
+                    } catch (Exception e) {
+                        Utils.logMsg(e.toString());
+                    }
+                    listener.OnCacheGetImageDone("", image);
+                } else {
+                    Utils.logMsg(error);
+                    listener.OnCacheGetImageDone(error, null);
+                }
+            }
+        });
 
         /*Bitmap bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_avatar);
 
 
-        FileOutputStream out = null;
-        try {
-            out = new FileOutputStream(appRootPath + IMG_CACHE_SUB_PATH + "test.jpg");
-            bm.compress(Bitmap.CompressFormat.PNG, 100, out);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }*/
+        */
 
         /*AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();

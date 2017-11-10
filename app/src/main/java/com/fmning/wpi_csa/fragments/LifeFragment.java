@@ -1,7 +1,6 @@
 package com.fmning.wpi_csa.fragments;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,7 +11,6 @@ import android.view.ViewGroup;
 
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.adapters.LifeListAdapter;
-import com.fmning.wpi_csa.cache.CacheManager;
 import com.fmning.wpi_csa.helpers.Utils;
 import com.fmning.wpi_csa.http.objects.WCFeed;
 
@@ -52,10 +50,10 @@ public class LifeFragment extends Fragment {
 
 
         feedItemList = new ArrayList<WCFeed>();
-        for (int i = 0; i < 1; i++) {
+        /*for (int i = 0; i < 1; i++) {
             WCFeed feed = new WCFeed();
             feedItemList.add(feed);
-        }
+        }*/
         adapter = new LifeListAdapter(feedItemList, new OnFeedClickListener() {
             @Override
             public void OnFeedClick(int index) {
@@ -81,7 +79,7 @@ public class LifeFragment extends Fragment {
 
         //Database.test1(getActivity());
 
-        CacheManager.getImage("test.jpg", getActivity(), new CacheManager.OnCacheGetImageDoneListener() {
+        /*CacheManager.getImage("WCImage_20", getActivity(), new CacheManager.OnCacheGetImageDoneListener() {
             @Override
             public void OnCacheGetImageDone(String error, Bitmap image) {
                 if (error.equals("")){
@@ -90,7 +88,9 @@ public class LifeFragment extends Fragment {
                     Utils.logMsg(error);
                 }
             }
-        });
+        });*/
+
+        //Database.test(getActivity());
 
         return recyclerView;
     }
