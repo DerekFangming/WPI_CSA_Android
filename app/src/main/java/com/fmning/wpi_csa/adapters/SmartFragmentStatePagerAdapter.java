@@ -7,7 +7,8 @@ import android.util.SparseArray;
 import android.view.ViewGroup;
 
 /**
- * Created by fangmingning on 10/31/17.
+ * Created by fangmingning
+ * On 10/31/17.
  */
 
 /*

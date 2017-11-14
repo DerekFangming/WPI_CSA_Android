@@ -12,11 +12,8 @@ import com.fmning.wpi_csa.adapters.NoSwipePager;
 import com.fmning.wpi_csa.fragments.LifeFragment;
 import com.fmning.wpi_csa.fragments.SGFragment;
 import com.fmning.wpi_csa.helpers.Utils;
-import com.fmning.wpi_csa.http.OnJsonCompleteListener;
 import com.fmning.wpi_csa.http.WCService;
 import com.fmning.wpi_csa.http.WCUtils;
-
-import org.json.JSONObject;
 
 public class MainTabActivity extends AppCompatActivity {
 
@@ -68,12 +65,10 @@ public class MainTabActivity extends AppCompatActivity {
 
         WCUtils.initSetup(this);
 
-        WCService.checkSoftwareVersion("1.03.001", new OnJsonCompleteListener() {
+        WCService.checkSoftwareVersion(this, "1.03.001", new WCService.OnCheckSoftwareVersionListener() {
             @Override
-            public void onJsonComplete(JSONObject jsonObject) {
-                try{
-                    Utils.logMsg("Got responds 22 " + jsonObject.getString("status"));
-                } catch(Exception e){}
+            public void OnCheckSoftwareVersionDone(String status, String title, String msg, String updates, String version) {
+                Utils.logMsg(status);
             }
         });
 

@@ -11,7 +11,11 @@
     <!--Error messages-->
     <string name="unknown_error">Unknown error. Please contact support at admin@fmning.com</string>
     <string name="server_down_error">The server is down. Please contact support at admin@fmning.com</string>
+    <string name="respond_format_error">Incorrect respond format. Please contact support at admin@fmning.com</string>
     <string name="number_format_error">Malformated WCService image id</string>
+    <!--Known server side error that needs to be handled-->
+    <string name="no_more_feed_error">There are no more feeds.</string>
+    <string name="no_event_error">The event you are looking for does not exist.</string>
 
     <!-- Image View content descriptions -->
     <string name="feed_cover_desc">Feed cover</string>

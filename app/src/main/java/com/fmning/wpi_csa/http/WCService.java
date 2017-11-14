@@ -1,31 +1,36 @@
 package com.fmning.wpi_csa.http;
 
+import android.content.Context;
+
+import com.fmning.wpi_csa.R;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
 /**
- * Created by fangmingning on 11/2/17.
+ * Created by fangmingning
+ * On 11/2/17.
  */
 
 public class WCService {
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 
-    public static void checkSoftwareVersion(String version, OnJsonCompleteListener listner){
+    @SuppressWarnings("ConstantConditions")
+    public static void checkSoftwareVersion(final Context context, String version, final OnCheckSoftwareVersionListener listener){
 
-        final OnJsonCompleteListener onJsonCompleteListener = listner;
 
         if(WCUtils.localMode){
-            onJsonCompleteListener.onJsonComplete(RequestMocker.getFakeResponse(WCUtils.pathGetVersionInfo));
-            return;
-        }
-        if(!WCUtils.isNetworkAvailable()){
-            onJsonCompleteListener.onJsonComplete(WCUtils.serverDownResponse);
+            List<Object> mock = RequestMocker.getFakeResponse(WCUtils.pathGetVersionInfo);
+            listener.OnCheckSoftwareVersionDone((String)mock.get(0), (String)mock.get(1), (String)mock.get(2),
+                    (String)mock.get(3), (String)mock.get(4));
             return;
         }
 
@@ -36,13 +41,33 @@ public class WCService {
                 new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                onJsonCompleteListener.onJsonComplete(response);
+                try {
+                    String error = response.getString("error");
+                    if (!error.equals("")){
+                        listener.OnCheckSoftwareVersionDone(error, "", "", "", "");
+                    } else {
+                        listener.OnCheckSoftwareVersionDone(response.getString("status"), response.getString("title"),
+                                response.getString("message"), response.getString("updates"),
+                                response.getString("newVersion"));
+                    }
+                } catch(JSONException e){
+                    listener.OnCheckSoftwareVersionDone(context.getString(R.string.respond_format_error),
+                            "", "", "", "");
+                } catch(Exception e){
+                    listener.OnCheckSoftwareVersionDone(context.getString(R.string.unknown_error),
+                            "", "", "", "");
+                }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
-                onJsonCompleteListener.onJsonComplete(WCUtils.serverDownResponse);
+                listener.OnCheckSoftwareVersionDone(context.getString(R.string.server_down_error),
+                        "", "", "", "");
             }
         });
+    }
+
+    public interface OnCheckSoftwareVersionListener {
+        void OnCheckSoftwareVersionDone(String status, String title, String msg, String updates, String version);
     }
 }

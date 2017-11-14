@@ -15,7 +15,7 @@ public class WCUtils {
     //let serviceBase = "https://wcservice.fmning.com/" //*****************PROD
     public static final String serviceBase = "http://wc.fmning.com/"; //********************TEST
     //If enabled, most of the HTTP request will return faked local value, instead of making network calls
-    public static final Boolean localMode = false;
+    public static final Boolean localMode = true;
 
     /*
         Web request URL standard:
@@ -44,6 +44,10 @@ public class WCUtils {
 
     public static Context context;
     public static JSONObject serverDownResponse;
+
+
+
+
 
     public static void initSetup(Context activityContext){
         context = activityContext;

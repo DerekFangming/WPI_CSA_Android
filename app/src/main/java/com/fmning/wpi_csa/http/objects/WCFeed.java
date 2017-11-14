@@ -9,15 +9,17 @@ import java.util.Date;
 
 public class WCFeed {
 
-    int id;
-    String title;
-    String type;
-    String body;
-    Date createdAt;
-    int ownerId;
-    String ownerName;
-    int coverImgId;
-    int avatarId;
+    public int id;
+    public String title;
+    public String type;
+    public String body;
+    public Date createdAt;
+    public int ownerId;
+    public String ownerName;
+    public int coverImgId;
+    public int avatarId;
+
+    WCEvent event;
 
     public WCFeed(int id, String title, String type, String body, Date createdAt){
         this.id = id;

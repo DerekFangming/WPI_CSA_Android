@@ -3,6 +3,7 @@ package com.fmning.wpi_csa.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,7 +16,6 @@ import com.fmning.wpi_csa.helpers.Utils;
 import com.fmning.wpi_csa.http.objects.WCFeed;
 
 import java.util.ArrayList;
-
 
 
 public class LifeFragment extends Fragment {
@@ -43,7 +43,16 @@ public class LifeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_life, container, false);
+
+        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout)inflater.inflate(R.layout.fragment_life, container, false);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Utils.logMsg("Refreshed!");
+            }
+        });
+
+        RecyclerView recyclerView = (RecyclerView) swipeRefreshLayout.findViewById(R.id.life_list);
 
         Context context = recyclerView.getContext();
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -90,7 +99,14 @@ public class LifeFragment extends Fragment {
             }
         });*/
 
-        //Database.test(getActivity());
+        /*Utils.logMsg("onCreateView");
+        WCFeedManager.getRecentFeeds(getActivity(), 3, null, new WCFeedManager.OnGetRecentFeedListener() {
+            @Override
+            public void OnGetRecentFeedDone(String error, List<WCFeed> feedList, String checkPoint) {
+                Utils.logMsg("1");
+            }
+        });*/
+
 
         return recyclerView;
     }
