@@ -8,6 +8,8 @@
     <string name="feed_loading">  Loading ...</string>
     <string name="feed_no_more">There are no more articles.</string>
 
+    <string name="ok">Ok</string>
+
     <!--Error messages-->
     <string name="unknown_error">Unknown error. Please contact support at admin@fmning.com</string>
     <string name="server_down_error">The server is down. Please contact support at admin@fmning.com</string>

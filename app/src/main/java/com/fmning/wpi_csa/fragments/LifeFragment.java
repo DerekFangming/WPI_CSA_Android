@@ -16,11 +16,21 @@ import com.fmning.wpi_csa.helpers.Utils;
 import com.fmning.wpi_csa.http.objects.WCFeed;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class LifeFragment extends Fragment {
 
-    ArrayList feedItemList;
+    List<WCFeed> feedList = new ArrayList<>();
+    String checkPoint;
+    boolean serverDownFlag = false;
+    boolean reloadingFlag = false;
+    boolean keepLoadingFlag = false;
+    boolean stopLoadingFlag = false;
+
+    int feedLoadLimit = 3;
+
+
     LifeListAdapter adapter;
 
     public LifeFragment() {
@@ -44,6 +54,18 @@ public class LifeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        //CacheManager.localDirInitiateSetup(getActivity());
+
+        /*============================== TESTING AREA STARTS ==============================*/
+
+
+
+
+
+
+        Utils.logMsg("bkpoint for testing area");
+        /*============================== TESTING AREA ENDS ==============================*/
+
         SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout)inflater.inflate(R.layout.fragment_life, container, false);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -58,12 +80,12 @@ public class LifeFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
 
-        feedItemList = new ArrayList<WCFeed>();
+        feedList = new ArrayList<WCFeed>();
         /*for (int i = 0; i < 1; i++) {
             WCFeed feed = new WCFeed();
             feedItemList.add(feed);
         }*/
-        adapter = new LifeListAdapter(feedItemList, new OnFeedClickListener() {
+        adapter = new LifeListAdapter(feedList, new OnFeedClickListener() {
             @Override
             public void OnFeedClick(int index) {
                 Utils.logMsg(Integer.toString(index) + " is clicked");
@@ -108,7 +130,7 @@ public class LifeFragment extends Fragment {
         });*/
 
 
-        return recyclerView;
+        return swipeRefreshLayout;
     }
 
 

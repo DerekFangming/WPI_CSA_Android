@@ -10,7 +10,6 @@ import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.fragments.LifeFragment.OnFeedClickListener;
 import com.fmning.wpi_csa.http.objects.WCFeed;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,7 +21,7 @@ public class LifeListAdapter extends RecyclerView.Adapter<LifeListAdapter.Custom
     private List<WCFeed> feedList;
     private OnFeedClickListener listener;
 
-    public LifeListAdapter( ArrayList<WCFeed> feedItemList,  OnFeedClickListener listener) {
+    public LifeListAdapter( List<WCFeed> feedItemList,  OnFeedClickListener listener) {
         this.feedList = feedItemList;
         this.listener = listener;
     }

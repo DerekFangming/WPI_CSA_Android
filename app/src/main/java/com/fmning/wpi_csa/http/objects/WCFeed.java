@@ -4,7 +4,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Created by fangmingning on 11/3/17.
+ * Created by fangmingning
+ * On 11/3/17.
  */
 
 public class WCFeed {

@@ -3,6 +3,7 @@ package com.fmning.wpi_csa.http;
 import android.content.Context;
 
 import com.fmning.wpi_csa.R;
+import com.fmning.wpi_csa.http.objects.WCUser;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -20,6 +21,7 @@ import cz.msebera.android.httpclient.Header;
  */
 
 public class WCService {
+    public static WCUser currentUser;
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 
