@@ -7,7 +7,8 @@ import android.net.NetworkInfo;
 import org.json.JSONObject;
 
 /**
- * Created by fangmingning on 11/1/17.
+ * Created by fangmingning
+ * On 11/1/17.
  */
 
 public class WCUtils {

@@ -5,6 +5,7 @@
     android:clipToPadding="false">
 
     <ImageView
+        android:id="@+id/feedCellCoverImage"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_marginLeft="15dp"
@@ -15,7 +16,7 @@
         android:contentDescription="@string/feed_cover_desc"/>
 
     <TextView
-        android:id="@+id/feedTitle"
+        android:id="@+id/feedCellTitle"
         android:layout_width="match_parent"
         android:layout_height="28dp"
         android:text="@string/d_feed_title"
@@ -23,26 +24,28 @@
         android:textSize="20sp"
         android:layout_marginTop="220dp"
         android:layout_marginStart="15dp"
-        android:layout_toStartOf="@+id/feedAvatar"/>
+        android:layout_toStartOf="@+id/feedCellAvatar"/>
 
     <TextView
+        android:id="@+id/feedCellType"
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:text="@string/d_feed_type"
         android:layout_marginTop="245dp"
         android:layout_marginStart="15dp"
-        android:layout_toStartOf="@+id/feedAvatar"/>
+        android:layout_toStartOf="@+id/feedCellAvatar"/>
 
     <TextView
+        android:id="@+id/feedCellCreatedAt"
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:text="@string/d_feed_date"
         android:layout_marginTop="260dp"
         android:layout_marginStart="15dp"
-        android:layout_toStartOf="@+id/feedAvatar"/>
+        android:layout_toStartOf="@+id/feedCellAvatar"/>
 
     <ImageView
-        android:id="@+id/feedAvatar"
+        android:id="@+id/feedCellAvatar"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginEnd="40dp"
@@ -54,6 +57,7 @@
         />
 
     <TextView
+        android:id="@+id/feedCellOwnerName"
         android:layout_width="150dp"
         android:layout_height="20dp"
         android:text="@string/d_name"

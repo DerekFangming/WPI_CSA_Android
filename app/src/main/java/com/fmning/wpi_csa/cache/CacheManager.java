@@ -67,7 +67,7 @@ public class CacheManager {
         }
     }
 
-    public static void getImage(String name, final Context context, final OnCacheGetImageDoneListener listener){
+    public static void getImage(final Context context, String name, final OnCacheGetImageDoneListener listener){
         int id = 0;
         if (name.startsWith("WCImage_")){
             try {

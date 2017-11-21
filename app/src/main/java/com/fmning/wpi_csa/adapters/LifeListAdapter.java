@@ -1,28 +1,39 @@
 package com.fmning.wpi_csa.adapters;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fmning.wpi_csa.R;
-import com.fmning.wpi_csa.fragments.LifeFragment.OnFeedClickListener;
+import com.fmning.wpi_csa.cache.CacheManager;
+import com.fmning.wpi_csa.helpers.Utils;
 import com.fmning.wpi_csa.http.objects.WCFeed;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by fangmingning on 11/3/17.
+ * Created by fangmingning
+ * On 11/3/17.
  */
 
-public class LifeListAdapter extends RecyclerView.Adapter<LifeListAdapter.CustomViewHolder> {
+public class LifeListAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     private List<WCFeed> feedList;
+    private boolean stopLoadingFlag;
+    private Context context;
     private OnFeedClickListener listener;
 
-    public LifeListAdapter( List<WCFeed> feedItemList,  OnFeedClickListener listener) {
-        this.feedList = feedItemList;
+    public LifeListAdapter(Context context, OnFeedClickListener listener) {
+        this.feedList = new ArrayList<>();
+        this.stopLoadingFlag = false;
+        this.context = context;
         this.listener = listener;
     }
 
@@ -37,17 +48,15 @@ public class LifeListAdapter extends RecyclerView.Adapter<LifeListAdapter.Custom
     }
 
     @Override
-    public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case 1:
-                View viewONE = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_feed, parent, false);
-                CustomViewHolder rowONE = new CustomViewHolder(viewONE);
-                return rowONE;
+                View view1 = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_feed, parent, false);
+                return new ViewHolder(view1);
 
             case 2:
-                View viewTWO = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_feed_loading, parent, false);
-                CustomViewHolder rowTWO = new CustomViewHolder(viewTWO);
-                return rowTWO;
+                View view2 = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_feed_loading, parent, false);
+                return new ViewHolder(view2);
 
 
         }
@@ -56,21 +65,52 @@ public class LifeListAdapter extends RecyclerView.Adapter<LifeListAdapter.Custom
 
 
     @Override
-    public void onBindViewHolder(CustomViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         if(position < feedList.size()) {
-            View view = holder.itemView;
-            TextView tv = (TextView) view.findViewById(R.id.feedTitle);
-            tv.setText("wtf ahahahhahaha");
+            final View cell = holder.itemView;
+            WCFeed feed = feedList.get(position);
 
-            view.setOnClickListener(new View.OnClickListener() {
+            ((TextView) cell.findViewById(R.id.feedCellTitle)).setText(feed.title);
+            ((TextView) cell.findViewById(R.id.feedCellType)).setText(feed.type);
+            ((TextView) cell.findViewById(R.id.feedCellOwnerName)).setText(feed.ownerName);
+            ((TextView) cell.findViewById(R.id.feedCellCreatedAt)).setText(Utils.dateToString(feed.createdAt));
+
+            if (feed.avatarId != -1) {
+                CacheManager.getImage(context, Utils.convertToWCImageId(feed.avatarId), new CacheManager.OnCacheGetImageDoneListener() {
+                    @Override
+                    public void OnCacheGetImageDone(String error, Bitmap image) {
+                        if (error.equals("")) {
+                            ((ImageView) cell.findViewById(R.id.feedCellAvatar)).setImageBitmap(image);
+                        } else {
+                            ((ImageView) cell.findViewById(R.id.feedCellAvatar))
+                                    .setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.default_avatar));
+                        }
+                    }
+                });
+            } else {
+                ((ImageView) cell.findViewById(R.id.feedCellAvatar))
+                        .setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.default_avatar));
+            }
+
+            ((ImageView) cell.findViewById(R.id.feedCellCoverImage))
+                    .setImageBitmap(Utils.createImage(context.getResources().getColor(R.color.black)));
+
+            cell.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if(listener != null){
-                        listener.OnFeedClick(position);
+                        listener.OnFeedClick(holder.getLayoutPosition());
                     }
                 }
             });
 
+        } else {
+            TextView coverLabel = (TextView) holder.itemView.findViewById(R.id.coverLabel);
+            if (stopLoadingFlag) {
+                coverLabel.setVisibility(View.VISIBLE);
+            } else {
+                coverLabel.setVisibility(View.INVISIBLE);
+            }
         }
     }
 
@@ -80,13 +120,17 @@ public class LifeListAdapter extends RecyclerView.Adapter<LifeListAdapter.Custom
         return feedList.size() + 1;
     }
 
-    class CustomViewHolder extends RecyclerView.ViewHolder {
+    public void setFeedList(List<WCFeed> feedList, boolean stopLoadingFlag){
+        this.feedList = feedList;
+        this.stopLoadingFlag = stopLoadingFlag;
+    }
 
-        //WCFeed feed;
+    public void appendFeedList(List<WCFeed> feedList, boolean stopLoadingFlag){
+        this.feedList.addAll(feedList);
+        this.stopLoadingFlag = stopLoadingFlag;
+    }
 
-        public CustomViewHolder(View itemView) {
-            super(itemView);
-
-        }
+    public interface OnFeedClickListener {
+        void OnFeedClick(int index);
     }
 }

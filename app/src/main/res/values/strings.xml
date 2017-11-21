@@ -1,20 +1,25 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">WPI_CSA</string>
 
     <string name="life_tab">Life</string>
     <string name="sg_tab">Survival Guide</string>
     <string name="setting_tab">Setting</string>
     <string name="title_activity_life">Life</string>
-    <string name="feed_loading">  Loading ...</string>
+    <string name="feed_loading">  Loading …</string>
+    <string name="no_more_articles">There are no more articles.</string>
     <string name="feed_no_more">There are no more articles.</string>
+    <string name="feed_network_issue">There is a network issue. Click anywhere to refresh the page.\n If still doesn\'t work, please contact admin@fmning.com</string>
 
-    <string name="ok">Ok</string>
+    <string name="ok" tools:ignore="ButtonCase,Typos">Ok</string>
+    <string name="remind_later">Remind me later</string>
+    <string name="never_show_again">Never show this again</string>
 
     <!--Error messages-->
     <string name="unknown_error">Unknown error. Please contact support at admin@fmning.com</string>
     <string name="server_down_error">The server is down. Please contact support at admin@fmning.com</string>
     <string name="respond_format_error">Incorrect respond format. Please contact support at admin@fmning.com</string>
     <string name="number_format_error">Malformated WCService image id</string>
+    <string name="user_detail_update_error">No user details to be saved</string>
     <!--Known server side error that needs to be handled-->
     <string name="no_more_feed_error">There are no more feeds.</string>
     <string name="no_event_error">The event you are looking for does not exist.</string>
@@ -22,6 +27,7 @@
     <!-- Image View content descriptions -->
     <string name="feed_cover_desc">Feed cover</string>
     <string name="feed_avatar_desc">Feed avatar</string>
+    <string name="feed_reload_desc">Feed reload</string>
 
     <!-- The following are default texts -->
     <string name="d_name">Fangming Ning</string>

@@ -35,6 +35,7 @@ public class WCFeedManager {
         if (WCUtils.localMode) {
             List<Object> mock = RequestMocker.getFakeResponse(WCUtils.pathGetRecentFeeds);
             listener.OnGetRecentFeedDone((String)mock.get(0), (List<WCFeed>)mock.get(1), (String)mock.get(2));
+            return;
         }
 
         RequestParams params = new RequestParams();

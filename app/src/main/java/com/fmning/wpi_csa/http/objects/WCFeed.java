@@ -20,7 +20,7 @@ public class WCFeed {
     public int coverImgId;
     public int avatarId;
 
-    WCEvent event;
+    public WCEvent event;
 
     public WCFeed(int id, String title, String type, String body, Date createdAt){
         this.id = id;
