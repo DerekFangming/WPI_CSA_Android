@@ -48,9 +48,28 @@ public class WCService {
                     if (!error.equals("")){
                         listener.OnCheckSoftwareVersionDone(error, "", "", "", "");
                     } else {
-                        listener.OnCheckSoftwareVersionDone(response.getString("status"), response.getString("title"),
-                                response.getString("message"), response.getString("updates"),
-                                response.getString("newVersion"));
+                        String status = "";
+                        String title = "";
+                        String message = "";
+                        String updates = "";
+                        String newVersion = "";
+
+                        try{
+                            status = response.getString("status");
+                        }catch (JSONException ignored){}
+                        try{
+                            title = response.getString("title");
+                        }catch (JSONException ignored){}
+                        try{
+                            message = response.getString("message");
+                        }catch (JSONException ignored){}
+                        try{
+                            updates = response.getString("updates");
+                        }catch (JSONException ignored){}
+                        try{
+                            newVersion = response.getString("newVersion");
+                        }catch (JSONException ignored){}
+                        listener.OnCheckSoftwareVersionDone(status, title, message, updates, newVersion);
                     }
                 } catch(JSONException e){
                     listener.OnCheckSoftwareVersionDone(context.getString(R.string.respond_format_error),

@@ -13,10 +13,10 @@ import org.json.JSONObject;
 
 public class WCUtils {
 
-    //let serviceBase = "https://wcservice.fmning.com/" //*****************PROD
-    public static final String serviceBase = "http://wc.fmning.com/"; //********************TEST
+    public static final String serviceBase = "https://wcservice.fmning.com/"; //*****************PROD
+    //public static final String serviceBase = "http://wc.fmning.com/"; //********************TEST
     //If enabled, most of the HTTP request will return faked local value, instead of making network calls
-    public static final Boolean localMode = true;
+    public static final Boolean localMode = false;
 
     /*
         Web request URL standard:

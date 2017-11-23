@@ -34,7 +34,7 @@
         android:gravity="center"
 
         android:text="@string/no_more_articles"
-        android:background="@color/white"
+        android:background="?android:colorBackground"
         />
 
     <View

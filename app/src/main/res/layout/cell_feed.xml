@@ -12,7 +12,8 @@
         android:layout_marginTop="15dp"
         android:layout_marginRight="15dp"
         android:elevation="5dp"
-        android:background="@drawable/test"
+        android:background="@color/white"
+        android:scaleType="centerCrop"
         android:contentDescription="@string/feed_cover_desc"/>
 
     <TextView
@@ -52,7 +53,8 @@
         android:layout_marginTop="175dp"
         android:layout_alignParentEnd="true"
         android:elevation="10dp"
-        android:background="@drawable/default_avatar"
+        android:background="@color/white"
+        android:scaleType="centerCrop"
         android:contentDescription="@string/feed_avatar_desc"
         />
 

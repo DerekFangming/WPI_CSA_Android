@@ -67,7 +67,7 @@ public class Utils {
                 initializeApp(context);
             } else if (!versionArr[1].equals(baseVersion.split("\\.")[1])) { //Software version mismatch
                 versionToCheck = baseVersion;
-                Utils.initializeApp(context);// TODO: merge top if nothing special
+                initializeApp(context);// TODO: merge top if nothing special
             }
         } else {//First time install
             initializeApp(context);
