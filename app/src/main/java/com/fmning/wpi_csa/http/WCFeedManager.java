@@ -58,14 +58,31 @@ public class WCFeedManager {
                             JSONObject feed = rawList.getJSONObject(i);
 
                             WCFeed wcFeed = new WCFeed();
-                            wcFeed.id = feed.getInt("id");
-                            wcFeed.title = feed.getString("title");
-                            wcFeed.type = feed.getString("type");
-                            wcFeed.createdAt = Utils.iso8601DateUTC(feed.getString("createdAt"));
-                            wcFeed.ownerId = feed.getInt("ownerId");
-                            wcFeed.ownerName = feed.getString("ownerName");
-                            wcFeed.coverImgId = feed.getInt("coverImgId");
-                            wcFeed.avatarId = feed.getInt("avatarId");
+                            try {
+                                wcFeed.id = feed.getInt("id");
+                            } catch (JSONException ignored){}
+
+                            try {
+                                wcFeed.title = feed.getString("title");
+                            } catch (JSONException ignored){}
+                            try {
+                                wcFeed.type = feed.getString("type");
+                            } catch (JSONException ignored){}
+                            try {
+                                wcFeed.createdAt = Utils.iso8601DateUTC(feed.getString("createdAt"));
+                            } catch (JSONException ignored){}
+                            try {
+                                wcFeed.ownerId = feed.getInt("ownerId");
+                            } catch (JSONException ignored){}
+                            try {
+                                wcFeed.ownerName = feed.getString("ownerName");
+                            } catch (JSONException ignored){}
+                            try {
+                                wcFeed.coverImgId = feed.getInt("coverImgId");
+                            } catch (JSONException ignored){}
+                            try {
+                                wcFeed.avatarId = feed.getInt("avatarId");
+                            } catch (JSONException ignored){}
 
                             feedList.add(wcFeed);
                         }

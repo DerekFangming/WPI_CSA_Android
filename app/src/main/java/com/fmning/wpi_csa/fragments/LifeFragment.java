@@ -82,10 +82,18 @@ public class LifeFragment extends Fragment {
         tableView.setLayoutManager(new LinearLayoutManager(context));
 
 
-        tableViewAdapter = new LifeListAdapter(getActivity(), new LifeListAdapter.OnFeedClickListener() {
+        tableViewAdapter = new LifeListAdapter(getActivity(), new LifeListAdapter.FeedListListener() {
             @Override
             public void OnFeedClick(int index) {
                 Utils.logMsg(Integer.toString(index) + " is clicked");
+            }
+
+            @Override
+            public void scrolledToLastFeed() {
+                Utils.logMsg("End");
+                if (!stopLoadingFlag) {
+                    keepLoading();
+                }
             }
         });
 
@@ -213,7 +221,6 @@ public class LifeFragment extends Fragment {
             @Override
             public void OnGetRecentFeedDone(String error, List<WCFeed> feedList, String checkPoint) {
                 if (error.equals("")) {
-                    tableViewAdapter.appendFeedList(feedList, stopLoadingFlag);
                     LifeFragment.this.checkPoint = checkPoint;
                 } else {
                     Utils.logMsg(error);
@@ -229,6 +236,7 @@ public class LifeFragment extends Fragment {
                     }
                 }
                 keepLoadingFlag = false;
+                tableViewAdapter.appendFeedList(feedList, stopLoadingFlag);
                 tableViewAdapter.notifyDataSetChanged();
             }
         });

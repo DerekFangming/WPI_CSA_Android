@@ -91,7 +91,7 @@ public class CacheManager {
             File imgFile = new  File(imgFileName);
 
             if(imgFile.exists()){
-                Utils.logMsg("image from local");
+                //Utils.logMsg("image from local");
                 Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 Database.imageHit(context, id);
                 listener.OnCacheGetImageDone("", bitmap);
@@ -101,7 +101,7 @@ public class CacheManager {
             }
         }
 
-        Utils.logMsg("image from server");
+        //Utils.logMsg("image from server");
 
         final int imageId = id;
         WCImageManager.getImage(context, imageId, new WCImageManager.OnGetImageDoneListener() {

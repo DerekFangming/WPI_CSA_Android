@@ -28,9 +28,9 @@ public class LifeListAdapter extends RecyclerView.Adapter<ViewHolder> {
     private List<WCFeed> feedList;
     private boolean stopLoadingFlag;
     private Context context;
-    private OnFeedClickListener listener;
+    private FeedListListener listener;
 
-    public LifeListAdapter(Context context, OnFeedClickListener listener) {
+    public LifeListAdapter(Context context, FeedListListener listener) {
         this.feedList = new ArrayList<>();
         this.stopLoadingFlag = false;
         this.context = context;
@@ -105,14 +105,22 @@ public class LifeListAdapter extends RecyclerView.Adapter<ViewHolder> {
                 });
             }
 
-            cell.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(listener != null){
+            if (listener != null) {
+                cell.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
                         listener.OnFeedClick(holder.getLayoutPosition());
                     }
+                });
+
+                if (position == feedList.size() - 1) {
+                    listener.scrolledToLastFeed();
                 }
-            });
+            }
+
+
+
+
 
         } else {
             TextView coverLabel = (TextView) holder.itemView.findViewById(R.id.coverLabel);
@@ -140,7 +148,8 @@ public class LifeListAdapter extends RecyclerView.Adapter<ViewHolder> {
         this.stopLoadingFlag = stopLoadingFlag;
     }
 
-    public interface OnFeedClickListener {
+    public interface FeedListListener {
         void OnFeedClick(int index);
+        void scrolledToLastFeed();
     }
 }
