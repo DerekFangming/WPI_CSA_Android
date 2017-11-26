@@ -35,11 +35,7 @@ public class LifeFragment extends Fragment {
 
     LifeListAdapter tableViewAdapter;
 
-    public LifeFragment() {
-        // Required empty public constructor
-    }
-
-
+    public LifeFragment(){}
 
     public static LifeFragment newInstance(String param1, String param2) {
         LifeFragment fragment = new LifeFragment();
