@@ -4,7 +4,9 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -160,7 +164,7 @@ public class Utils {
                         appMode = AppMode.LOGGED_ON;
                         WCService.currentUser = user;
                         hideLoadingIndicator();
-                        //TODO: Notify cell update
+                        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("reloadUserCell"));
                     } else {
                         hideLoadingIndicator();
                         processErrorMessage(context, error, showAlert);
@@ -169,7 +173,7 @@ public class Utils {
             });
         } else {
             hideLoadingIndicator();
-            //TODO: Notify cell update
+            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("reloadUserCell"));
         }
     }
 
@@ -177,7 +181,7 @@ public class Utils {
         if (errMsg.equals(context.getString(R.string.server_down_error))){
             WCService.currentUser = null;
             appMode = AppMode.OFFLINE;
-            //TODO: RELOAD USER CELL
+            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("reloadUserCell"));
 
             if (showAlert) {
                 showAlertMessage(context, errMsg);
@@ -220,11 +224,26 @@ public class Utils {
     }
 
     public static boolean isEmailAddress(String email){
-        return true;
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 
-    public static String checkPasswordStrength(String password){
-        return null;
+    public static String checkPasswordStrength(Context context, String password){
+        if (password.length() < 6) {
+            return context.getString(R.string.password_too_short);
+        } else {
+            if (password.matches(".*[a-zA-Z].*")) {
+                if (password.matches(".*[0-9].*")) {
+                    return "";
+                } else {
+                    return context.getString(R.string.password_no_number);
+                }
+            } else {
+                return context.getString(R.string.password_no_letter);
+            }
+        }
     }
 
     public static String getParam(Context context, String key){

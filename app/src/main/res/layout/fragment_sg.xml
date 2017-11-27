@@ -10,4 +10,4 @@
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context="com.fmning.wpi_csa.fragments.SGFragment"
-    tools:listitem="@layout/fragment_paragraph" />
+    tools:listitem="@layout/cell_default" />

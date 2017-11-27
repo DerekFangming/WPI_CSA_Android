@@ -11,6 +11,7 @@ import com.fmning.wpi_csa.adapters.BottomBarAdapter;
 import com.fmning.wpi_csa.adapters.NoSwipePager;
 import com.fmning.wpi_csa.fragments.LifeFragment;
 import com.fmning.wpi_csa.fragments.SGFragment;
+import com.fmning.wpi_csa.fragments.SettingFragment;
 
 public class MainTabActivity extends AppCompatActivity {
 
@@ -25,19 +26,20 @@ public class MainTabActivity extends AppCompatActivity {
         viewPager.setPagingEnabled(false);
         BottomBarAdapter pagerAdapter = new BottomBarAdapter(getSupportFragmentManager());
 
-        LifeFragment fragment = new LifeFragment().newInstance("hahahah", "jajajaj");
+        LifeFragment lifeFragment = new LifeFragment().newInstance("hahahah", "jajajaj");
 
-        pagerAdapter.addFragments(fragment);
+        pagerAdapter.addFragments(lifeFragment);
 
         SGFragment fragment1 = new SGFragment();
 
         pagerAdapter.addFragments(fragment1);
 
-        SGFragment fragment2 = new SGFragment();
+        SettingFragment settingFragment = new SettingFragment();
 
-        pagerAdapter.addFragments(fragment2);
+        pagerAdapter.addFragments(settingFragment);
 
         viewPager.setAdapter(pagerAdapter);
+        viewPager.setOffscreenPageLimit(3);
 
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);

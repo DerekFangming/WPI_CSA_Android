@@ -31,7 +31,7 @@ public class MyParagraphRecyclerViewAdapter extends RecyclerView.Adapter<MyParag
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_paragraph, parent, false);
+                .inflate(R.layout.cell_default, parent, false);
         return new ViewHolder(view);
     }
 

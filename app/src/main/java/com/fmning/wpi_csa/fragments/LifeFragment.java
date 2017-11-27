@@ -1,8 +1,10 @@
 package com.fmning.wpi_csa.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -55,8 +57,6 @@ public class LifeFragment extends Fragment {
         //CacheManager.localDirInitiateSetup(getActivity());
 
         /*============================== TESTING AREA STARTS ==============================*/
-
-
 
 
         Utils.logMsg("bkpoint for testing area");
@@ -144,20 +144,13 @@ public class LifeFragment extends Fragment {
             }
         });
 
-//        new android.os.Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                loadingView.setVisibility(View.INVISIBLE);
-//
-//                new android.os.Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        loadingView.setVisibility(View.VISIBLE);
-//                    }
-//                }, 10000);
-//            }
-//        }, 10000);
 
+        new android.os.Handler().postDelayed(new Runnable() {
+                                @Override
+                    public void run() {
+                                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("reloadUserCell"));
+                    }
+                }, 10000);
 
 
 

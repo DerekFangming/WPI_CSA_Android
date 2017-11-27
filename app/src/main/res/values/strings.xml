@@ -5,10 +5,20 @@
     <string name="sg_tab">Survival Guide</string>
     <string name="setting_tab">Setting</string>
     <string name="title_activity_life">Life</string>
+
+    <string name="password_too_short">Password must contain at least 6 chars</string>
+    <string name="password_no_number">Password must have at least 1 number</string>
+    <string name="password_no_letter">Password must have at least 1 letter</string>
+
     <string name="feed_loading">  Loading …</string>
     <string name="no_more_articles">There are no more articles.</string>
     <string name="feed_no_more">There are no more articles.</string>
     <string name="feed_network_issue">There is a network issue. Click anywhere to refresh the page.\n If still doesn\'t work, please contact admin@fmning.com</string>
+    <string name="setting_offline_mode_title">You are in offline mode</string>
+    <string name="setting_offline_mode_sub">Try again when you get online</string>
+    <string name="setting_reconnect">Reconnect</string>
+    <string name="setting_username_hint">Username</string>
+    <string name="setting_password_hint">Password</string>
 
     <string name="ok" tools:ignore="ButtonCase,Typos">Ok</string>
     <string name="remind_later">Remind me later</string>
@@ -28,6 +38,7 @@
     <string name="feed_cover_desc">Feed cover</string>
     <string name="feed_avatar_desc">Feed avatar</string>
     <string name="feed_reload_desc">Feed reload</string>
+    <string name="setting_default_avatar_desc">Setting default avatar</string>
 
     <!-- The following are default texts -->
     <string name="d_name">Fangming Ning</string>

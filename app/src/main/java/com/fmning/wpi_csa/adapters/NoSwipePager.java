@@ -6,7 +6,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 
 /**
- * Created by fangmingning on 10/31/17.
+ * Created by fangmingning
+ * On 10/31/17.
  */
 
 public class NoSwipePager extends ViewPager {
