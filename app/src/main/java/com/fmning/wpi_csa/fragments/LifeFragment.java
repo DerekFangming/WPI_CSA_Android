@@ -14,10 +14,12 @@ import android.view.ViewGroup;
 
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.adapters.LifeListAdapter;
+import com.fmning.wpi_csa.helpers.AppMode;
 import com.fmning.wpi_csa.helpers.LoadingView;
 import com.fmning.wpi_csa.helpers.Utils;
 import com.fmning.wpi_csa.http.WCFeedManager;
 import com.fmning.wpi_csa.http.objects.WCFeed;
+import com.fmning.wpi_csa.http.objects.WCUser;
 
 import java.util.List;
 
@@ -58,6 +60,16 @@ public class LifeFragment extends Fragment {
 
         /*============================== TESTING AREA STARTS ==============================*/
 
+        new android.os.Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Utils.appMode = AppMode.LOGIN;
+                WCUser user = new WCUser(1, "fangming", "token");
+                user.emailConfirmed = true;
+                //WCService.currentUser = user;
+                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("reloadUserCell"));
+            }
+        }, 10000);
 
         Utils.logMsg("bkpoint for testing area");
         /*============================== TESTING AREA ENDS ==============================*/
@@ -72,7 +84,7 @@ public class LifeFragment extends Fragment {
         });
 
 
-        tableView = (RecyclerView) refreshControl.findViewById(R.id.life_list);
+        tableView = (RecyclerView) refreshControl.findViewById(R.id.lifeList);
 
         Context context = tableView.getContext();
         tableView.setLayoutManager(new LinearLayoutManager(context));
@@ -85,7 +97,7 @@ public class LifeFragment extends Fragment {
             }
 
             @Override
-            public void scrolledToLastFeed() {
+            public void OnScrollToLastFeed() {
                 Utils.logMsg("End");
                 if (!stopLoadingFlag) {
                     keepLoading();
@@ -143,15 +155,6 @@ public class LifeFragment extends Fragment {
 
             }
         });
-
-
-        new android.os.Handler().postDelayed(new Runnable() {
-                                @Override
-                    public void run() {
-                                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("reloadUserCell"));
-                    }
-                }, 10000);
-
 
 
         return refreshControl;

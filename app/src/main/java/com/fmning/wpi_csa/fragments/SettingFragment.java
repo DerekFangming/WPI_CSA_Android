@@ -26,7 +26,7 @@ public class SettingFragment extends Fragment {
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Utils.logMsg("1LLLLLLLLLLLLLLLLLL");
+            tableViewAdapter.notifyDataSetChanged();
         }
     };
 
@@ -40,16 +40,68 @@ public class SettingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        RecyclerView tableView = (RecyclerView)inflater.inflate(R.layout.fragment_setting, container, false);
+        View settingView = (View)inflater.inflate(R.layout.fragment_setting, container, false);
 
-        tableViewAdapter = new SettingListAdapter();
+        RecyclerView tableView = (RecyclerView)settingView.findViewById(R.id.settingList);
+
+        tableViewAdapter = new SettingListAdapter(getActivity(), new SettingListAdapter.SettingListListener() {
+            @Override
+            public void OnReconnectClick() {
+                Utils.logMsg("recon");
+            }
+
+            @Override
+            public void OnLogInClick(String username, String password) {
+                Utils.logMsg("log in " + username + "  "  + password);
+            }
+
+            @Override
+            public void OnRegisterClick() {
+                Utils.logMsg("register");
+            }
+
+            @Override
+            public void OnUserDetailClick() {
+                Utils.logMsg("go to user detail");
+            }
+
+            @Override
+            public void OnFacebookClick() {
+                Utils.logMsg("fb");
+            }
+
+            @Override
+            public void OnInstagramClick() {
+                Utils.logMsg("inst");
+            }
+
+            @Override
+            public void OnYouTubeClick() {
+                Utils.logMsg("you tube");
+            }
+
+            @Override
+            public void OnChangePwdClick() {
+                Utils.logMsg("change password");
+            }
+
+            @Override
+            public void OnVerifyEmailClick() {
+                Utils.logMsg("verify email");
+            }
+
+            @Override
+            public void OnLogOutClick() {
+                Utils.logMsg("log out");
+            }
+        });
 
         tableView.setAdapter(tableViewAdapter);
 
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver,
                 new IntentFilter("reloadUserCell"));
 
-        return tableView;
+        return settingView;
     }
 
     @Override

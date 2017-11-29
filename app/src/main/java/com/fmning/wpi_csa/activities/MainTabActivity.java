@@ -47,13 +47,13 @@ public class MainTabActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.action_life:
+                    case R.id.actionLife:
                         viewPager.setCurrentItem(0, false);
                         break;
-                    case R.id.action_sg:
+                    case R.id.actionSG:
                         viewPager.setCurrentItem(1, false);
                         break;
-                    case R.id.action_setting:
+                    case R.id.actionSetting:
                         viewPager.setCurrentItem(2, false);
                         break;
 

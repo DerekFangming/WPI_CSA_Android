@@ -105,22 +105,16 @@ public class LifeListAdapter extends RecyclerView.Adapter<ViewHolder> {
                 });
             }
 
-            if (listener != null) {
-                cell.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        listener.OnFeedClick(holder.getLayoutPosition());
-                    }
-                });
-
-                if (position == feedList.size() - 1) {
-                    listener.scrolledToLastFeed();
+            cell.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.OnFeedClick(holder.getLayoutPosition());
                 }
+            });
+
+            if (position == feedList.size() - 1) {
+                listener.OnScrollToLastFeed();
             }
-
-
-
-
 
         } else {
             TextView coverLabel = (TextView) holder.itemView.findViewById(R.id.coverLabel);
@@ -150,6 +144,6 @@ public class LifeListAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     public interface FeedListListener {
         void OnFeedClick(int index);
-        void scrolledToLastFeed();
+        void OnScrollToLastFeed();
     }
 }

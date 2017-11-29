@@ -3,21 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_life"
+        android:id="@+id/actionLife"
         android:enabled="true"
         android:icon="@drawable/life_tab"
         android:title="@string/life_tab"
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_sg"
+        android:id="@+id/actionSG"
         android:enabled="true"
         android:icon="@drawable/sg_tab"
         android:title="@string/sg_tab"
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_setting"
+        android:id="@+id/actionSetting"
         android:enabled="true"
         android:icon="@drawable/setting_tab"
         android:title="@string/setting_tab"

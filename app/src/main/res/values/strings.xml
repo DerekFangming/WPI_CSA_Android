@@ -17,8 +17,16 @@
     <string name="setting_offline_mode_title">You are in offline mode</string>
     <string name="setting_offline_mode_sub">Try again when you get online</string>
     <string name="setting_reconnect">Reconnect</string>
+    <string name="setting_register">Register</string>
+    <string name="setting_log_in">Log in</string>
     <string name="setting_username_hint">Username</string>
     <string name="setting_password_hint">Password</string>
+    <string name="setting_facebook">Facebook</string>
+    <string name="setting_instagram">Instagram</string>
+    <string name="setting_youtube">YouTube</string>
+    <string name="setting_change_pwd">Change Password</string>
+    <string name="setting_verify_email">Verify Email Address</string>
+    <string name="setting_log_out">Log out</string>
 
     <string name="ok" tools:ignore="ButtonCase,Typos">Ok</string>
     <string name="remind_later">Remind me later</string>
@@ -39,11 +47,14 @@
     <string name="feed_avatar_desc">Feed avatar</string>
     <string name="feed_reload_desc">Feed reload</string>
     <string name="setting_default_avatar_desc">Setting default avatar</string>
+    <string name="setting_link_icon">Setting link icon</string>
 
     <!-- The following are default texts -->
     <string name="d_name">Fangming Ning</string>
     <string name="d_feed_title">Dragon Night 2018</string>
     <string name="d_feed_type">Event</string>
     <string name="d_feed_date">2017/9/20 16:00:45</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="d_setting_full_name">Fangming Ning</string>
+    <string name="d_setting_username">fning@wpi.edu</string>
+    <string name="d_setting_verify">Verified</string>
 </resources>
