@@ -18,6 +18,7 @@ import com.fmning.wpi_csa.helpers.AppMode;
 import com.fmning.wpi_csa.helpers.LoadingView;
 import com.fmning.wpi_csa.helpers.Utils;
 import com.fmning.wpi_csa.http.WCFeedManager;
+import com.fmning.wpi_csa.http.WCService;
 import com.fmning.wpi_csa.http.objects.WCFeed;
 import com.fmning.wpi_csa.http.objects.WCUser;
 
@@ -63,13 +64,13 @@ public class LifeFragment extends Fragment {
         new android.os.Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Utils.appMode = AppMode.LOGIN;
+                Utils.appMode = AppMode.LOGGED_ON;
                 WCUser user = new WCUser(1, "fangming", "token");
-                user.emailConfirmed = true;
-                //WCService.currentUser = user;
+                //user.emailConfirmed = true;
+                WCService.currentUser = user;
                 LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("reloadUserCell"));
             }
-        }, 10000);
+        }, 2000);
 
         Utils.logMsg("bkpoint for testing area");
         /*============================== TESTING AREA ENDS ==============================*/

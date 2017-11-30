@@ -19,8 +19,8 @@
     <string name="setting_reconnect">Reconnect</string>
     <string name="setting_register">Register</string>
     <string name="setting_log_in">Log in</string>
-    <string name="setting_username_hint">Username</string>
-    <string name="setting_password_hint">Password</string>
+    <string name="setting_username_hint"><font size="15">Username</font></string>
+    <string name="setting_password_hint"><font size="15">Password</font></string>
     <string name="setting_facebook">Facebook</string>
     <string name="setting_instagram">Instagram</string>
     <string name="setting_youtube">YouTube</string>

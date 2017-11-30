@@ -327,7 +327,7 @@ public class Utils {
     }
 
     public static void logMsg(String msg){
-        Log.d("csa.debug", msg);
+        Log.wtf("csa.debug", msg);
     }
 }
 

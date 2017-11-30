@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="120dp"
-    android:background="?android:colorBackground">
+    android:background="@color/white">
 
     <ImageView
         android:id="@+id/settingLoginAvatar"
@@ -61,7 +61,7 @@
             <Button
                 android:id="@+id/settingRegisterButton"
                 android:layout_width="wrap_content"
-                android:layout_height="33dp"
+                android:layout_height="35dp"
                 android:paddingTop="6dp"
                 style="?android:attr/borderlessButtonStyle"
                 android:textColor="@color/colorAccent"
@@ -71,7 +71,7 @@
             <Button
                 android:id="@+id/settingLoginButton"
                 android:layout_width="wrap_content"
-                android:layout_height="33dp"
+                android:layout_height="35dp"
                 android:paddingTop="6dp"
                 style="?android:attr/borderlessButtonStyle"
                 android:textColor="@color/colorAccent"
