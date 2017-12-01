@@ -8,6 +8,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -84,6 +85,16 @@ public class WCService {
             public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
                 listener.OnCheckSoftwareVersionDone(context.getString(R.string.server_down_error),
                         "", "", "", "");
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                onFailure(statusCode, headers, throwable.getLocalizedMessage(), throwable);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                onFailure(statusCode, headers, throwable.getLocalizedMessage(), throwable);
             }
         });
     }

@@ -103,6 +103,16 @@ public class WCFeedManager {
                 listener.OnGetRecentFeedDone(context.getString(R.string.server_down_error),
                         new ArrayList<WCFeed>(), null);
             }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                onFailure(statusCode, headers, throwable.getLocalizedMessage(), throwable);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                onFailure(statusCode, headers, throwable.getLocalizedMessage(), throwable);
+            }
         });
     }
 

@@ -43,6 +43,7 @@ public class WCImageManager {
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 listener.OnGetImageDone(context.getString(R.string.server_down_error), null);
             }
+
         });
     }
 

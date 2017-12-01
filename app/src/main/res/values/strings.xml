@@ -6,9 +6,6 @@
     <string name="setting_tab">Setting</string>
     <string name="title_activity_life">Life</string>
 
-    <string name="password_too_short">Password must contain at least 6 chars</string>
-    <string name="password_no_number">Password must have at least 1 number</string>
-    <string name="password_no_letter">Password must have at least 1 letter</string>
 
     <string name="feed_loading">  Loading …</string>
     <string name="no_more_articles">There are no more articles.</string>
@@ -27,8 +24,15 @@
     <string name="setting_change_pwd">Change Password</string>
     <string name="setting_verify_email">Verify Email Address</string>
     <string name="setting_log_out">Log out</string>
+    <string name="setting_change_pwd_old"><font size="15">Enter current password</font></string>
+    <string name="setting_change_pwd_new"><font size="15">Enter new password</font></string>
+    <string name="setting_change_pwd_confirm"><font size="15">Confirm new password</font></string>
+    <string name="setting_email_verified">Verified</string>
+    <string name="setting_email_not_verified">Not Verified</string>
 
     <string name="ok" tools:ignore="ButtonCase,Typos">Ok</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
     <string name="remind_later">Remind me later</string>
     <string name="never_show_again">Never show this again</string>
 
@@ -38,6 +42,11 @@
     <string name="respond_format_error">Incorrect respond format. Please contact support at admin@fmning.com</string>
     <string name="number_format_error">Malformated WCService image id</string>
     <string name="user_detail_update_error">No user details to be saved</string>
+    <string name="password_too_short">Password must contain at least 6 chars</string>
+    <string name="password_no_number">Password must have at least 1 number</string>
+    <string name="password_no_letter">Password must have at least 1 letter</string>
+    <string name="new_pwd_empty_error">Enter current password</string>
+    <string name="pwd_not_match_error">New passwords don\'t match.</string>
     <!--Known server side error that needs to be handled-->
     <string name="no_more_feed_error">There are no more feeds.</string>
     <string name="no_event_error">The event you are looking for does not exist.</string>

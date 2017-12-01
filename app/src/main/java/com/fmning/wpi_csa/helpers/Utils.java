@@ -17,7 +17,7 @@ import com.fmning.wpi_csa.cache.CacheManager;
 import com.fmning.wpi_csa.cache.Database;
 import com.fmning.wpi_csa.http.WCService;
 import com.fmning.wpi_csa.http.objects.WCUser;
-import com.fmning.wpi_csa.http.objects.WCUserManager;
+import com.fmning.wpi_csa.http.WCUserManager;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -177,7 +177,7 @@ public class Utils {
         }
     }
 
-    private static void processErrorMessage(Context context, String errMsg, boolean showAlert){
+    public static void processErrorMessage(Context context, String errMsg, boolean showAlert){
         if (errMsg.equals(context.getString(R.string.server_down_error))){
             WCService.currentUser = null;
             appMode = AppMode.OFFLINE;

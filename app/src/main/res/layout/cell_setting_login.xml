@@ -30,6 +30,7 @@
             android:layout_marginTop="10dp"
             android:hint="@string/setting_username_hint"
             android:backgroundTint="@color/clear"
+            android:maxLines="1"
             android:inputType="textEmailAddress"
             android:imeOptions="actionNext"
             />
@@ -49,6 +50,7 @@
             android:layout_marginTop="-5dp"
             android:hint="@string/setting_password_hint"
             android:backgroundTint="@color/clear"
+            android:maxLines="1"
             android:inputType="textPassword"
             android:imeOptions="actionDone"
             />

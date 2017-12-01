@@ -1,15 +1,14 @@
-package com.fmning.wpi_csa.http.objects;
+package com.fmning.wpi_csa.http;
 
 import android.content.Context;
 
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.helpers.Utils;
-import com.fmning.wpi_csa.http.RequestMocker;
-import com.fmning.wpi_csa.http.WCService;
-import com.fmning.wpi_csa.http.WCUtils;
+import com.fmning.wpi_csa.http.objects.WCUser;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -64,6 +63,16 @@ public class WCUserManager {
             public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
                 Utils.logMsg(res);
                 listener.OnGetUserSaltDone(context.getString(R.string.server_down_error), "");
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                onFailure(statusCode, headers, throwable.getLocalizedMessage(), throwable);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                onFailure(statusCode, headers, throwable.getLocalizedMessage(), throwable);
             }
         });
     }
@@ -129,6 +138,16 @@ public class WCUserManager {
                 Utils.logMsg(res);
                 listener.OnLoginUserDone(context.getString(R.string.server_down_error), null);
             }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                onFailure(statusCode, headers, throwable.getLocalizedMessage(), throwable);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                onFailure(statusCode, headers, throwable.getLocalizedMessage(), throwable);
+            }
         });
 
     }
@@ -165,6 +184,16 @@ public class WCUserManager {
                     public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
                         Utils.logMsg(res);
                         listener.OnRegisterSaltDone(context.getString(R.string.server_down_error), "");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                        onFailure(statusCode, headers, throwable.getLocalizedMessage(), throwable);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        onFailure(statusCode, headers, throwable.getLocalizedMessage(), throwable);
                     }
                 });
     }
@@ -204,6 +233,16 @@ public class WCUserManager {
                     public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
                         Utils.logMsg(res);
                         listener.OnRegisterDone(context.getString(R.string.server_down_error), null);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                        onFailure(statusCode, headers, throwable.getLocalizedMessage(), throwable);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        onFailure(statusCode, headers, throwable.getLocalizedMessage(), throwable);
                     }
                 });
     }
@@ -264,6 +303,16 @@ public class WCUserManager {
                         Utils.logMsg(res);
                         listener.OnSaveUserDetailsDone(context.getString(R.string.server_down_error));
                     }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                        onFailure(statusCode, headers, throwable.getLocalizedMessage(), throwable);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        onFailure(statusCode, headers, throwable.getLocalizedMessage(), throwable);
+                    }
                 });
     }
 
@@ -299,6 +348,16 @@ public class WCUserManager {
                     public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
                         Utils.logMsg(res);
                         listener.OnSendEmailConfirmationDone(context.getString(R.string.server_down_error));
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                        onFailure(statusCode, headers, throwable.getLocalizedMessage(), throwable);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        onFailure(statusCode, headers, throwable.getLocalizedMessage(), throwable);
                     }
                 });
     }
@@ -336,6 +395,16 @@ public class WCUserManager {
                     public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
                         Utils.logMsg(res);
                         listener.OnChangePasswordDone(context.getString(R.string.server_down_error), "");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                        onFailure(statusCode, headers, throwable.getLocalizedMessage(), throwable);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        onFailure(statusCode, headers, throwable.getLocalizedMessage(), throwable);
                     }
                 });
     }

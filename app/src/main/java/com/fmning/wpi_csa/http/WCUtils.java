@@ -6,6 +6,9 @@ import android.net.NetworkInfo;
 
 import org.json.JSONObject;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 /**
  * Created by fangmingning
  * On 11/1/17.
@@ -16,7 +19,7 @@ public class WCUtils {
     //public static final String serviceBase = "https://wcservice.fmning.com/"; //*****************PROD
     public static final String serviceBase = "http://wc.fmning.com/"; //********************TEST
     //If enabled, most of the HTTP request will return faked local value, instead of making network calls
-    public static final Boolean localMode = true;
+    public static final Boolean localMode = false;
 
     /*
         Web request URL standard:
@@ -48,13 +51,29 @@ public class WCUtils {
 
 
 
+    public static String md5(final String s) {
+        final String MD5 = "MD5";
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest
+                    .getInstance(MD5);
+            digest.update(s.getBytes());
+            byte messageDigest[] = digest.digest();
 
+            // Create Hex String
+            StringBuilder hexString = new StringBuilder();
+            for (byte aMessageDigest : messageDigest) {
+                String h = Integer.toHexString(0xFF & aMessageDigest);
+                while (h.length() < 2)
+                    h = "0" + h;
+                hexString.append(h);
+            }
+            return hexString.toString();
 
-    public static void initSetup(Context activityContext){
-        context = activityContext;
-        try{
-            serverDownResponse = new JSONObject("{\"error\":\"Server down\"}");
-        }catch(Exception e){}
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public static boolean isNetworkAvailable() {

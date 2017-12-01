@@ -2,11 +2,15 @@ package com.fmning.wpi_csa.adapters;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -18,6 +22,8 @@ import com.fmning.wpi_csa.helpers.AppMode;
 import com.fmning.wpi_csa.helpers.Utils;
 import com.fmning.wpi_csa.http.WCService;
 import com.fmning.wpi_csa.http.objects.WCUser;
+
+import static android.content.Context.INPUT_METHOD_SERVICE;
 
 /**
  * Created by fangmingning
@@ -116,13 +122,20 @@ public class SettingListAdapter extends RecyclerView.Adapter<ViewHolder> {
 
                 final EditText usernameField = (EditText) cell.findViewById(R.id.settingUsernameField);
                 final EditText passwordField = (EditText) cell.findViewById(R.id.settingPasswordField);
-                passwordField.setOnKeyListener(new View.OnKeyListener() {
+                passwordField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                     @Override
-                    public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                        if (keyEvent.getAction() == KeyEvent.KEYCODE_ENTER) {
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                        if (actionId == EditorInfo.IME_ACTION_DONE) {
                             String username = usernameField.getText().toString();
                             String password = passwordField.getText().toString();
                             listener.OnLogInClick(username, password);
+
+                            InputMethodManager imm = (InputMethodManager) context.getSystemService(INPUT_METHOD_SERVICE);
+
+                            if (imm != null && imm.isAcceptingText()) {
+                                imm.hideSoftInputFromWindow(passwordField.getWindowToken(), 0);
+                            }
+
                             return true;
                         }
                         return false;
@@ -147,6 +160,23 @@ public class SettingListAdapter extends RecyclerView.Adapter<ViewHolder> {
                     }
                 });
             } else {
+                WCUser user = WCService.currentUser;
+                ((TextView) cell.findViewById(R.id.settingUserNameText)).setText(user.name);
+                ((TextView) cell.findViewById(R.id.settingUserEmaillText)).setText(user.username);
+                TextView verifiedView = (TextView) cell.findViewById(R.id.settingUserEmailVerifiedText);
+                int imageSize = (int)(dpRatio * 15);
+                if (user.emailConfirmed) {
+                    verifiedView.setText(context.getString(R.string.setting_email_verified));
+                    Drawable img = ContextCompat.getDrawable(context, R.drawable.verified);
+                    img.setBounds(0, 0, imageSize, imageSize);
+                    verifiedView.setCompoundDrawables(img, null, null, null);
+                } else {
+                    verifiedView.setText(context.getString(R.string.setting_email_not_verified));
+                    Drawable img = ContextCompat.getDrawable(context, R.drawable.not_verified);
+                    img.setBounds(0, 0, imageSize, imageSize);
+                    verifiedView.setCompoundDrawables(img, null, null, null);
+                }
+
                 cell.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
