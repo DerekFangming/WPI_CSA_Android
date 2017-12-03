@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/settingChangePwdOld"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:hint="@string/setting_change_pwd_old"
+        android:maxLines="1"
+        android:inputType="textPassword"
+        android:imeOptions="actionNext" />
+
+    <EditText
+        android:id="@+id/settingChangePwdNew"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:hint="@string/setting_change_pwd_new"
+        android:maxLines="1"
+        android:inputType="textPassword"
+        android:imeOptions="actionNext" />
+
+    <EditText
+        android:id="@+id/settingChangePwdConfirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:hint="@string/setting_change_pwd_confirm"
+        android:maxLines="1"
+        android:inputType="textPassword"
+        android:imeOptions="actionDone" />
+
+</LinearLayout>
