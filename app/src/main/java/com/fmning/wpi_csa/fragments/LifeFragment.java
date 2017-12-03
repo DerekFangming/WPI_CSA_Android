@@ -61,23 +61,24 @@ public class LifeFragment extends Fragment {
 
         /*============================== TESTING AREA STARTS ==============================*/
 
-        new android.os.Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Utils.appMode = AppMode.LOGGED_ON;
-                WCUser user = new WCUser(1, "fangming", "token");
-                user.name = "Fangming Ning";
-                //user.emailConfirmed = true;
-                WCService.currentUser = user;
-                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("reloadUserCell"));
-            }
-        }, 2000);
+//        new android.os.Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                Utils.appMode = AppMode.LOGGED_ON;
+//                WCUser user = new WCUser(1, "fangming", "token");
+//                user.name = "Fangming Ning";
+//                //user.emailConfirmed = true;
+//                WCService.currentUser = user;
+//                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("reloadUserCell"));
+//            }
+//        }, 2000);
 
 
         Utils.logMsg("bkpoint for testing area");
         /*============================== TESTING AREA ENDS ==============================*/
 
-        refreshControl = (SwipeRefreshLayout)inflater.inflate(R.layout.fragment_life, container, false);
+        View parentView = inflater.inflate(R.layout.fragment_life, container, false);
+        refreshControl = (SwipeRefreshLayout)parentView.findViewById(R.id.swipeRefreshLayout);
         refreshControl.setEnabled(false);
         refreshControl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -160,7 +161,7 @@ public class LifeFragment extends Fragment {
         });
 
 
-        return refreshControl;
+        return parentView;
     }
 
     private void refresh(boolean refreshFromTappingServerDownScreen){
