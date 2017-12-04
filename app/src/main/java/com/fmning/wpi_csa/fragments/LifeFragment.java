@@ -61,17 +61,17 @@ public class LifeFragment extends Fragment {
 
         /*============================== TESTING AREA STARTS ==============================*/
 
-//        new android.os.Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                Utils.appMode = AppMode.LOGGED_ON;
-//                WCUser user = new WCUser(1, "fangming", "token");
-//                user.name = "Fangming Ning";
-//                //user.emailConfirmed = true;
-//                WCService.currentUser = user;
-//                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("reloadUserCell"));
-//            }
-//        }, 2000);
+        new android.os.Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Utils.appMode = AppMode.LOGIN;
+                WCUser user = new WCUser(1, "fangming", "token");
+                user.name = "Fangming Ning";
+                //user.emailConfirmed = true;
+                WCService.currentUser = user;
+                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("reloadUserCell"));
+            }
+        }, 2000);
 
 
         Utils.logMsg("bkpoint for testing area");

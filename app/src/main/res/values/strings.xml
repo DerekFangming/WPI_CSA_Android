@@ -1,6 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">WPI_CSA</string>
 
+    <string name="register_activity">Register</string>
+
     <string name="life_tab">Life</string>
     <string name="sg_tab">Survival Guide</string>
     <string name="setting_tab">Setting</string>
@@ -29,10 +31,15 @@
     <string name="setting_change_pwd_confirm"><font size="15">Confirm new password</font></string>
     <string name="setting_email_verified">Verified</string>
     <string name="setting_email_not_verified">Not Verified</string>
+    <string name="setting_email_confirm_msg1">An email has been sent to </string>
+    <string name="setting_email_confirm_msg2"> with a link to confirm your email. Please click on the link in 24 hours. Please check your junk folder if you cannot see the email.</string>
+    <string name="setting_logout_title">Are you sure</string>
+    <string name="setting_logout_message">Your credentials will be removed</string>
 
     <string name="ok" tools:ignore="ButtonCase,Typos">Ok</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+    <string name="done">Done</string>
     <string name="remind_later">Remind me later</string>
     <string name="never_show_again">Never show this again</string>
 

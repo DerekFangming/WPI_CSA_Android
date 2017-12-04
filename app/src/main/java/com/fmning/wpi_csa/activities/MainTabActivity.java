@@ -26,7 +26,7 @@ public class MainTabActivity extends AppCompatActivity {
         viewPager.setPagingEnabled(false);
         BottomBarAdapter pagerAdapter = new BottomBarAdapter(getSupportFragmentManager());
 
-        LifeFragment lifeFragment = new LifeFragment().newInstance("hahahah", "jajajaj");
+        LifeFragment lifeFragment = new LifeFragment();//.newInstance("hahahah", "jajajaj");
 
         pagerAdapter.addFragments(lifeFragment);
 

@@ -98,7 +98,7 @@ public class SettingListAdapter extends RecyclerView.Adapter<ViewHolder> {
                 View view5 = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_setting_button, parent, false);
                 return new ViewHolder(view5);
             case 6:
-                View view6 = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_setting_separator, parent, false);
+                View view6 = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_list_separator, parent, false);
                 return new ViewHolder(view6);
 
         }
