@@ -53,12 +53,9 @@ public class LifeListAdapter extends RecyclerView.Adapter<ViewHolder> {
             case 1:
                 View view1 = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_feed, parent, false);
                 return new ViewHolder(view1);
-
             case 2:
                 View view2 = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_feed_loading, parent, false);
                 return new ViewHolder(view2);
-
-
         }
         return null;
     }

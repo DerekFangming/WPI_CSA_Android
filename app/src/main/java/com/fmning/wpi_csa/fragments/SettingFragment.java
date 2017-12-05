@@ -97,8 +97,10 @@ public class SettingFragment extends Fragment {
 
             @Override
             public void OnRegisterClick() {
+
                 Intent intent = new Intent(getActivity(), RegisterActivity.class);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
             }
 
             @Override

@@ -21,7 +21,7 @@
         </activity>
         <activity
             android:name=".activities.RegisterActivity"
-            android:label="@string/register_activity">
+            android:windowSoftInputMode="adjustPan">
         </activity>
     </application>
 
