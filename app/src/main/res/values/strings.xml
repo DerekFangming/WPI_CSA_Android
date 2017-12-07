@@ -35,6 +35,24 @@
     <string name="setting_email_confirm_msg2"> with a link to confirm your email. Please click on the link in 24 hours. Please check your junk folder if you cannot see the email.</string>
     <string name="setting_logout_title">Are you sure</string>
     <string name="setting_logout_message">Your credentials will be removed</string>
+    <string name="register_greeting_msg">Welcome to CSA</string>
+    <string name="register_header_avatar">AVATAR</string>
+    <string name="register_header_required">REQUIRED</string>
+    <string name="register_header_optional">OPTIONAL</string>
+    <string name="register_label_username">Username</string>
+    <string name="register_label_name">Name</string>
+    <string name="register_label_password">Password</string>
+    <string name="register_label_confirm">Confirm</string>
+    <string name="register_label_birthday">Birthday</string>
+    <string name="register_label_classof">Class of</string>
+    <string name="register_label_major">Major</string>
+    <string name="register_hint_username">Your email address</string>
+    <string name="register_hint_name">Your name</string>
+    <string name="register_hint_password">6 characters with number and letter</string>
+    <string name="register_hint_confirm">Confirm your password</string>
+    <string name="register_hint_birthday">Your birthday</string>
+    <string name="register_hint_classof">Graduation year, like 2020</string>
+    <string name="register_hint_major">Abbreviation of your major</string>
 
     <string name="ok" tools:ignore="ButtonCase,Typos">Ok</string>
     <string name="confirm">Confirm</string>
@@ -64,6 +82,7 @@
     <string name="feed_reload_desc">Feed reload</string>
     <string name="setting_default_avatar_desc">Setting default avatar</string>
     <string name="setting_link_icon">Setting link icon</string>
+    <string name="register_avatar_desc">Register avatar</string>
 
     <!-- The following are default texts -->
     <string name="d_name">Fangming Ning</string>

@@ -5,11 +5,23 @@
     android:layout_height="100dp"
     android:background="@color/white">
 
+    <ImageView
+        android:id="@+id/registerAvatar"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/add_avatar"
+        android:layout_marginStart="15dp"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/register_avatar_desc"/>
+
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:text="Welcome to CSA"/>
+        android:layout_toEndOf="@id/registerAvatar"
+        android:textAlignment="center"
+        android:text="@string/register_greeting_msg"
+        android:textColor="@color/black"/>
 
     <View
         android:id="@+id/settingLinkBotLine"

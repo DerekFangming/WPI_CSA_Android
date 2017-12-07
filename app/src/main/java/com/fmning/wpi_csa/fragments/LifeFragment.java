@@ -64,7 +64,7 @@ public class LifeFragment extends Fragment {
         new android.os.Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Utils.appMode = AppMode.LOGIN;
+                Utils.appMode = AppMode.LOGGED_ON;
                 WCUser user = new WCUser(1, "fangming", "token");
                 user.name = "Fangming Ning";
                 //user.emailConfirmed = true;
