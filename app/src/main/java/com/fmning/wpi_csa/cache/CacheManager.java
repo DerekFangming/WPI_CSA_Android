@@ -67,7 +67,7 @@ public class CacheManager {
         }
     }
 
-    public static void getImage(final Context context, String name, final OnCacheGetImageDoneListener listener){
+    public static void getImage(final Context context, String name, final OnCacheGetImageListener listener){
         int id = 0;
         if (name.startsWith("WCImage_")){
             try {
@@ -126,37 +126,17 @@ public class CacheManager {
             }
         });
 
-        /*Bitmap bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_avatar);
-
-
-        */
-
-        /*AsyncHttpClient client = new AsyncHttpClient();
-        RequestParams params = new RequestParams();
-        params.put("id", 1);
-        client.get("https://wcservice.fmning.com/get_image", params, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                Bitmap image = BitmapFactory.decodeByteArray(responseBody, 0, responseBody.length);
-                String error = "";
-                if (image == null) {
-                    error = new String(responseBody);
-                    if(error == null || error.equals("")){
-                        error = context.getString(R.string.unknown_error);
-                    }
-                }
-                listener.OnCacheGetImageDone(error, image);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                listener.OnCacheGetImageDone(context.getString(R.string.server_down_error), null);
-            }
-        });*/
     }
 
+    public static void uploadImage(Bitmap image, String type, int targetSize, OnCacheUploadImageListener listener) {
 
-    public interface OnCacheGetImageDoneListener {
+    }
+
+    public interface OnCacheGetImageListener {
         void OnCacheGetImageDone(String error, Bitmap image);
+    }
+
+    public interface OnCacheUploadImageListener {
+        void OnCacheUploadImageDone(String error, int id);
     }
 }

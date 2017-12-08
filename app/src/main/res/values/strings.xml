@@ -71,18 +71,28 @@
     <string name="password_no_number">Password must have at least 1 number</string>
     <string name="password_no_letter">Password must have at least 1 letter</string>
     <string name="new_pwd_empty_error">Enter current password</string>
-    <string name="pwd_not_match_error">New passwords don\'t match.</string>
+    <string name="pwd_not_match_error">Two passwords don\'t match.</string>
+    <string name="username_format_error">Username is not a well fomatted email</string>
+    <string name="name_empty_error">You must enter your name</string>
+    <string name="name_too_long_error">Name needs to be less that 20 characters</string>
+    <string name="password_empty_error">You must enter a password</string>
+    <string name="year_format_error">Graduation year must be a four digits number</string>
+    <string name="major_too_long_error">Please use abbreviation for major, like CS, ECE, etc</string>
     <!--Known server side error that needs to be handled-->
     <string name="no_more_feed_error">There are no more feeds.</string>
     <string name="no_event_error">The event you are looking for does not exist.</string>
 
-    <!-- Image View content descriptions -->
+    <!--Image View content descriptions -->
     <string name="feed_cover_desc">Feed cover</string>
     <string name="feed_avatar_desc">Feed avatar</string>
     <string name="feed_reload_desc">Feed reload</string>
     <string name="setting_default_avatar_desc">Setting default avatar</string>
     <string name="setting_link_icon">Setting link icon</string>
     <string name="register_avatar_desc">Register avatar</string>
+
+    <!--String formats with place holders-->
+    <string name="simple_date">%1$s/%2$s/%3$s</string>
+    <string name="name_register_fail_error">User created but name is not stored correctly. %1$s</string>
 
     <!-- The following are default texts -->
     <string name="d_name">Fangming Ning</string>

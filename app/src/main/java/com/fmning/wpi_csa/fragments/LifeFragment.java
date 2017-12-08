@@ -1,10 +1,10 @@
 package com.fmning.wpi_csa.fragments;
 
 import android.content.Context;
-import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,14 +14,13 @@ import android.view.ViewGroup;
 
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.adapters.LifeListAdapter;
-import com.fmning.wpi_csa.helpers.AppMode;
 import com.fmning.wpi_csa.helpers.LoadingView;
 import com.fmning.wpi_csa.helpers.Utils;
 import com.fmning.wpi_csa.http.WCFeedManager;
-import com.fmning.wpi_csa.http.WCService;
 import com.fmning.wpi_csa.http.objects.WCFeed;
-import com.fmning.wpi_csa.http.objects.WCUser;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 
@@ -61,17 +60,32 @@ public class LifeFragment extends Fragment {
 
         /*============================== TESTING AREA STARTS ==============================*/
 
-        new android.os.Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Utils.appMode = AppMode.LOGGED_ON;
-                WCUser user = new WCUser(1, "fangming", "token");
-                user.name = "Fangming Ning";
-                //user.emailConfirmed = true;
-                WCService.currentUser = user;
-                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("reloadUserCell"));
-            }
-        }, 2000);
+//        new android.os.Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                Utils.appMode = AppMode.LOGGED_ON;
+//                WCUser user = new WCUser(1, "fangming", "token");
+//                user.name = "Fangming Ning";
+//                user.emailConfirmed = true;
+//                WCService.currentUser = user;
+//                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("reloadUserCell"));
+//            }
+//        }, 2000);
+
+        Bitmap icon = BitmapFactory.decodeResource(getActivity().getResources(),
+                R.drawable.test);
+
+        FileOutputStream out = null;
+        try {
+            String appRootPath = getActivity().getApplicationInfo().dataDir;
+            final String imgFileName = appRootPath + "/imageCache/99.jpg";
+            out = new FileOutputStream(imgFileName);
+            icon.compress(Bitmap.CompressFormat.JPEG, 50, out);
+
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
         Utils.logMsg("bkpoint for testing area");

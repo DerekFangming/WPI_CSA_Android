@@ -73,7 +73,7 @@ public class LifeListAdapter extends RecyclerView.Adapter<ViewHolder> {
             ((TextView) cell.findViewById(R.id.feedCellCreatedAt)).setText(Utils.dateToString(feed.createdAt));
 
             if (feed.avatarId != -1) {
-                CacheManager.getImage(context, Utils.convertToWCImageId(feed.avatarId), new CacheManager.OnCacheGetImageDoneListener() {
+                CacheManager.getImage(context, Utils.convertToWCImageId(feed.avatarId), new CacheManager.OnCacheGetImageListener() {
                     @Override
                     public void OnCacheGetImageDone(String error, Bitmap image) {
                         if (error.equals("")) {
@@ -92,7 +92,7 @@ public class LifeListAdapter extends RecyclerView.Adapter<ViewHolder> {
             ((ImageView) cell.findViewById(R.id.feedCellCoverImage))
                     .setImageBitmap(Utils.createImage(context.getResources().getColor(R.color.white)));
             if (feed.coverImgId != -1) {
-                CacheManager.getImage(context, Utils.convertToWCImageId(feed.coverImgId), new CacheManager.OnCacheGetImageDoneListener() {
+                CacheManager.getImage(context, Utils.convertToWCImageId(feed.coverImgId), new CacheManager.OnCacheGetImageListener() {
                     @Override
                     public void OnCacheGetImageDone(String error, Bitmap image) {
                         if (error.equals("")) {
