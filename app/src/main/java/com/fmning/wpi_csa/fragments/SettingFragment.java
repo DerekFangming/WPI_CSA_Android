@@ -63,7 +63,14 @@ public class SettingFragment extends Fragment {
 
             @Override
             public void OnLogInClick(final String username, final String password) {
-                Utils.logMsg("log in " + username + "  "  + password);
+                View view = getActivity().getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
+                }
+
                 Utils.showLoadingIndicator(getActivity());
                 WCUserManager.getSaltForUser(getActivity(), username, new WCUserManager.OnGetUserSaltListener() {
                     @Override

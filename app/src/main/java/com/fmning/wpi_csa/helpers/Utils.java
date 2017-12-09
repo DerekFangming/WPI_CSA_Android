@@ -19,6 +19,7 @@ import com.fmning.wpi_csa.http.WCService;
 import com.fmning.wpi_csa.http.objects.WCUser;
 import com.fmning.wpi_csa.http.WCUserManager;
 
+import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -326,8 +327,36 @@ public class Utils {
         return image;
     }
 
+    public static int compressRateForSize(Bitmap bitmap, int target) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        int fullSize = stream.toByteArray().length;
+        int rate = fullSize / target;
+
+        if (rate == 0) {
+            return 100;
+        } else if (rate <= 2) {
+            return 90;
+        } else if (rate <= 4) {
+            return 60;
+        } else if (rate <= 8) {
+            return 20;
+        } else {
+            return 0;
+        }
+    }
+
     public static void logMsg(String msg){
         Log.wtf("csa.debug", msg);
+    }
+
+    public static void logLong(String content) {
+        if (content.length() > 4000) {
+            Log.wtf("csa.debug", content.substring(0, 4000));
+            logLong(content.substring(4000));
+        } else {
+            Log.wtf("csa.debug", content);
+        }
     }
 }
 

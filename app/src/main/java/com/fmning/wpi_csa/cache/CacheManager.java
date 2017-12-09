@@ -128,7 +128,35 @@ public class CacheManager {
 
     }
 
-    public static void uploadImage(Bitmap image, String type, int targetSize, OnCacheUploadImageListener listener) {
+    public static void uploadImage(final Context context, final Bitmap image, String type, int targetSize, final OnCacheUploadImageListener listener) {
+        int compressRate = 100;
+        if (targetSize != -1) {
+            compressRate = Utils.compressRateForSize(image, targetSize);
+        }
+
+        WCImageManager.saveTypeUniqueImg(context, image, type, compressRate, new WCImageManager.OnUploadImageDoneListener() {
+            @Override
+            public void OnUploadImageDone(String error, int id) {
+                if (error.equals("")) {
+                    String appRootPath = context.getApplicationInfo().dataDir;
+                    final String imgFileName = appRootPath + IMG_CACHE_SUB_PATH + Integer.toString(id) + ".jpg";
+
+                    FileOutputStream out = null;
+                    try {
+                        out = new FileOutputStream(imgFileName);
+                        image.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                        out.close();
+
+                        Database.createOrUpdateImageCache(context, id);
+                    } catch (Exception e) {
+                        Utils.logMsg(e.toString());
+                    }
+                    listener.OnCacheUploadImageDone("", id);
+                } else {
+                    listener.OnCacheUploadImageDone(error, -1);
+                }
+            }
+        });
 
     }
 
