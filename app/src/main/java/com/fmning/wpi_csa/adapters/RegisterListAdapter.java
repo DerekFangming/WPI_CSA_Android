@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fmning.wpi_csa.R;
-import com.fmning.wpi_csa.helpers.Utils;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -103,7 +102,7 @@ public class RegisterListAdapter extends RecyclerView.Adapter<ViewHolder> {
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         View cell = holder.itemView;
-        Utils.logMsg("position " + Integer.toString(position) + " holder " + Integer.toString(holder.getAdapterPosition()));
+
         if (position == 0) {
             ((TextView) cell.findViewById(R.id.separatorHeaderText)).setText(context.getString(R.string.register_header_avatar));
         } else if (position == 1) {

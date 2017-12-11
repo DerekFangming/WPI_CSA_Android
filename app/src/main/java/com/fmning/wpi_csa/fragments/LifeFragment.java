@@ -1,14 +1,11 @@
 package com.fmning.wpi_csa.fragments;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +15,8 @@ import com.fmning.wpi_csa.adapters.LifeListAdapter;
 import com.fmning.wpi_csa.helpers.LoadingView;
 import com.fmning.wpi_csa.helpers.Utils;
 import com.fmning.wpi_csa.http.WCFeedManager;
-import com.fmning.wpi_csa.http.WCImageManager;
 import com.fmning.wpi_csa.http.objects.WCFeed;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.List;
 
 
@@ -75,33 +67,6 @@ public class LifeFragment extends Fragment {
 //                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("reloadUserCell"));
 //            }
 //        }, 2000);
-        String appRootPath = getActivity().getApplicationInfo().dataDir;
-        final String srcName = appRootPath + "/imageCache/1.jpg";
-
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inScaled = false;
-        final Bitmap icon = BitmapFactory.decodeFile(srcName);
-
-
-
-
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        icon.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[] imageInByte = stream.toByteArray();
-        long lengthbmp = imageInByte.length;
-        Utils.logMsg(Long.toString(lengthbmp));
-
-        FileOutputStream out = null;
-        try {
-            final String imgFileName = appRootPath + "/imageCache/99.jpg";
-            out = new FileOutputStream(imgFileName);
-            icon.compress(Bitmap.CompressFormat.JPEG, 95 , out);
-
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
 
         Utils.logMsg("bkpoint for testing area");
         /*============================== TESTING AREA ENDS ==============================*/

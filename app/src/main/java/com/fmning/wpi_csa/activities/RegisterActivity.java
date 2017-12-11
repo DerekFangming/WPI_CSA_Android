@@ -1,6 +1,9 @@
 package com.fmning.wpi_csa.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -10,12 +13,15 @@ import android.support.v7.widget.RecyclerView;
 
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.adapters.RegisterListAdapter;
+import com.fmning.wpi_csa.cache.CacheManager;
 import com.fmning.wpi_csa.helpers.AppMode;
 import com.fmning.wpi_csa.helpers.Utils;
 import com.fmning.wpi_csa.http.WCService;
 import com.fmning.wpi_csa.http.WCUserManager;
 import com.fmning.wpi_csa.http.WCUtils;
 import com.fmning.wpi_csa.http.objects.WCUser;
+
+import java.io.IOException;
 
 /**
  * Created by fangmingning
@@ -44,6 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void OnRegisterClicked(final String username, final String name, final String password, String confirm,
                                           final String birthday, final String classOf, final String major, final Uri avatar) {
+
                 if (username ==  null || username.trim().equals("") || !Utils.isEmailAddress(username.trim())) {
                     Utils.showAlertMessage(RegisterActivity.this, getString(R.string.username_format_error));
                     return;
@@ -101,7 +108,7 @@ public class RegisterActivity extends AppCompatActivity {
                             WCUserManager.register(RegisterActivity.this, username.trim(),
                                 WCUtils.md5(password + salt), new WCUserManager.OnRegisterListener() {
                                     @Override
-                                    public void OnRegisterDone(String error, WCUser user) {
+                                    public void OnRegisterDone(String error, final WCUser user) {
                                         if (error.equals("")) {
                                             WCService.currentUser = user;
                                             Utils.appMode = AppMode.LOGGED_ON;
@@ -125,15 +132,80 @@ public class RegisterActivity extends AppCompatActivity {
                                                                     WCUtils.md5(password + salt));
 
                                                             if (avatar != null) {
-                                                                //CacheManager.
+                                                                try {
+                                                                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(RegisterActivity.this.getContentResolver(), avatar);
+                                                                    CacheManager.uploadImage(RegisterActivity.this, bitmap, "Avatar", 250,
+                                                                            new CacheManager.OnCacheUploadImageListener() {
+                                                                        @Override
+                                                                        public void OnCacheUploadImageDone(String error, int id) {
+                                                                            if (!error.equals("")) {
+                                                                                Utils.logMsg(error);
+                                                                            }
+                                                                            WCService.currentUser.avatarId = id;
+                                                                            LocalBroadcastManager.getInstance(RegisterActivity.this)
+                                                                                    .sendBroadcast(new Intent("reloadUserCell"));
+                                                                            Utils.hideLoadingIndicator();
+                                                                            AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                                                                            builder.setTitle(null)
+                                                                                    .setCancelable(false)
+                                                                                    .setMessage(String.format(RegisterActivity.this
+                                                                                            .getString(R.string.register_done_message), user.username))
+                                                                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                                                                        public void onClick(DialogInterface dialog, int which) {
+                                                                                            finish();
+                                                                                        }
+                                                                                    })
+                                                                                    .show();
+                                                                        }
+                                                                    });
+                                                                } catch (IOException e) {
+                                                                    Utils.logMsg(e.getMessage());
+                                                                    LocalBroadcastManager.getInstance(RegisterActivity.this)
+                                                                            .sendBroadcast(new Intent("reloadUserCell"));
+                                                                    Utils.hideLoadingIndicator();
+                                                                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                                                                    builder.setTitle(null)
+                                                                            .setCancelable(false)
+                                                                            .setMessage(String.format(RegisterActivity.this
+                                                                                    .getString(R.string.register_done_message), user.username))
+                                                                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                                                                public void onClick(DialogInterface dialog, int which) {
+                                                                                    finish();
+                                                                                }
+                                                                            })
+                                                                            .show();
+                                                                }
+                                                            } else {
+                                                                LocalBroadcastManager.getInstance(RegisterActivity.this)
+                                                                        .sendBroadcast(new Intent("reloadUserCell"));
+                                                                Utils.hideLoadingIndicator();
+                                                                AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                                                                builder.setTitle(null)
+                                                                        .setCancelable(false)
+                                                                        .setMessage(String.format(RegisterActivity.this
+                                                                                .getString(R.string.register_done_message), user.username))
+                                                                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                                                            public void onClick(DialogInterface dialog, int which) {
+                                                                                finish();
+                                                                            }
+                                                                        })
+                                                                        .show();
                                                             }
                                                         } else {
                                                             LocalBroadcastManager.getInstance(RegisterActivity.this)
                                                                     .sendBroadcast(new Intent("reloadUserCell"));
                                                             Utils.hideLoadingIndicator();
-                                                            Utils.showAlertMessage(RegisterActivity.this,
-                                                                    String.format(RegisterActivity.this
-                                                                            .getString(R.string.name_register_fail_error), error));
+                                                            AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                                                            builder.setTitle(null)
+                                                                    .setCancelable(false)
+                                                                    .setMessage(String.format(RegisterActivity.this
+                                                                            .getString(R.string.name_register_fail_error), error))
+                                                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                                                        public void onClick(DialogInterface dialog, int which) {
+                                                                            finish();
+                                                                        }
+                                                                    })
+                                                                    .show();
                                                         }
                                                     }
                                                 });

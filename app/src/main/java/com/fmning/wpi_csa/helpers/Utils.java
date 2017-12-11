@@ -101,7 +101,7 @@ public class Utils {
                     hideLoadingIndicator();
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    AlertDialog show = builder.setTitle(title)
+                    builder.setTitle(title)
                             .setCancelable(false)
                             .setMessage(msg)
                             .setPositiveButton(context.getString(R.string.remind_later), new DialogInterface.OnClickListener() {
@@ -128,7 +128,7 @@ public class Utils {
                     hideLoadingIndicator();
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    AlertDialog show = builder.setTitle(title)
+                    builder.setTitle(title)
                             .setCancelable(false)
                             .setMessage(msg)
                             .setPositiveButton(context.getString(R.string.remind_later), null)
