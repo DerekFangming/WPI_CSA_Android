@@ -1,10 +1,12 @@
 package com.fmning.wpi_csa.activities;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.adapters.BottomBarAdapter;
@@ -41,6 +43,9 @@ public class MainTabActivity extends AppCompatActivity {
         viewPager.setAdapter(pagerAdapter);
         viewPager.setOffscreenPageLimit(3);
 
+        getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR |
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        getWindow().setStatusBarColor(Color.TRANSPARENT);
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -49,29 +54,30 @@ public class MainTabActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.actionLife:
                         viewPager.setCurrentItem(0, false);
+
+                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR |
+                                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
                         break;
                     case R.id.actionSG:
                         viewPager.setCurrentItem(1, false);
+
+                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
+
                         break;
                     case R.id.actionSetting:
                         viewPager.setCurrentItem(2, false);
+
+                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR |
+                                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
                         break;
 
                 }
                 return true;
             }
         });
-
-//        WCUtils.initSetup(this);
-//
-//        WCService.checkSoftwareVersion(this, "1.03.001", new WCService.OnCheckSoftwareVersionListener() {
-//            @Override
-//            public void OnCheckSoftwareVersionDone(String status, String title, String msg, String updates, String version) {
-//                Utils.logMsg(status);
-//            }
-//        });
-
-
 
     }
 

@@ -87,8 +87,9 @@
     <string name="feed_avatar_desc">Feed avatar</string>
     <string name="feed_reload_desc">Feed reload</string>
     <string name="setting_default_avatar_desc">Setting default avatar</string>
-    <string name="setting_link_icon">Setting link icon</string>
+    <string name="setting_link_icon_desc">Setting link icon</string>
     <string name="register_avatar_desc">Register avatar</string>
+    <string name="sg_cover_desc">SG Cover image</string>
 
     <!--String formats with place holders-->
     <string name="simple_date">%1$s/%2$s/%3$s</string>
