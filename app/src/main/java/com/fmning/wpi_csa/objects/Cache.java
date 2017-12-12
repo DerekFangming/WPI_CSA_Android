@@ -1,10 +1,13 @@
-package com.fmning.wpi_csa.cache;
+package com.fmning.wpi_csa.objects;
+
+import com.fmning.wpi_csa.cache.CacheType;
 
 /**
  * Created by fangmingning
  * On 11/9/17.
  */
 
+@SuppressWarnings("WeakerAccess")
 public class Cache {
     int id;
     String name;

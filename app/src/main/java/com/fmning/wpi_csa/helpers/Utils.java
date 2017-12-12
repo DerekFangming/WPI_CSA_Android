@@ -16,13 +16,15 @@ import com.fmning.wpi_csa.activities.MainTabActivity;
 import com.fmning.wpi_csa.cache.CacheManager;
 import com.fmning.wpi_csa.cache.Database;
 import com.fmning.wpi_csa.http.WCService;
-import com.fmning.wpi_csa.http.objects.WCUser;
 import com.fmning.wpi_csa.http.WCUserManager;
+import com.fmning.wpi_csa.http.objects.WCUser;
 
 import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
@@ -54,7 +56,7 @@ public class Utils {
     private static ProgressDialog loadingDialog;
 
     public static AppMode appMode = AppMode.OFFLINE;
-
+    public static List<Integer> menuOrderList = new ArrayList<>();
 
 
     public static void checkVerisonInfoAndLoginUser(final Context context, final boolean showAlert){

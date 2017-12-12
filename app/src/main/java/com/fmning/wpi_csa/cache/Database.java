@@ -6,8 +6,13 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.fmning.wpi_csa.helpers.Utils;
+import com.fmning.wpi_csa.objects.Cache;
+import com.fmning.wpi_csa.objects.Menu;
 
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by fangmingning
@@ -44,7 +49,7 @@ public class Database {
         dbHelper.close();
     }
 
-    public static void test(Context context){
+    /*public static void test(Context context){
         Database db = new Database(context);
         db.open();
         try{
@@ -82,13 +87,90 @@ public class Database {
         }
 
         db.close();
+    }*/
+
+    public List<Menu> getSubMenus(int menuId, String prefix) {
+        String query;
+        List<Menu> menuList= new ArrayList<>();
+
+        try {
+            if (menuId == 0) {
+                query = "SELECT ID, TITLE FROM ARTICLES WHERE PARENT_ID IS NULL ORDER BY POSITION ASC";
+            } else {
+                query = "SELECT ID, TITLE FROM ARTICLES WHERE PARENT_ID = " + Integer.toString(menuId)
+                        + " ORDER BY POSITION ASC";
+            }
+
+            Cursor cursor = database.rawQuery(query, null);
+            if (cursor.moveToFirst()){
+                do{
+                    int id = cursor.getInt(0);
+                    String name = cursor.getString(1);
+                    name = prefix + name;
+                    Menu menu = new Menu(id, name);
+
+                    menu.subMenus = getSubMenus(id, prefix + "  ");
+                    menu.isParentMenu = menu.subMenus.size() > 0;
+                    if (!menu.isParentMenu) {
+                        Utils.menuOrderList.add(id);
+                    }
+                    menuList.add(menu);
+                }while (cursor.moveToNext());
+            }
+            cursor.close();
+        } catch (SQLException e) {
+            Utils.logMsg(e.toString());
+        }
+
+        return menuList;
+    }
+
+    public List<Menu> searchArticles(String keyword) {
+        String query = "SELECT ID, TITLE FROM ARTICLES WHERE CONTENT LIKE '%" + keyword + "%'";
+        List<Menu> menuList= new ArrayList<>();
+
+        try {
+            Cursor cursor = database.rawQuery(query, null);
+            if (cursor.moveToFirst()){
+                do{
+                    int id = cursor.getInt(0);
+                    String name = cursor.getString(1);
+
+                    menuList.add(new Menu(id, name));
+                }while (cursor.moveToNext());
+            }
+            cursor.close();
+        } catch (SQLException e) {
+            Utils.logMsg(e.toString());
+        }
+
+        return menuList;
+    }
+
+    public String getMenuTitle(int menuId) {
+        String query = "SELECT TITLE FROM ARTICLES WHERE ID = " + Integer.toString(menuId);
+        String name = "";
+
+        try {
+            Cursor cursor = database.rawQuery(query, null);
+            if (cursor.moveToFirst()){
+                name = cursor.getString(0);
+            } else {
+                Utils.logMsg("Article not found");
+            }
+            cursor.close();
+        } catch (SQLException e) {
+            Utils.logMsg(e.toString());
+        }
+
+        return name;
     }
 
     public static Cache getCache(Context context, CacheType type) {
         return getCache(context, type, 0);
     }
 
-    public static Cache getCache(Context context, CacheType type, int mappingId) {
+    static Cache getCache(Context context, CacheType type, int mappingId) {
         Cache cache = null;
 
         Database db = new Database(context);
@@ -120,7 +202,7 @@ public class Database {
         return cache;
     }
 
-    public static void createOrUpdateImageCache(Context context, int imageId) {
+    static void createOrUpdateImageCache(Context context, int imageId) {
         Database db = new Database(context);
         db.open();
 
@@ -148,11 +230,11 @@ public class Database {
         db.close();
     }
 
-    public static void deleteCache(Context context, int id){
+    static void deleteCache(Context context, int id){
         run(context, "DELETE FROM CACHE WHERE ID = " + Integer.toString(id));
     }
 
-    public static void imageHit(Context context, int id){
+    static void imageHit(Context context, int id){
         String query = "UPDATE CACHE SET VALUE = VALUE + 1 WHERE TYPE = 'Image' ";
         query += "AND MAPPING_ID = " + Integer.toString(id);
         run(context, query);
@@ -162,7 +244,10 @@ public class Database {
         Database db = new Database(context);
         db.open();
         try {
-            db.database.execSQL(queries);
+            String[] queryArr = queries.split(";");
+            for(String query : queryArr){
+                db.database.execSQL(query);
+            }
         } catch (SQLException e){
             Utils.logMsg(e.toString());
         }
