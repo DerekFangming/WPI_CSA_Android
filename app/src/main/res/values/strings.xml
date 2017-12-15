@@ -90,6 +90,7 @@
     <string name="setting_link_icon_desc">Setting link icon</string>
     <string name="register_avatar_desc">Register avatar</string>
     <string name="sg_cover_desc">SG Cover image</string>
+    <string name="sg_menu_status_desc">SG Menu Status</string>
 
     <!--String formats with place holders-->
     <string name="simple_date">%1$s/%2$s/%3$s</string>

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.fmning.wpi_csa.R;
+import com.fmning.wpi_csa.helpers.Utils;
 
 /**
  * Created by fangmingning
@@ -34,7 +35,13 @@ public class SGListAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-
+        View cell = holder.itemView;
+        cell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.logLong("clicked");
+            }
+        });
     }
 
     @Override
