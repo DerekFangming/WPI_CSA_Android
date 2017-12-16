@@ -4,10 +4,18 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.LayoutAnimationController;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -33,7 +41,7 @@ public class SGFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        DrawerLayout view = (DrawerLayout)inflater.inflate(R.layout.fragment_sg, container, false);
+        final DrawerLayout view = (DrawerLayout)inflater.inflate(R.layout.fragment_sg, container, false);
         //view.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
 
         RecyclerView tableView = (RecyclerView) view.findViewById(R.id.SGList);
@@ -44,12 +52,13 @@ public class SGFragment extends Fragment {
         RecyclerView menuView = (RecyclerView) view.findViewById(R.id.SGMenu);
         final MenuListAdapter menuListAdapter = new MenuListAdapter(getActivity(), new MenuListAdapter.SGMenuListListener() {
             @Override
-            public void OnMenuItem(int itemId, boolean shouldHideMenu) {
-
+            public void OnOpenArticle(int menuId) {
+                Utils.logLong(Integer.toString(menuId));
             }
         });
-
         menuView.setAdapter(menuListAdapter);
+
+
 
         double width = getResources().getDisplayMetrics().widthPixels * 0.8;
         DrawerLayout.LayoutParams params = (android.support.v4.widget.DrawerLayout.LayoutParams) menuView.getLayoutParams();

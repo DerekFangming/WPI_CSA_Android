@@ -16,8 +16,12 @@ import com.fmning.wpi_csa.helpers.LoadingView;
 import com.fmning.wpi_csa.helpers.Utils;
 import com.fmning.wpi_csa.http.WCFeedManager;
 import com.fmning.wpi_csa.http.objects.WCFeed;
+import com.fmning.wpi_csa.objects.Menu;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class LifeFragment extends Fragment {
@@ -67,6 +71,7 @@ public class LifeFragment extends Fragment {
 //                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("reloadUserCell"));
 //            }
 //        }, 2000);
+
 
         Utils.logMsg("bkpoint for testing area");
         /*============================== TESTING AREA ENDS ==============================*/

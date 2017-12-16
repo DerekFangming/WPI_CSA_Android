@@ -24,8 +24,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -261,6 +263,20 @@ public class Utils {
         ((MainTabActivity)context).getPreferences(MODE_PRIVATE).edit().remove(key).apply();
     }
 
+    public static Map<String, String> getHtmlAttributes (String string) {
+        Map<String, String> dic = new HashMap<>();
+        Matcher m = Pattern.compile("\\w+\\s?=\\s?\".*?\"").matcher(string);
+
+        while (m.find()) {
+            String match = m.group(0);
+            String key = match.split("=")[0].trim();
+            String value = match.replace(key, "")
+                    .replace("=", "").replaceAll("\"", "").trim();
+            Utils.logMsg(key + ":" + value);
+            dic.put(key, value);
+        }
+        return dic;
+    }
 
     /**
      UTC Time formatter that converts iso-8601 with millisecond.

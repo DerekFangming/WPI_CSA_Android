@@ -5,10 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fmning.wpi_csa.R;
-import com.fmning.wpi_csa.helpers.Utils;
 import com.fmning.wpi_csa.objects.Menu;
 
 import java.util.ArrayList;
@@ -49,13 +49,22 @@ public class MenuListAdapter extends RecyclerView.Adapter<ViewHolder> {
         Menu menu = getSelectedMenu(menuList, position);
         if (menu != null) {
             ((TextView)cell.findViewById(R.id.SGMenuTitle)).setText(menu.name);
+
+            if (menu.isParentMenu) {
+                if (menu.isOpened) {
+                    ((ImageView)cell.findViewById(R.id.SGMenuStatus)).setImageDrawable(context.getDrawable(R.drawable.menu_expanded));
+                } else {
+                    ((ImageView)cell.findViewById(R.id.SGMenuStatus)).setImageDrawable(context.getDrawable(R.drawable.menu_collapsed));
+                }
+            } else {
+                ((ImageView)cell.findViewById(R.id.SGMenuStatus)).setImageDrawable(null);
+            }
         }
 
         cell.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 toggleSelectedMenu(menuList, holder.getLayoutPosition());
-                listener.OnMenuItem(holder.getLayoutPosition(), true);
             }
         });
     }
@@ -108,9 +117,9 @@ public class MenuListAdapter extends RecyclerView.Adapter<ViewHolder> {
                     m.isOpened = !m.isOpened;
                     visibleCellCount = calculateVisibleCellNumber(this.menuList);
                     notifyDataSetChanged();
+
                 } else {
-                    //TODO ARTICLE??
-                    Utils.logMsg("Open this article");
+                    listener.OnOpenArticle(m.id);
                 }
                 return;
             } else if (m.isOpened) {
@@ -126,6 +135,6 @@ public class MenuListAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
     public interface SGMenuListListener {
-        void OnMenuItem(int itemId, boolean shouldHideMenu);
+        void OnOpenArticle(int menuId);
     }
 }

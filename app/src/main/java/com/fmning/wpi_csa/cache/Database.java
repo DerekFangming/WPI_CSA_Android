@@ -6,6 +6,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.fmning.wpi_csa.helpers.Utils;
+import com.fmning.wpi_csa.objects.Article;
 import com.fmning.wpi_csa.objects.Cache;
 import com.fmning.wpi_csa.objects.Menu;
 
@@ -109,7 +110,7 @@ public class Database {
                     name = prefix + name;
                     Menu menu = new Menu(id, name);
 
-                    menu.subMenus = getSubMenus(id, prefix + "  ");
+                    menu.subMenus = getSubMenus(id, prefix + "    ");
                     menu.isParentMenu = menu.subMenus.size() > 0;
                     if (!menu.isParentMenu) {
                         Utils.menuOrderList.add(id);
@@ -164,6 +165,40 @@ public class Database {
         }
 
         return name;
+    }
+
+    public Article getArticle(int menuId) {
+        String query = "SELECT CONTENT FROM ARTICLES WHERE ID = " + Integer.toString(menuId);
+        Article article;
+
+        try {
+            Cursor cursor = database.rawQuery(query, null);
+            if (cursor.moveToFirst()){
+                String content = cursor.getString(0);
+                article = new Article(content);
+            } else {
+                Utils.logMsg("Article not found");
+                article = new Article("");
+            }
+            cursor.close();
+        } catch (SQLException e) {
+            Utils.logMsg(e.toString());
+            article = new Article("");
+        }
+
+        article.menuId = menuId;
+        int index = Utils.menuOrderList.indexOf(menuId);
+
+        if (index != Utils.menuOrderList.size() - 1) {
+            article.nextMenuId = Utils.menuOrderList.get(index + 1);//TODO: Check for index?
+            article.nextMenuText = getMenuTitle(article.nextMenuId);
+        }
+        if (index != 0) {
+            article.prevMenuId = Utils.menuOrderList.get(index - 1);//TODO: Check for index?
+            article.prevMenuText = getMenuTitle(article.nextMenuId);
+        }
+
+        return article;
     }
 
     public static Cache getCache(Context context, CacheType type) {
