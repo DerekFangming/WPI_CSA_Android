@@ -29,6 +29,7 @@ public class Paragraph {
 
     public Paragraph(Spanned content){
         this.content = content;
+        type = ParagraphType.PLAIN;
     }
 
     public Paragraph(Spanned content, ParagraphType type){

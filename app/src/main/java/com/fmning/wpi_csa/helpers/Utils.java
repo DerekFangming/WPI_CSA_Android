@@ -272,7 +272,7 @@ public class Utils {
             String key = match.split("=")[0].trim();
             String value = match.replace(key, "")
                     .replace("=", "").replaceAll("\"", "").trim();
-            Utils.logMsg(key + ":" + value);
+
             dic.put(key, value);
         }
         return dic;

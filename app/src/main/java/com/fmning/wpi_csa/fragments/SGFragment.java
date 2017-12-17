@@ -7,6 +7,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.text.Spanned;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +27,9 @@ import com.fmning.wpi_csa.adapters.MenuListAdapter;
 import com.fmning.wpi_csa.adapters.SGListAdapter;
 import com.fmning.wpi_csa.cache.Database;
 import com.fmning.wpi_csa.helpers.Utils;
+import com.fmning.wpi_csa.objects.Article;
 import com.fmning.wpi_csa.objects.Menu;
+import com.pixplicity.htmlcompat.HtmlCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +48,18 @@ public class SGFragment extends Fragment {
         //view.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
 
         RecyclerView tableView = (RecyclerView) view.findViewById(R.id.SGList);
-        tableView.setAdapter(new SGListAdapter(getActivity()));
+        final SGListAdapter sgListAdapter = new SGListAdapter(getActivity(), new SGListAdapter.SGListListener() {
+            @Override
+            public void OnPrevArticleClicked() {
+
+            }
+
+            @Override
+            public void OnNextArticleClicked() {
+
+            }
+        });
+        tableView.setAdapter(sgListAdapter);
 
 
 
@@ -54,6 +68,7 @@ public class SGFragment extends Fragment {
             @Override
             public void OnOpenArticle(int menuId) {
                 Utils.logLong(Integer.toString(menuId));
+                view.closeDrawer(Gravity.START);
             }
         });
         menuView.setAdapter(menuListAdapter);
@@ -69,6 +84,15 @@ public class SGFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 coverImage.setVisibility(View.GONE);
+                Database db = new Database(getActivity());
+                db.open();
+                Spanned fromHtml = HtmlCompat.fromHtml(getActivity(), "<font size=\"40px\" color=\"00FF00\">kjdshfsdj</font>", 0);
+                final Article article = new Article("<font size=\"40px\" color=\"00FF00\">kjdshfsdj</font>");//db.getArticle(5);
+                db.close();
+
+                sgListAdapter.setAndProcessArticle(article);
+                sgListAdapter.notifyDataSetChanged();
+
             }
         });
 
@@ -89,6 +113,23 @@ public class SGFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private class LoadArticleTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+//
+//            this.sgListAdapter.setAndProcessArticle(article);
+//            sgListAdapter.notifyDataSetChanged();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void params) {
+            super.onPostExecute(params);
+            //Log.d(TAG + " onPostExecute", "" + result);
+        }
     }
 
 }

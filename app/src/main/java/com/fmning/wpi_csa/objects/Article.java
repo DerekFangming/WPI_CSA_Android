@@ -32,7 +32,7 @@ public class Article {
         paragraphs = new ArrayList<>();
     }
 
-    private void processContent() {
+    public void processContent() {
         List<String> matchs = new ArrayList<>();
         int count = 0;
 
@@ -44,7 +44,7 @@ public class Article {
         }
 
         for (int i = 0; i < count; i ++) {
-            String[] parts = content.split(matchs.get(0), 2);
+            String[] parts = content.split(matchs.get(i), 2);
             String first = parts[0];
             ParagraphType paraType = ParagraphType.PLAIN;
             if (first.length() > 0) {
@@ -89,7 +89,8 @@ public class Article {
                     paragraphs.add(paragraph);
                     String colorStr = paragraph.properties.get("color");
                     if (colorStr != null && themeColor == -1) {
-                        themeColor = Color.parseColor(colorStr);
+                        Utils.logMsg(colorStr);
+                        themeColor = Color.parseColor("#" + colorStr);
                     }
                     break;
                 default:
