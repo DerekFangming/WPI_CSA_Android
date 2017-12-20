@@ -1,12 +1,20 @@
 package com.fmning.wpi_csa.objects;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.text.Html;
+import android.text.Layout;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.AlignmentSpan;
 
 import com.fmning.wpi_csa.helpers.Utils;
+import com.pixplicity.htmlcompat.HtmlCompat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,7 +40,7 @@ public class Article {
         paragraphs = new ArrayList<>();
     }
 
-    public void processContent() {
+    public void processContent(Context context) {
         List<String> matchs = new ArrayList<>();
         int count = 0;
 
@@ -46,20 +54,39 @@ public class Article {
         for (int i = 0; i < count; i ++) {
             String[] parts = content.split(matchs.get(i), 2);
             String first = parts[0];
-            ParagraphType paraType = ParagraphType.PLAIN;
+            ParagraphType paraType;
             if (first.length() > 0) {
-                paraType = getParagraphType(first);//TODO: This can only be Plain.  Fix also on iOS
-                paragraphs.add(new Paragraph(Html.fromHtml(first), paraType));
+                Spannable spannable = new SpannableString(HtmlCompat.fromHtml(context, first, 0));
+                String s = spannable.toString();
+
+                Matcher alignMatcher = Pattern.compile("<p.*?align.*?>.*?</p>")
+                        .matcher(first);
+                while (alignMatcher.find()) {
+                    String[] alignParts = m.group(0).split(">", 2);
+                    String align = Utils.getHtmlAttributes(alignParts[0]).get("align");
+                    String alignedString = alignParts[1].replace("</p>", "");
+                    if (align != null) {
+                        int start = s.indexOf(alignedString);
+                        if (align.equals("center")) {
+                            spannable.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), start,
+                                    alignedString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        } else if (align.equals("right")) {
+                            spannable.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_OPPOSITE), start,
+                                    alignedString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
+                    }
+                }
+
+                paragraphs.add(new Paragraph(spannable, ParagraphType.PLAIN));
             }
 
             paraType = getParagraphType(matchs.get(i));
             switch (paraType) {
                 case IMAGE:
-                    paragraphs.add(new Paragraph(Html.fromHtml(""), ParagraphType.IMAGE, Utils.getHtmlAttributes(matchs.get(i))));
+                    paragraphs.add(new Paragraph(HtmlCompat.fromHtml(context, "", 0), ParagraphType.IMAGE, Utils.getHtmlAttributes(matchs.get(i))));
                     break;
                 case IMAGETEXT:
                 case TEXTIMAGE:
-                    //TODO: This is so hacky. Fix with recuglar exp. Also in iOS
                     String imgStr = matchs.get(i).substring(0, matchs.get(i).length() - 9);
                     String[] imgTextParts = imgStr.split(">", 2);
                     paragraphs.add(new Paragraph(Html.fromHtml(imgTextParts[1]), paraType,
@@ -81,7 +108,6 @@ public class Article {
                     }
                     break;
                 case DIV:
-                    //TODO: This is so hacky. Fix with recuglar exp. Also in iOS
                     String divStr = matchs.get(i).substring(0, matchs.get(i).length() - 9);
                     String[] divParts = divStr.split(">", 2);
                     Paragraph paragraph = new Paragraph(Html.fromHtml(divParts[1]), paraType,
@@ -100,8 +126,39 @@ public class Article {
         }
 
         if (!content.equals("")) {
-            paragraphs.add(new Paragraph(Html.fromHtml(content)));
+
+            paragraphs.add(new Paragraph(getAlignedSpanned(context, content)));
         }
+    }
+
+    private Spanned getAlignedSpanned(Context context, String text) {
+        Spannable spannable = new SpannableString(HtmlCompat.fromHtml(context, text, 0));
+        String s = spannable.toString();
+
+        Matcher alignMatcher = Pattern.compile("<p.*?align.*?>.*?</p>")
+                .matcher(text);
+        while (alignMatcher.find()) {
+            String[] alignParts = alignMatcher.group(0).split(">", 2);
+            String align = Utils.getHtmlAttributes(alignParts[0]).get("align");
+            String alignedString = alignParts[1].replace("</p>", "");
+            if (align != null) {
+                int start = s.indexOf(alignedString);
+
+                if (align.equals("center")) {
+                    spannable.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), start,
+                            alignedString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                } else if (align.equals("right")) {
+                    //&emsp;&emsp;Hello 亲爱的学弟学妹们！<br><br><p align="right">Cyan 谢珊珊 2018 ECE </p>
+                    char aaa2 = s.charAt(start - 1);
+                    char aaa = s.charAt(start);
+                    char aaa1 = s.charAt(start + 1);
+                    spannable.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_OPPOSITE), start,
+                            alignedString.length() - 10, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+            }
+        }
+
+        return spannable;
     }
 
     private ParagraphType getParagraphType (String string) {

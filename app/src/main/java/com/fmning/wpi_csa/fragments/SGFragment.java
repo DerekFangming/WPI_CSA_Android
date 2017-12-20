@@ -17,6 +17,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.LayoutAnimationController;
 import android.view.animation.TranslateAnimation;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -86,8 +87,8 @@ public class SGFragment extends Fragment {
                 coverImage.setVisibility(View.GONE);
                 Database db = new Database(getActivity());
                 db.open();
-                Spanned fromHtml = HtmlCompat.fromHtml(getActivity(), "<font size=\"40px\" color=\"00FF00\">kjdshfsdj</font>", 0);
-                final Article article = new Article("<font size=\"40px\" color=\"00FF00\">kjdshfsdj</font>");//db.getArticle(5);
+                //Spanned fromHtml = HtmlCompat.fromHtml(getActivity(), "<font size=\"40px\" color=\"00FF00\">kjdshfsdj</font>", 0);
+                final Article article = new Article("<div color=\"468499\"><br><br><br><h1><big><big><font color=\"#FFFFFF\">写在前面的话</font></big></big></h1></div>&emsp;&emsp;Hello 亲爱的学弟学妹们！<br><br><p align=\"right\">Cyan 谢珊珊 2018 ECE </p>");//db.getArticle(5);
                 db.close();
 
                 sgListAdapter.setAndProcessArticle(article);
