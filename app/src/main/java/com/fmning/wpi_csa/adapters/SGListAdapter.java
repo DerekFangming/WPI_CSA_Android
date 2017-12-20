@@ -2,16 +2,9 @@ package com.fmning.wpi_csa.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
-import android.text.Layout;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.AlignmentSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.fmning.wpi_csa.R;

@@ -10,11 +10,9 @@ import android.text.Spanned;
 import android.text.style.AlignmentSpan;
 
 import com.fmning.wpi_csa.helpers.Utils;
-import com.pixplicity.htmlcompat.HtmlCompat;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,7 +54,7 @@ public class Article {
             String first = parts[0];
             ParagraphType paraType;
             if (first.length() > 0) {
-                Spannable spannable = new SpannableString(HtmlCompat.fromHtml(context, first, 0));
+                Spannable spannable = new SpannableString(Html.fromHtml(first));
                 String s = spannable.toString();
 
                 Matcher alignMatcher = Pattern.compile("<p.*?align.*?>.*?</p>")
@@ -83,7 +81,7 @@ public class Article {
             paraType = getParagraphType(matchs.get(i));
             switch (paraType) {
                 case IMAGE:
-                    paragraphs.add(new Paragraph(HtmlCompat.fromHtml(context, "", 0), ParagraphType.IMAGE, Utils.getHtmlAttributes(matchs.get(i))));
+                    paragraphs.add(new Paragraph(Html.fromHtml(""), ParagraphType.IMAGE, Utils.getHtmlAttributes(matchs.get(i))));
                     break;
                 case IMAGETEXT:
                 case TEXTIMAGE:
@@ -126,34 +124,37 @@ public class Article {
         }
 
         if (!content.equals("")) {
-
-            paragraphs.add(new Paragraph(getAlignedSpanned(context, content)));
+            //Currently, only Plain text supports alignment
+            //The getAlignedSpanned function is android specific because it does not support alignment
+            paragraphs.add(new Paragraph(getAlignedSpanned(content)));
         }
     }
 
-    private Spanned getAlignedSpanned(Context context, String text) {
-        Spannable spannable = new SpannableString(HtmlCompat.fromHtml(context, text, 0));
-        String s = spannable.toString();
+    private Spanned getAlignedSpanned(String text) {
+        Spannable spannable = new SpannableString(Html.fromHtml(text));
+        String spannableStr = spannable.toString();
 
         Matcher alignMatcher = Pattern.compile("<p.*?align.*?>.*?</p>")
                 .matcher(text);
         while (alignMatcher.find()) {
-            String[] alignParts = alignMatcher.group(0).split(">", 2);
+            String matchedStr = alignMatcher.group(0);
+            String[] alignParts = matchedStr.split(">", 2);
             String align = Utils.getHtmlAttributes(alignParts[0]).get("align");
             String alignedString = alignParts[1].replace("</p>", "");
+            String matchedHtmlStr = Html.fromHtml(alignedString).toString();
             if (align != null) {
-                int start = s.indexOf(alignedString);
+                int start = spannableStr.indexOf(matchedHtmlStr);
+                if (start == -1) {
+                    continue;
+                }
 
+                int end = start + matchedHtmlStr.length();
                 if (align.equals("center")) {
                     spannable.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), start,
-                            alignedString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 } else if (align.equals("right")) {
-                    //&emsp;&emsp;Hello 亲爱的学弟学妹们！<br><br><p align="right">Cyan 谢珊珊 2018 ECE </p>
-                    char aaa2 = s.charAt(start - 1);
-                    char aaa = s.charAt(start);
-                    char aaa1 = s.charAt(start + 1);
                     spannable.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_OPPOSITE), start,
-                            alignedString.length() - 10, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
             }
         }
