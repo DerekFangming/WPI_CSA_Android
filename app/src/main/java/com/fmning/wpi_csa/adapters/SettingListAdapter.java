@@ -34,12 +34,10 @@ public class SettingListAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     private Context context;
     private SettingListListener listener;
-    private float dpRatio;
 
     public SettingListAdapter(Context context, SettingListListener listener){
         this.context = context;
         this.listener = listener;
-        dpRatio = context.getResources().getDisplayMetrics().density;
     }
 
     @Override
@@ -170,7 +168,7 @@ public class SettingListAdapter extends RecyclerView.Adapter<ViewHolder> {
                 ((TextView) cell.findViewById(R.id.settingUserNameText)).setText(user.name);
                 ((TextView) cell.findViewById(R.id.settingUserEmaillText)).setText(user.username);
                 TextView verifiedView = (TextView) cell.findViewById(R.id.settingUserEmailVerifiedText);
-                int imageSize = (int)(dpRatio * 15);
+                int imageSize = Utils.padding15;
                 if (user.emailConfirmed) {
                     verifiedView.setText(context.getString(R.string.setting_email_verified));
                     Drawable img = ContextCompat.getDrawable(context, R.drawable.verified);
@@ -196,7 +194,7 @@ public class SettingListAdapter extends RecyclerView.Adapter<ViewHolder> {
             ((TextView) cell.findViewById(R.id.settingLinkText)).setText(context.getString(R.string.setting_facebook));
 
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) cell.findViewById(R.id.settingLinkBotLine).getLayoutParams();
-            layoutParams.setMarginStart((int)(15 * dpRatio));
+            layoutParams.setMarginStart(Utils.padding15);
 
             cell.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -210,7 +208,7 @@ public class SettingListAdapter extends RecyclerView.Adapter<ViewHolder> {
             ((TextView) cell.findViewById(R.id.settingLinkText)).setText(context.getString(R.string.setting_instagram));
 
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) cell.findViewById(R.id.settingLinkBotLine).getLayoutParams();
-            layoutParams.setMarginStart((int)(15 * dpRatio));
+            layoutParams.setMarginStart(Utils.padding15);
 
             cell.setOnClickListener(new View.OnClickListener() {
                 @Override

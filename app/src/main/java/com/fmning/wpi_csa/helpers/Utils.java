@@ -54,6 +54,9 @@ public class Utils {
     public static final String localTitle = "title";
     public static final String localArticle = "article";
 
+    //The padding values will get initiated before any segments are created
+    public static int padding15;
+    public static int paddingFullWidth;
 
     private static ProgressDialog loadingDialog;
 

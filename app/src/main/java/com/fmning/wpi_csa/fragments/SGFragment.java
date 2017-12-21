@@ -63,7 +63,7 @@ public class SGFragment extends Fragment {
 
 
 
-        double width = getResources().getDisplayMetrics().widthPixels * 0.8;
+        double width = Utils.paddingFullWidth * 0.8;
         DrawerLayout.LayoutParams params = (android.support.v4.widget.DrawerLayout.LayoutParams) menuView.getLayoutParams();
         params.width = (int)width;
 
@@ -75,7 +75,7 @@ public class SGFragment extends Fragment {
                 Database db = new Database(getActivity());
                 db.open();
                 //Spanned fromHtml = HtmlCompat.fromHtml(getActivity(), "<font size=\"40px\" color=\"00FF00\">kjdshfsdj</font>", 0);
-                final Article article = new Article("<div color=\"468499\"><br><br><br><h1><big><big><font color=\"#FFFFFF\">写在前面的话</font></big></big></h1></div>&emsp;&emsp;Hello 亲爱的学弟学妹们！<br><br><p align=\"center\">Cyan 谢珊珊 <br>2018 ECE </p>");//db.getArticle(5);
+                final Article article = db.getArticle(85);
                 db.close();
 
                 sgListAdapter.setAndProcessArticle(article);

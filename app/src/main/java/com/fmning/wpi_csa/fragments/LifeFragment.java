@@ -10,6 +10,7 @@ import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,6 +76,9 @@ public class LifeFragment extends Fragment {
 //                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("reloadUserCell"));
 //            }
 //        }, 2000);
+
+
+        DisplayMetrics m = getActivity().getResources().getDisplayMetrics();
 
 
         Utils.logMsg("bkpoint for testing area");

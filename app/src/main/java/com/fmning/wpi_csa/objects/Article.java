@@ -54,28 +54,9 @@ public class Article {
             String first = parts[0];
             ParagraphType paraType;
             if (first.length() > 0) {
-                Spannable spannable = new SpannableString(Html.fromHtml(first));
-                String s = spannable.toString();
-
-                Matcher alignMatcher = Pattern.compile("<p.*?align.*?>.*?</p>")
-                        .matcher(first);
-                while (alignMatcher.find()) {
-                    String[] alignParts = m.group(0).split(">", 2);
-                    String align = Utils.getHtmlAttributes(alignParts[0]).get("align");
-                    String alignedString = alignParts[1].replace("</p>", "");
-                    if (align != null) {
-                        int start = s.indexOf(alignedString);
-                        if (align.equals("center")) {
-                            spannable.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), start,
-                                    alignedString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        } else if (align.equals("right")) {
-                            spannable.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_OPPOSITE), start,
-                                    alignedString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        }
-                    }
-                }
-
-                paragraphs.add(new Paragraph(spannable, ParagraphType.PLAIN));
+                //Currently, only Plain text supports alignment
+                //The getAlignedSpanned function is android specific because it does not support alignment
+                paragraphs.add(new Paragraph(getAlignedSpanned(first), ParagraphType.PLAIN));
             }
 
             paraType = getParagraphType(matchs.get(i));
