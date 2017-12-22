@@ -53,6 +53,8 @@
     <string name="register_hint_birthday">Your birthday</string>
     <string name="register_hint_classof">Graduation year, like 2020</string>
     <string name="register_hint_major">Abbreviation of your major</string>
+    <string name="sg_nav_prev_end">Previous</string>
+    <string name="sg_nav_next_end">Next</string>
 
     <string name="ok" tools:ignore="ButtonCase,Typos">Ok</string>
     <string name="confirm">Confirm</string>
@@ -98,6 +100,8 @@
     <string name="simple_date">%1$s/%2$s/%3$s</string>
     <string name="name_register_fail_error">User created but name is not stored correctly. %1$s</string>
     <string name="register_done_message">An email has been sent to %1$s with a link to confirm your email. Please click on the link in 24 hours. Please check your junk folder if you cannot see the email.</string>
+    <string name="sg_nav_prev">Previous\n%1$s</string>
+    <string name="sg_nav_next">Next\n%1$s</string>
 
     <!-- The following are default texts -->
     <string name="d_name">Fangming Ning</string>

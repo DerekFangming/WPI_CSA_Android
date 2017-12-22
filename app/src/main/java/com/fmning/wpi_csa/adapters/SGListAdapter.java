@@ -3,10 +3,12 @@ package com.fmning.wpi_csa.adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -37,6 +39,9 @@ public class SGListAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
+        if (article.paragraphs.size() == position) {
+            return 5;
+        }
         switch (article.paragraphs.get(position).type) {
             case DIV:
             case PLAIN:
@@ -62,6 +67,9 @@ public class SGListAdapter extends RecyclerView.Adapter<ViewHolder> {
             case 3:
                 View view3 = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_sg_image_text, parent, false);
                 return new ViewHolder(view3);
+            case 5:
+                View view5 = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_sg_navigation, parent, false);
+                return new ViewHolder(view5);
             default:
                 View view4 = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_default, parent, false);
                 return new ViewHolder(view4);
@@ -71,12 +79,47 @@ public class SGListAdapter extends RecyclerView.Adapter<ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final View cell = holder.itemView;
-        cell.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.logLong("clicked");
+
+        if (article.paragraphs.size() == position) {
+            Button prevBtn = (Button)cell.findViewById(R.id.sgPrevButton);
+            Button nextBtn = (Button)cell.findViewById(R.id.sgNextButton);
+            if (article.themeColor != -1) {
+                ((GradientDrawable)prevBtn.getBackground()).setColor(article.themeColor);
+                ((GradientDrawable)nextBtn.getBackground()).setColor(article.themeColor);
             }
-        });
+            prevBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.OnPrevArticleClicked();
+                }
+            });
+            nextBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.OnNextArticleClicked();
+                }
+            });
+
+            if (article.prevMenuText != null) {
+                prevBtn.setText(String.format(context.getString(R.string.sg_nav_prev), article.prevMenuText));
+                prevBtn.setEnabled(true);
+                prevBtn.setAlpha(1);
+            } else {
+                prevBtn.setText(context.getString(R.string.sg_nav_prev_end));
+                prevBtn.setEnabled(false);
+                prevBtn.setAlpha(0.5f);
+            }
+            if (article.nextMenuText != null) {
+                nextBtn.setText(String.format(context.getString(R.string.sg_nav_next), article.nextMenuText));
+                nextBtn.setEnabled(true);
+                nextBtn.setAlpha(1);
+            } else {
+                nextBtn.setText(context.getString(R.string.sg_nav_next_end));
+                nextBtn.setEnabled(false);
+                nextBtn.setAlpha(0.5f);
+            }
+            return;
+        }
 
         Paragraph paragraph = article.paragraphs.get(position);
 
@@ -114,8 +157,6 @@ public class SGListAdapter extends RecyclerView.Adapter<ViewHolder> {
                     //TODO: friendly error message?
                     Utils.logMsg("Cannot read image");
                 }
-
-
                 break;
             case IMAGETEXT:
                 ((TextView)cell.findViewById(R.id.sgImgtxtText)).setText(paragraph.content);
@@ -131,10 +172,7 @@ public class SGListAdapter extends RecyclerView.Adapter<ViewHolder> {
                     //TODO: friendly error message?
                     Utils.logMsg("Cannot read image");
                 }
-
-
                 break;
-
         }
 
     }
@@ -144,7 +182,7 @@ public class SGListAdapter extends RecyclerView.Adapter<ViewHolder> {
         if (article == null) {
             return 0;
         } else {
-            return article.paragraphs.size();
+            return article.paragraphs.size() + 1;
         }
     }
 

@@ -75,7 +75,7 @@ public class SGFragment extends Fragment {
                 Database db = new Database(getActivity());
                 db.open();
                 //Spanned fromHtml = HtmlCompat.fromHtml(getActivity(), "<font size=\"40px\" color=\"00FF00\">kjdshfsdj</font>", 0);
-                final Article article = db.getArticle(85);
+                final Article article = db.getArticle(1);
                 db.close();
 
                 sgListAdapter.setAndProcessArticle(article);
