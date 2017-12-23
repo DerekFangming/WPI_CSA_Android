@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:textColor="@color/black"
-        android:autoLink="email|map"/>
+        android:autoLink="email|map|web"/>
 
     <View
         android:id="@+id/sgTextSeparator"

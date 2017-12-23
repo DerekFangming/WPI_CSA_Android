@@ -15,6 +15,7 @@ import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.adapters.MenuListAdapter;
 import com.fmning.wpi_csa.adapters.SGListAdapter;
 import com.fmning.wpi_csa.cache.Database;
+import com.fmning.wpi_csa.helpers.CustomDrawer;
 import com.fmning.wpi_csa.helpers.Utils;
 import com.fmning.wpi_csa.objects.Article;
 import com.fmning.wpi_csa.objects.Menu;
@@ -32,19 +33,32 @@ public class SGFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final DrawerLayout view = (DrawerLayout)inflater.inflate(R.layout.fragment_sg, container, false);
+        final CustomDrawer view = (CustomDrawer)inflater.inflate(R.layout.fragment_sg, container, false);
         //view.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
 
         RecyclerView tableView = (RecyclerView) view.findViewById(R.id.SGList);
-        final SGListAdapter sgListAdapter = new SGListAdapter(getActivity(), new SGListAdapter.SGListListener() {
+        final SGListAdapter sgListAdapter = new SGListAdapter(getActivity());
+        sgListAdapter.setListener(new SGListAdapter.SGListListener() {
             @Override
             public void OnPrevArticleClicked() {
-
+//                Database db = new Database(getActivity());
+//                db.open();
+//                final Article article = db.getArticle();
+//                db.close();
+//
+//                sgListAdapter.setAndProcessArticle(article);
+//                sgListAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void OnNextArticleClicked() {
-
+//                Database db = new Database(getActivity());
+//                db.open();
+//                final Article article = db.getArticle(1);
+//                db.close();
+//
+//                sgListAdapter.setAndProcessArticle(article);
+//                sgListAdapter.notifyDataSetChanged();
             }
         });
         tableView.setAdapter(sgListAdapter);

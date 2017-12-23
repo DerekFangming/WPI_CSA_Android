@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.cache.CacheManager;
+import com.fmning.wpi_csa.cache.Database;
 import com.fmning.wpi_csa.helpers.Utils;
 import com.fmning.wpi_csa.objects.Article;
 import com.fmning.wpi_csa.objects.Paragraph;
@@ -32,8 +33,11 @@ public class SGListAdapter extends RecyclerView.Adapter<ViewHolder> {
     private SGListListener listener;
     private Article article;
 
-    public SGListAdapter(Context context, SGListListener listener) {
+    public SGListAdapter(Context context) {
         this.context = context;
+    }
+
+    public void setListener(SGListListener listener) {
         this.listener = listener;
     }
 
@@ -90,13 +94,31 @@ public class SGListAdapter extends RecyclerView.Adapter<ViewHolder> {
             prevBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.OnPrevArticleClicked();
+                    Database db = new Database(context);
+                    db.open();
+                    article = db.getArticle(article.prevMenuId);
+                    db.close();
+
+                    article.processContent(context);
+                    notifyDataSetChanged();
+//                    if (listener != null) {
+//                        listener.OnPrevArticleClicked();
+//                    }
                 }
             });
             nextBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.OnNextArticleClicked();
+                    Database db = new Database(context);
+                    db.open();
+                    article = db.getArticle(article.nextMenuId);
+                    db.close();
+
+                    article.processContent(context);
+                    notifyDataSetChanged();
+//                    if (listener != null) {
+//                        listener.OnNextArticleClicked();
+//                    }
                 }
             });
 
