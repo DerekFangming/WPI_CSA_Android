@@ -10,6 +10,7 @@ import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.util.Linkify;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,8 +78,9 @@ public class LifeFragment extends Fragment {
 //            }
 //        }, 2000);
 
-
-        DisplayMetrics m = getActivity().getResources().getDisplayMetrics();
+        String a = "<b>学校主页</b><br>http://www.wpi.edu";
+        SpannableString spannable = new SpannableString(Html.fromHtml(a));
+        boolean b = Linkify.addLinks(spannable, Linkify.WEB_URLS);
 
 
         Utils.logMsg("bkpoint for testing area");

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<com.fmning.wpi_csa.helpers.CustomDrawer
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -33,3 +35,4 @@
         android:background="@drawable/menu_gradient_background"
         app:layoutManager="LinearLayoutManager"/>
 
+</com.fmning.wpi_csa.helpers.CustomDrawer>

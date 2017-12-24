@@ -3,10 +3,12 @@ package com.fmning.wpi_csa.helpers;
 import android.content.Context;
 import android.support.v4.widget.DrawerLayout;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.MotionEvent;
 
 /**
  * Created by Fangming
+ * On 12/22/2017.
  */
 
 public class CustomDrawer extends DrawerLayout {
@@ -25,7 +27,9 @@ public class CustomDrawer extends DrawerLayout {
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            if (!isDrawerOpen(Gravity.START)) {
+                setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            }
         } else {
             setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         }

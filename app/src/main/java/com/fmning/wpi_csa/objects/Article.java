@@ -8,6 +8,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.AlignmentSpan;
+import android.text.util.Linkify;
 
 import com.fmning.wpi_csa.helpers.Utils;
 
@@ -50,7 +51,9 @@ public class Article {
         }
 
         for (int i = 0; i < count; i ++) {
-            String[] parts = content.split(matchs.get(i), 2);
+            String splitter = matchs.get(i).replaceAll("\\(", "\\\\\\(").replaceAll("\\)", "\\\\\\)")
+                    .replaceAll("\\[", "\\\\\\[").replaceAll("\\]", "\\\\\\]");
+            String[] parts = content.split(splitter, 2);
             String first = parts[0];
             ParagraphType paraType;
             if (first.length() > 0) {
@@ -87,7 +90,7 @@ public class Article {
                     }
                     break;
                 case DIV:
-                    String divStr = matchs.get(i).substring(0, matchs.get(i).length() - 9);
+                    String divStr = matchs.get(i).substring(0, matchs.get(i).length() - 6);
                     String[] divParts = divStr.split(">", 2);
                     Paragraph paragraph = new Paragraph(Html.fromHtml(divParts[1]), paraType,
                             Utils.getHtmlAttributes(divParts[0]));
@@ -101,7 +104,11 @@ public class Article {
                 default:
                     break;
             }
-            content = parts[1];
+            if (parts.length == 2) {
+                content = parts[1];
+            } else {
+                return;
+            }
         }
 
         if (!content.equals("")) {
@@ -139,7 +146,7 @@ public class Article {
                 }
             }
         }
-
+        Linkify.addLinks(spannable, Linkify.WEB_URLS);
         return spannable;
     }
 

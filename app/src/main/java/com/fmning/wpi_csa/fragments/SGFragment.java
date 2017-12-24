@@ -41,24 +41,10 @@ public class SGFragment extends Fragment {
         sgListAdapter.setListener(new SGListAdapter.SGListListener() {
             @Override
             public void OnPrevArticleClicked() {
-//                Database db = new Database(getActivity());
-//                db.open();
-//                final Article article = db.getArticle();
-//                db.close();
-//
-//                sgListAdapter.setAndProcessArticle(article);
-//                sgListAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void OnNextArticleClicked() {
-//                Database db = new Database(getActivity());
-//                db.open();
-//                final Article article = db.getArticle(1);
-//                db.close();
-//
-//                sgListAdapter.setAndProcessArticle(article);
-//                sgListAdapter.notifyDataSetChanged();
             }
         });
         tableView.setAdapter(sgListAdapter);
@@ -69,8 +55,14 @@ public class SGFragment extends Fragment {
         final MenuListAdapter menuListAdapter = new MenuListAdapter(getActivity(), new MenuListAdapter.SGMenuListListener() {
             @Override
             public void OnOpenArticle(int menuId) {
-                Utils.logLong(Integer.toString(menuId));
                 view.closeDrawer(Gravity.START);
+                Database db = new Database(getActivity());
+                db.open();
+                Article article = db.getArticle(menuId);
+                db.close();
+
+                sgListAdapter.setAndProcessArticle(article);
+                sgListAdapter.notifyDataSetChanged();
             }
         });
         menuView.setAdapter(menuListAdapter);
@@ -100,6 +92,7 @@ public class SGFragment extends Fragment {
 
 
 
+
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -109,7 +102,11 @@ public class SGFragment extends Fragment {
                 db.close();
 
                 menuListAdapter.setMenuList(menuList);
-                menuListAdapter.notifyDataSetChanged();
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        menuListAdapter.notifyDataSetChanged();
+                    }
+                });
             }
 
         });

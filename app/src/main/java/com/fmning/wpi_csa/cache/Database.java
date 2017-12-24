@@ -195,7 +195,7 @@ public class Database {
         }
         if (index != 0) {
             article.prevMenuId = Utils.menuOrderList.get(index - 1);//TODO: Check for index?
-            article.prevMenuText = getMenuTitle(article.nextMenuId);
+            article.prevMenuText = getMenuTitle(article.prevMenuId);
         }
 
         return article;
