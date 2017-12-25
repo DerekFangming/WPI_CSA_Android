@@ -55,6 +55,7 @@
     <string name="register_hint_major">Abbreviation of your major</string>
     <string name="sg_nav_prev_end">Previous</string>
     <string name="sg_nav_next_end">Next</string>
+    <string name="sg_nav_search_hint">Search</string>
 
     <string name="ok" tools:ignore="ButtonCase,Typos">Ok</string>
     <string name="confirm">Confirm</string>

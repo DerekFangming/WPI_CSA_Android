@@ -7,8 +7,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.fmning.wpi_csa.R;
@@ -28,6 +31,7 @@ public class SGFragment extends Fragment {
 
     private List<Menu> menuList = new ArrayList<>();
     private boolean isShowingNavBar = true;
+    private final AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
 
     public SGFragment() {}
 
@@ -39,6 +43,9 @@ public class SGFragment extends Fragment {
         final View navigationBar = drawer.findViewById(R.id.SGNavigationBar);
         final RecyclerView tableView = (RecyclerView) drawer.findViewById(R.id.SGList);
         final ImageView coverImage = (ImageView) drawer.findViewById(R.id.SGCoverImage);
+
+        final Button menuButton = (Button) drawer.findViewById(R.id.SGMenuButton);
+        final Button reportButton = (Button) drawer.findViewById(R.id.SGReportButton);
 
         final SGListAdapter sgListAdapter = new SGListAdapter(getActivity());
         sgListAdapter.setListener(new SGListAdapter.SGListListener() {
@@ -68,7 +75,6 @@ public class SGFragment extends Fragment {
                 Database db = new Database(getActivity());
                 db.open();
                 Article article = db.getArticle(1);
-                //article = new Article("更多详情请见http://www.wpi.edu/academics/imgd.html，上面有详细的课程介绍和每年的选课流程，感兴趣的同学可以去看看更多详情请见http://www.wpi.edu/academics/imgd.html， 上面有详细的课程介绍和每年的选课流程，感兴趣的同学可以去看看");
                 db.close();
 
                 sgListAdapter.setAndProcessArticle(article);
@@ -96,6 +102,10 @@ public class SGFragment extends Fragment {
 
                 sgListAdapter.setAndProcessArticle(article);
                 sgListAdapter.notifyDataSetChanged();
+
+                if (article.themeColor != -1) {
+                    navigationBar.setBackgroundColor(article.themeColor);
+                }
             }
         });
         menuView.setAdapter(menuListAdapter);
@@ -120,6 +130,14 @@ public class SGFragment extends Fragment {
                         navigationBar.animate().y(0);
                     }
                 }
+            }
+        });
+
+        menuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.startAnimation(buttonClick);
+                drawer.openDrawer(Gravity.START);
             }
         });
 
