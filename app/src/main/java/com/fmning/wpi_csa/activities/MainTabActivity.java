@@ -28,6 +28,8 @@ public class MainTabActivity extends AppCompatActivity {
 
         DisplayMetrics window = getResources().getDisplayMetrics();
         Utils.padding15 = (int)(window.density * 15);
+        Utils.padding50 = (int)(window.density * 50);
+        Utils.padding72 = (int)(window.density * 72);
         Utils.paddingFullWidth = window.widthPixels;
 
         viewPager = (NoSwipePager) findViewById(R.id.mainTabPager);

@@ -56,6 +56,8 @@ public class Utils {
 
     //The padding values will get initiated before any segments are created
     public static int padding15;
+    public static int padding50;
+    public static int padding72;
     public static int paddingFullWidth;
 
     private static ProgressDialog loadingDialog;

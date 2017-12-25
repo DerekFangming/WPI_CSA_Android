@@ -27,31 +27,40 @@ import java.util.List;
 public class SGFragment extends Fragment {
 
     private List<Menu> menuList = new ArrayList<>();
+    private boolean isShowingNavBar = true;
 
     public SGFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final CustomDrawer view = (CustomDrawer)inflater.inflate(R.layout.fragment_sg, container, false);
+        final CustomDrawer drawer = (CustomDrawer)inflater.inflate(R.layout.fragment_sg, container, false);
 
-        final RecyclerView tableView = (RecyclerView) view.findViewById(R.id.SGList);
+        final View navigationBar = drawer.findViewById(R.id.SGNavigationBar);
+        final RecyclerView tableView = (RecyclerView) drawer.findViewById(R.id.SGList);
+        final ImageView coverImage = (ImageView) drawer.findViewById(R.id.SGCoverImage);
+
         final SGListAdapter sgListAdapter = new SGListAdapter(getActivity());
         sgListAdapter.setListener(new SGListAdapter.SGListListener() {
             @Override
-            public void OnPrevArticleShown() {
+            public void OnPrevArticleShown(int color) {
                 tableView.scrollToPosition(0);
+                if (color != -1) {
+                    navigationBar.setBackgroundColor(color);
+                }
             }
 
             @Override
-            public void OnNextArticleShown() {
+            public void OnNextArticleShown(int color) {
                 tableView.scrollToPosition(0);
+                if (color != -1) {
+                    navigationBar.setBackgroundColor(color);
+                }
             }
         });
         tableView.setAdapter(sgListAdapter);
 
 
-        final ImageView coverImage = (ImageView) view.findViewById(R.id.SGCoverImage);
         coverImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,17 +74,21 @@ public class SGFragment extends Fragment {
                 sgListAdapter.setAndProcessArticle(article);
                 sgListAdapter.notifyDataSetChanged();
 
+                if (article.themeColor != -1) {
+                    navigationBar.setBackgroundColor(article.themeColor);
+                }
+
             }
         });
 
-        RecyclerView menuView = (RecyclerView) view.findViewById(R.id.SGMenu);
+        RecyclerView menuView = (RecyclerView) drawer.findViewById(R.id.SGMenu);
         final MenuListAdapter menuListAdapter = new MenuListAdapter(getActivity(), new MenuListAdapter.SGMenuListListener() {
             @Override
             public void OnOpenArticle(int menuId) {
                 if (coverImage.getVisibility() == View.VISIBLE) {
                     coverImage.setVisibility(View.GONE);
                 }
-                view.closeDrawer(Gravity.START);
+                drawer.closeDrawer(Gravity.START);
                 Database db = new Database(getActivity());
                 db.open();
                 Article article = db.getArticle(menuId);
@@ -90,6 +103,25 @@ public class SGFragment extends Fragment {
         double width = Utils.paddingFullWidth * 0.8;
         DrawerLayout.LayoutParams params = (android.support.v4.widget.DrawerLayout.LayoutParams) menuView.getLayoutParams();
         params.width = (int)width;
+
+
+        tableView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    if (isShowingNavBar) {
+                        isShowingNavBar = false;
+                        navigationBar.animate().y(-Utils.padding72);
+                    }
+                } else {
+                    if (!isShowingNavBar) {
+                        isShowingNavBar = true;
+                        navigationBar.animate().y(0);
+                    }
+                }
+            }
+        });
 
 
         AsyncTask.execute(new Runnable() {
@@ -110,7 +142,7 @@ public class SGFragment extends Fragment {
 
         });
 
-        return view;
+        return drawer;
     }
 
     private class LoadArticleTask extends AsyncTask<Void, Void, Void> {

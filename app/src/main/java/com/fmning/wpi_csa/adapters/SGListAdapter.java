@@ -103,7 +103,7 @@ public class SGListAdapter extends RecyclerView.Adapter<ViewHolder> {
                     notifyDataSetChanged();
 
                     if (listener != null) {
-                        listener.OnPrevArticleShown();
+                        listener.OnPrevArticleShown(article.themeColor);
                     }
                 }
             });
@@ -118,7 +118,7 @@ public class SGListAdapter extends RecyclerView.Adapter<ViewHolder> {
                     article.processContent(context);
                     notifyDataSetChanged();
                     if (listener != null) {
-                        listener.OnNextArticleShown();
+                        listener.OnNextArticleShown(article.themeColor);
                     }
                 }
             });
@@ -163,7 +163,11 @@ public class SGListAdapter extends RecyclerView.Adapter<ViewHolder> {
 
                 if (paragraph.type == ParagraphType.DIV) {
                     cell.setBackgroundColor(article.themeColor);
+                    RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) cell.findViewById(R.id.sgDivPlaceholder).getLayoutParams();
+                    layoutParams.setMargins(0, Utils.padding50, 0, 0);
                 } else {
+                    RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) cell.findViewById(R.id.sgDivPlaceholder).getLayoutParams();
+                    layoutParams.setMargins(0, 0, 0, 0);
                     cell.setBackgroundColor(Color.TRANSPARENT);
                 }
                 break;
@@ -215,7 +219,7 @@ public class SGListAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
     public interface SGListListener {
-        void OnPrevArticleShown();
-        void OnNextArticleShown();
+        void OnPrevArticleShown(int color);
+        void OnNextArticleShown(int color);
     }
 }
