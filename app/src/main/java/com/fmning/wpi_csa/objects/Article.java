@@ -97,7 +97,6 @@ public class Article {
                     paragraphs.add(paragraph);
                     String colorStr = paragraph.properties.get("color");
                     if (colorStr != null && themeColor == -1) {
-                        Utils.logMsg(colorStr);
                         themeColor = Color.parseColor("#" + colorStr);
                     }
                     break;

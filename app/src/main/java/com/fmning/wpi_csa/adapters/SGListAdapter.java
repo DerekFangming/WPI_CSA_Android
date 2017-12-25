@@ -101,9 +101,10 @@ public class SGListAdapter extends RecyclerView.Adapter<ViewHolder> {
 
                     article.processContent(context);
                     notifyDataSetChanged();
-//                    if (listener != null) {
-//                        listener.OnPrevArticleClicked();
-//                    }
+
+                    if (listener != null) {
+                        listener.OnPrevArticleShown();
+                    }
                 }
             });
             nextBtn.setOnClickListener(new View.OnClickListener() {
@@ -116,9 +117,9 @@ public class SGListAdapter extends RecyclerView.Adapter<ViewHolder> {
 
                     article.processContent(context);
                     notifyDataSetChanged();
-//                    if (listener != null) {
-//                        listener.OnNextArticleClicked();
-//                    }
+                    if (listener != null) {
+                        listener.OnNextArticleShown();
+                    }
                 }
             });
 
@@ -214,7 +215,7 @@ public class SGListAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
     public interface SGListListener {
-        void OnPrevArticleClicked();
-        void OnNextArticleClicked();
+        void OnPrevArticleShown();
+        void OnNextArticleShown();
     }
 }

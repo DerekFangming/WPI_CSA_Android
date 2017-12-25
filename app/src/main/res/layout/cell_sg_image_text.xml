@@ -24,6 +24,7 @@
         android:layout_marginEnd="10dp"
         android:textColor="@color/black"
         android:autoLink="email|map|web"
+        android:textIsSelectable="true"
         android:layout_centerVertical="true"/>
 
 </RelativeLayout>

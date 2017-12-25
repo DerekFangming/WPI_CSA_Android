@@ -34,27 +34,47 @@ public class SGFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final CustomDrawer view = (CustomDrawer)inflater.inflate(R.layout.fragment_sg, container, false);
-        //view.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
 
-        RecyclerView tableView = (RecyclerView) view.findViewById(R.id.SGList);
+        final RecyclerView tableView = (RecyclerView) view.findViewById(R.id.SGList);
         final SGListAdapter sgListAdapter = new SGListAdapter(getActivity());
         sgListAdapter.setListener(new SGListAdapter.SGListListener() {
             @Override
-            public void OnPrevArticleClicked() {
+            public void OnPrevArticleShown() {
+                tableView.scrollToPosition(0);
             }
 
             @Override
-            public void OnNextArticleClicked() {
+            public void OnNextArticleShown() {
+                tableView.scrollToPosition(0);
             }
         });
         tableView.setAdapter(sgListAdapter);
 
 
+        final ImageView coverImage = (ImageView) view.findViewById(R.id.SGCoverImage);
+        coverImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                coverImage.setVisibility(View.GONE);
+                Database db = new Database(getActivity());
+                db.open();
+                Article article = db.getArticle(1);
+                //article = new Article("更多详情请见http://www.wpi.edu/academics/imgd.html，上面有详细的课程介绍和每年的选课流程，感兴趣的同学可以去看看更多详情请见http://www.wpi.edu/academics/imgd.html， 上面有详细的课程介绍和每年的选课流程，感兴趣的同学可以去看看");
+                db.close();
+
+                sgListAdapter.setAndProcessArticle(article);
+                sgListAdapter.notifyDataSetChanged();
+
+            }
+        });
 
         RecyclerView menuView = (RecyclerView) view.findViewById(R.id.SGMenu);
         final MenuListAdapter menuListAdapter = new MenuListAdapter(getActivity(), new MenuListAdapter.SGMenuListListener() {
             @Override
             public void OnOpenArticle(int menuId) {
+                if (coverImage.getVisibility() == View.VISIBLE) {
+                    coverImage.setVisibility(View.GONE);
+                }
                 view.closeDrawer(Gravity.START);
                 Database db = new Database(getActivity());
                 db.open();
@@ -67,30 +87,9 @@ public class SGFragment extends Fragment {
         });
         menuView.setAdapter(menuListAdapter);
 
-
-
         double width = Utils.paddingFullWidth * 0.8;
         DrawerLayout.LayoutParams params = (android.support.v4.widget.DrawerLayout.LayoutParams) menuView.getLayoutParams();
         params.width = (int)width;
-
-        final ImageView coverImage = (ImageView) view.findViewById(R.id.SGCoverImage);
-        coverImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                coverImage.setVisibility(View.GONE);
-                Database db = new Database(getActivity());
-                db.open();
-                //Spanned fromHtml = HtmlCompat.fromHtml(getActivity(), "<font size=\"40px\" color=\"00FF00\">kjdshfsdj</font>", 0);
-                final Article article = db.getArticle(1);
-                db.close();
-
-                sgListAdapter.setAndProcessArticle(article);
-                sgListAdapter.notifyDataSetChanged();
-
-            }
-        });
-
-
 
 
         AsyncTask.execute(new Runnable() {
