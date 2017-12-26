@@ -38,8 +38,8 @@ public class MainTabActivity extends AppCompatActivity {
 
         LifeFragment lifeFragment = new LifeFragment();
         pagerAdapter.addFragments(lifeFragment);
-        SGFragment fragment1 = new SGFragment();
-        pagerAdapter.addFragments(fragment1);
+        SGFragment sgFragment = new SGFragment();
+        pagerAdapter.addFragments(sgFragment);
         SettingFragment settingFragment = new SettingFragment();
         pagerAdapter.addFragments(settingFragment);
 
@@ -50,35 +50,35 @@ public class MainTabActivity extends AppCompatActivity {
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         getWindow().setStatusBarColor(Color.TRANSPARENT);
 
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        final BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.actionLife:
                         viewPager.setCurrentItem(0, false);
-
                         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR |
                                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-
                         break;
                     case R.id.actionSG:
                         viewPager.setCurrentItem(1, false);
-
                         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-
-
                         break;
                     case R.id.actionSetting:
                         viewPager.setCurrentItem(2, false);
-
                         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR |
                                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-
                         break;
 
                 }
                 return true;
+            }
+        });
+
+        sgFragment.setOnSGListener(new SGFragment.OnSGListener() {
+            @Override
+            public void OnGotoSettingPage() {
+                bottomNavigationView.setSelectedItemId(R.id.actionSetting);
             }
         });
 

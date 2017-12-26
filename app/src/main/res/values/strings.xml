@@ -2,6 +2,7 @@
     <string name="app_name">WPI CSA</string>
 
     <string name="register_activity">Register</string>
+    <string name="report_activity">Report a problem</string>
 
     <string name="life_tab">Life</string>
     <string name="sg_tab">Survival Guide</string>
@@ -63,6 +64,9 @@
     <string name="done">Done</string>
     <string name="remind_later">Remind me later</string>
     <string name="never_show_again">Never show this again</string>
+    <string name="login_register">Login &amp; Register</string>
+    <string name="report_anyway">Report anyway</string>
+
 
     <!--Error messages-->
     <string name="unknown_error">Unknown error. Please contact support at admin@fmning.com</string>
@@ -81,6 +85,7 @@
     <string name="password_empty_error">You must enter a password</string>
     <string name="year_format_error">Graduation year must be a four digits number</string>
     <string name="major_too_long_error">Please use abbreviation for major, like CS, ECE, etc</string>
+    <string name="report_not_loggedin">No user logged in. Please login so that we can get back to you and keep track of reports.</string>
     <!--Known server side error that needs to be handled-->
     <string name="no_more_feed_error">There are no more feeds.</string>
     <string name="no_event_error">The event you are looking for does not exist.</string>

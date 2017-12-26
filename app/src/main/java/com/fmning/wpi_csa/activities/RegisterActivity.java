@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.adapters.RegisterListAdapter;
@@ -36,6 +37,9 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR |
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
         RecyclerView tableView = (RecyclerView) findViewById(R.id.registerList);
 

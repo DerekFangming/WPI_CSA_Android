@@ -1,5 +1,8 @@
 package com.fmning.wpi_csa.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,11 +18,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.fmning.wpi_csa.R;
+import com.fmning.wpi_csa.activities.ReportActivity;
 import com.fmning.wpi_csa.adapters.MenuListAdapter;
 import com.fmning.wpi_csa.adapters.SGListAdapter;
 import com.fmning.wpi_csa.cache.Database;
+import com.fmning.wpi_csa.helpers.AppMode;
 import com.fmning.wpi_csa.helpers.CustomDrawer;
 import com.fmning.wpi_csa.helpers.Utils;
+import com.fmning.wpi_csa.http.WCService;
 import com.fmning.wpi_csa.objects.Article;
 import com.fmning.wpi_csa.objects.Menu;
 
@@ -33,7 +39,9 @@ public class SGFragment extends Fragment {
     private boolean isShowingNavBar = true;
     private final AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
 
-    public SGFragment() {}
+    private OnSGListener listener;
+
+    public SGFragment(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -141,6 +149,37 @@ public class SGFragment extends Fragment {
             }
         });
 
+        reportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.startAnimation(buttonClick);
+                if (Utils.appMode == AppMode.LOGGED_ON) {
+
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setCancelable(false).setTitle(null)
+                            .setMessage(getActivity().getString(R.string.report_not_loggedin))
+                            .setPositiveButton(getActivity().getString(R.string.login_register), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    if (listener != null) {
+                                        listener.OnGotoSettingPage();
+                                    }
+                                }
+                            })
+                            .setNeutralButton(getActivity().getString(R.string.cancel), null)
+                            .setNegativeButton(getActivity().getString(R.string.report_anyway), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(getActivity(), ReportActivity.class);
+                                    startActivity(intent);
+                                    getActivity().overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+                                }
+                            }).show();
+                }
+            }
+        });
+
 
         AsyncTask.execute(new Runnable() {
             @Override
@@ -163,21 +202,11 @@ public class SGFragment extends Fragment {
         return drawer;
     }
 
-    private class LoadArticleTask extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-//
-//            this.sgListAdapter.setAndProcessArticle(article);
-//            sgListAdapter.notifyDataSetChanged();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void params) {
-            super.onPostExecute(params);
-            //Log.d(TAG + " onPostExecute", "" + result);
-        }
+    public void setOnSGListener (OnSGListener listener) {
+        this.listener = listener;
     }
 
+    public interface OnSGListener {
+        void OnGotoSettingPage();
+    }
 }
