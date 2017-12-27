@@ -92,7 +92,6 @@ public class CacheManager {
 
             if(imgFile.exists()){
                 //Utils.logMsg("image from local");
-                Utils.logMsg("trying to load " + imgFileName);
                 Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 Database.imageHit(context, id);
                 listener.OnCacheGetImageDone("", bitmap);

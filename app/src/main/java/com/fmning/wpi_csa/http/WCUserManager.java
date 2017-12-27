@@ -61,7 +61,6 @@ public class WCUserManager {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
-                Utils.logMsg(res);
                 listener.OnGetUserSaltDone(context.getString(R.string.server_down_error), "");
             }
 

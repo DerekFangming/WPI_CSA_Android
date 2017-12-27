@@ -57,11 +57,18 @@
     <string name="sg_nav_prev_end">Previous</string>
     <string name="sg_nav_next_end">Next</string>
     <string name="sg_nav_search_hint">Search</string>
+    <string name="report_email_hint">Please enter email</string>
+    <string name="report_report_hint">Please enter report</string>
+    <string name="report_cancel_confirm">Are you sure you want to cancel?</string>
+    <string name="report_email_error">Please check email format</string>
+    <string name="report_empty_error">Please enter a valid report</string>
 
     <string name="ok" tools:ignore="ButtonCase,Typos">Ok</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="done">Done</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
     <string name="remind_later">Remind me later</string>
     <string name="never_show_again">Never show this again</string>
     <string name="login_register">Login &amp; Register</string>

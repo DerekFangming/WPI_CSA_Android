@@ -154,7 +154,9 @@ public class SGFragment extends Fragment {
             public void onClick(View v) {
                 v.startAnimation(buttonClick);
                 if (Utils.appMode == AppMode.LOGGED_ON) {
-
+                    Intent intent = new Intent(getActivity(), ReportActivity.class);
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setCancelable(false).setTitle(null)

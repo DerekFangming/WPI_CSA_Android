@@ -13,6 +13,7 @@ import android.view.View;
 
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.activities.MainTabActivity;
+import com.fmning.wpi_csa.activities.ReportActivity;
 import com.fmning.wpi_csa.cache.CacheManager;
 import com.fmning.wpi_csa.cache.Database;
 import com.fmning.wpi_csa.http.WCService;
@@ -256,16 +257,31 @@ public class Utils {
         }
     }
 
+    //TODO: Are these activity specific preferences really what we need?
     public static String getParam(Context context, String key){
-        return ((MainTabActivity)context).getPreferences(MODE_PRIVATE).getString(key,null);
+        if (context.getClass() == MainTabActivity.class) {
+            return ((MainTabActivity) context).getPreferences(MODE_PRIVATE).getString(key, null);
+        } else if (context.getClass() == ReportActivity.class) {
+            return ((ReportActivity) context).getPreferences(MODE_PRIVATE).getString(key, null);
+        } else {
+            return null;
+        }
     }
 
     public static void setParam(Context context, String key, String value){
-        ((MainTabActivity)context).getPreferences(MODE_PRIVATE).edit().putString(key, value).apply();
+        if (context.getClass() == MainTabActivity.class) {
+            ((MainTabActivity)context).getPreferences(MODE_PRIVATE).edit().putString(key, value).apply();
+        } else if (context.getClass() == ReportActivity.class) {
+            ((ReportActivity)context).getPreferences(MODE_PRIVATE).edit().putString(key, value).apply();
+        }
     }
 
     public static void deleteParam(Context context, String key){
-        ((MainTabActivity)context).getPreferences(MODE_PRIVATE).edit().remove(key).apply();
+        if (context.getClass() == MainTabActivity.class) {
+            ((MainTabActivity) context).getPreferences(MODE_PRIVATE).edit().remove(key).apply();
+        } else if (context.getClass() == ReportActivity.class) {
+            ((ReportActivity) context).getPreferences(MODE_PRIVATE).edit().remove(key).apply();
+        }
     }
 
     public static Map<String, String> getHtmlAttributes (String string) {

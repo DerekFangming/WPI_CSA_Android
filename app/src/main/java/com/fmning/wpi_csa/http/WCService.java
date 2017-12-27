@@ -12,9 +12,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.entity.ContentType;
+import cz.msebera.android.httpclient.entity.StringEntity;
 
 /**
  * Created by fangmingning
@@ -97,6 +100,57 @@ public class WCService {
                 onFailure(statusCode, headers, throwable.getLocalizedMessage(), throwable);
             }
         });
+    }
+
+    public static void reportSGProblem(final Context context, int menuId, int userId, String email,
+                                       String report, final OnReportProblemListener listener) {
+        StringEntity entity = null;
+        try {
+            JSONObject params = new JSONObject();
+            params.put("menuId", menuId);
+            params.put("email", email);
+            params.put("report", report);
+            if (userId != -1) {
+                params.put("userId", userId);
+            }
+            entity = new StringEntity(params.toString());
+        }catch (JSONException | UnsupportedEncodingException ignored){}
+
+        client.post(context, WCUtils.serviceBase + WCUtils.pathCreateReport, entity,
+                ContentType.APPLICATION_JSON.getMimeType(), new JsonHttpResponseHandler(){
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        try {
+                            String error = response.getString("error");
+                            if (!error.equals("")){
+                                listener.OnReportProblemDone(error);
+                            } else {
+                                listener.OnReportProblemDone("");
+                            }
+                        } catch(JSONException e){
+                            listener.OnReportProblemDone(context.getString(R.string.respond_format_error));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
+                        listener.OnReportProblemDone(context.getString(R.string.server_down_error));
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                        onFailure(statusCode, headers, throwable.getLocalizedMessage(), throwable);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        onFailure(statusCode, headers, throwable.getLocalizedMessage(), throwable);
+                    }
+                });
+    }
+
+    public interface OnReportProblemListener {
+        void OnReportProblemDone(String error);
     }
 
     public interface OnCheckSoftwareVersionListener {

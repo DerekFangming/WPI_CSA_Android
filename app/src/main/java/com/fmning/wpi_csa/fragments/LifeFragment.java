@@ -78,9 +78,7 @@ public class LifeFragment extends Fragment {
 //            }
 //        }, 2000);
 
-        String a = "<b>学校主页</b><br>http://www.wpi.edu";
-        SpannableString spannable = new SpannableString(Html.fromHtml(a));
-        boolean b = Linkify.addLinks(spannable, Linkify.WEB_URLS);
+        //String a = Utils.getParam(getActivity(), Utils.reportEmail);
 
 
         Utils.logMsg("bkpoint for testing area");
