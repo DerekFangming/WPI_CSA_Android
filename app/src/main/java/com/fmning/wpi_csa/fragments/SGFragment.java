@@ -10,7 +10,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -25,7 +24,6 @@ import com.fmning.wpi_csa.cache.Database;
 import com.fmning.wpi_csa.helpers.AppMode;
 import com.fmning.wpi_csa.helpers.CustomDrawer;
 import com.fmning.wpi_csa.helpers.Utils;
-import com.fmning.wpi_csa.http.WCService;
 import com.fmning.wpi_csa.objects.Article;
 import com.fmning.wpi_csa.objects.Menu;
 

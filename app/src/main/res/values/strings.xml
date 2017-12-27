@@ -3,6 +3,7 @@
 
     <string name="register_activity">Register</string>
     <string name="report_activity">Report a problem</string>
+    <string name="user_detail_fragment">User Details</string>
 
     <string name="life_tab">Life</string>
     <string name="sg_tab">Survival Guide</string>
@@ -60,13 +61,15 @@
     <string name="report_email_hint">Please enter email</string>
     <string name="report_report_hint">Please enter report</string>
     <string name="report_cancel_confirm">Are you sure you want to cancel?</string>
-    <string name="report_email_error">Please check email format</string>
-    <string name="report_empty_error">Please enter a valid report</string>
+    <string name="report_sent_with_email">Thank you for your report. We will get back to you as soon as possible.</string>
+    <string name="report_sent_whtout_email">Thank you for your report. We will not get back to you since you do not have email on record.</string>
+
 
     <string name="ok" tools:ignore="ButtonCase,Typos">Ok</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="done">Done</string>
+    <string name="save">Save</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="remind_later">Remind me later</string>
@@ -93,6 +96,8 @@
     <string name="year_format_error">Graduation year must be a four digits number</string>
     <string name="major_too_long_error">Please use abbreviation for major, like CS, ECE, etc</string>
     <string name="report_not_loggedin">No user logged in. Please login so that we can get back to you and keep track of reports.</string>
+    <string name="report_email_error">Please check email format</string>
+    <string name="report_empty_error">Please enter a valid report</string>
     <!--Known server side error that needs to be handled-->
     <string name="no_more_feed_error">There are no more feeds.</string>
     <string name="no_event_error">The event you are looking for does not exist.</string>

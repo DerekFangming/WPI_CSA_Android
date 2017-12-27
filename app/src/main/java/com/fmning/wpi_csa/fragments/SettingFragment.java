@@ -9,6 +9,8 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,9 +25,9 @@ import com.fmning.wpi_csa.adapters.SettingListAdapter;
 import com.fmning.wpi_csa.helpers.AppMode;
 import com.fmning.wpi_csa.helpers.Utils;
 import com.fmning.wpi_csa.http.WCService;
+import com.fmning.wpi_csa.http.WCUserManager;
 import com.fmning.wpi_csa.http.WCUtils;
 import com.fmning.wpi_csa.http.objects.WCUser;
-import com.fmning.wpi_csa.http.WCUserManager;
 
 /**
  * Created by fangmingning
@@ -84,8 +86,8 @@ public class SettingFragment extends Fragment {
                                     if (error.equals("")) {
                                         WCService.currentUser = user;
                                         Utils.appMode = AppMode.LOGGED_ON;
-                                        Utils.setParam(getActivity(), Utils.savedUsername, username);
-                                        Utils.setParam(getActivity(), Utils.savedPassword, encryptedPassword);
+                                        Utils.setParam(Utils.savedUsername, username);
+                                        Utils.setParam(Utils.savedPassword, encryptedPassword);
                                         Utils.hideLoadingIndicator();
                                         tableViewAdapter.notifyDataSetChanged();
                                     } else {
@@ -112,7 +114,12 @@ public class SettingFragment extends Fragment {
 
             @Override
             public void OnUserDetailClick() {
-                Utils.logMsg("go to user detail");
+                Fragment fragment = new UserDetailFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.settingFragment, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
 
             @Override
@@ -150,7 +157,7 @@ public class SettingFragment extends Fragment {
                                 if (oldPass.trim().equals("")) {
                                     error = getActivity().getString(R.string.new_pwd_empty_error);
                                 } else {
-                                    error = Utils.checkPasswordStrength(getActivity(), newPass);
+                                    error = Utils.checkPasswordStrength(newPass);
                                     if (error.equals("") && !newPass.equals(confirmNewPass)) {
                                         error = getActivity().getString(R.string.pwd_not_match_error);
                                     }
@@ -170,7 +177,7 @@ public class SettingFragment extends Fragment {
                                                             public void OnChangePasswordDone(String error, String accessToken) {
                                                                 if (error.equals("")) {
                                                                     WCService.currentUser.accessToken = accessToken;
-                                                                    Utils.setParam(getActivity(), Utils.savedPassword, encryptedNewPwd);
+                                                                    Utils.setParam(Utils.savedPassword, encryptedNewPwd);
                                                                     Utils.hideLoadingIndicator();
                                                                     Utils.showAlertMessage(getActivity(), getActivity().getString(R.string.done));
                                                                 } else {
@@ -235,8 +242,8 @@ public class SettingFragment extends Fragment {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 WCService.currentUser = null;
                                 Utils.appMode = AppMode.LOGIN;
-                                Utils.deleteParam(getActivity(), Utils.savedUsername);
-                                Utils.deleteParam(getActivity(), Utils.savedPassword);
+                                Utils.deleteParam(Utils.savedUsername);
+                                Utils.deleteParam(Utils.savedPassword);
                                 tableViewAdapter.notifyDataSetChanged();
                             }
                         })

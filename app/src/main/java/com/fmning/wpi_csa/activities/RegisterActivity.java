@@ -75,7 +75,7 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                String pwdStrengthCheck = Utils.checkPasswordStrength(RegisterActivity.this, password);
+                String pwdStrengthCheck = Utils.checkPasswordStrength(password);
                 if (!pwdStrengthCheck.equals("")) {
                     Utils.showAlertMessage(RegisterActivity.this, pwdStrengthCheck);
                     return;
@@ -131,8 +131,8 @@ public class RegisterActivity extends AppCompatActivity {
                                                             if (major != null) {
                                                                 WCService.currentUser.major = major;
                                                             }
-                                                            Utils.setParam(RegisterActivity.this, Utils.savedUsername, username.trim());
-                                                            Utils.setParam(RegisterActivity.this, Utils.savedPassword,
+                                                            Utils.setParam(Utils.savedUsername, username.trim());
+                                                            Utils.setParam(Utils.savedPassword,
                                                                     WCUtils.md5(password + salt));
 
                                                             if (avatar != null) {

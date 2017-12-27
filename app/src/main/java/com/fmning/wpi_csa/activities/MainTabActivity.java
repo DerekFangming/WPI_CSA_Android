@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -26,11 +25,7 @@ public class MainTabActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_tab);
 
-        DisplayMetrics window = getResources().getDisplayMetrics();
-        Utils.padding15 = (int)(window.density * 15);
-        Utils.padding50 = (int)(window.density * 50);
-        Utils.padding72 = (int)(window.density * 72);
-        Utils.paddingFullWidth = window.widthPixels;
+        Utils.initialize(this);
 
         viewPager = (NoSwipePager) findViewById(R.id.mainTabPager);
         viewPager.setPagingEnabled(false);

@@ -7,13 +7,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.activities.MainTabActivity;
-import com.fmning.wpi_csa.activities.ReportActivity;
 import com.fmning.wpi_csa.cache.CacheManager;
 import com.fmning.wpi_csa.cache.Database;
 import com.fmning.wpi_csa.http.WCService;
@@ -42,6 +42,11 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class Utils {
 
+    //This is the context from MainTabActivity
+    //This is used to get screen dimentions, access strings, etc.
+    //This is NOT used to show UI elements since it may NOT be the current active activity
+    private static Context mainContext;
+
     //Format: AppMajorVerion.AppSubVersion.ContentVersion
     //Update this number results server version update
     public static final String baseVersion = "1.03.001";
@@ -66,6 +71,15 @@ public class Utils {
     public static AppMode appMode = AppMode.OFFLINE;
     public static List<Integer> menuOrderList = new ArrayList<>();
 
+    public static void initialize(Context context) {
+        mainContext = context;
+        DisplayMetrics window = mainContext.getResources().getDisplayMetrics();
+        padding15 = (int)(window.density * 15);
+        padding50 = (int)(window.density * 50);
+        padding72 = (int)(window.density * 72);
+        paddingFullWidth = window.widthPixels;
+    }
+
 
     public static void checkVerisonInfoAndLoginUser(final Context context, final boolean showAlert){
         if (showAlert) {
@@ -73,22 +87,22 @@ public class Utils {
         }
 
         String versionToCheck = baseVersion;
-        String version = getParam(context, appVersion);
+        String version = getParam(appVersion);
         if (version != null) {
             versionToCheck = version;
             String[] versionArr = version.split("\\.");
             if (versionArr.length != 3) {                                    //Corrupted data
                 versionToCheck = baseVersion;
-                initializeApp(context);
+                initializeApp();
             } else if (!versionArr[1].equals(baseVersion.split("\\.")[1])) { //Software version mismatch
                 versionToCheck = baseVersion;
-                initializeApp(context);// TODO: merge top if nothing special
+                initializeApp();// TODO: merge top if nothing special
             }
         } else {//First time install
-            initializeApp(context);
+            initializeApp();
         }
 
-        String status = getParam(context, appStatus);
+        String status = getParam(appStatus);
         if (status != null && !status.equals("OK")) {
             return; //TODO: Any friendly message?
         }
@@ -100,7 +114,7 @@ public class Utils {
                 if (status.equals("OK")) {
                     dismissIndicatorAndTryLogin(context, showAlert);
                 } else if (status.equals("CU")) {
-                    setParam(context, appVersion, version);
+                    setParam(appVersion, version);
                     Database.run(context, updates);
                     dismissIndicatorAndTryLogin(context, showAlert);
                 } else if (status.equals("BM")) {
@@ -121,15 +135,15 @@ public class Utils {
                                         int prevVersion = Integer.parseInt(currVersion) - 1;
                                         String prevVersionStr = version.substring(0, version.length() - 3) +
                                                 String.format(Locale.getDefault(), "%03d", prevVersion);
-                                        setParam(context, appVersion, prevVersionStr);
+                                        setParam(appVersion, prevVersionStr);
                                     } catch (NumberFormatException e) {
-                                        setParam(context, appVersion, version);//TODO: Do something here
+                                        setParam(appVersion, version);//TODO: Do something here
                                     }
                                 }
                             })
                             .setNegativeButton(context.getString(R.string.never_show_again), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    setParam(context, appVersion, version);
+                                    setParam(appVersion, version);
                                 }
                             })
                             .show();
@@ -144,7 +158,7 @@ public class Utils {
                             .setPositiveButton(context.getString(R.string.remind_later), null)
                             .setNegativeButton(context.getString(R.string.never_show_again), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    setParam(context, appStatus, "");
+                                    setParam(appStatus, "");
                                 }
                             })
                             .show();
@@ -158,15 +172,15 @@ public class Utils {
 
     }
 
-    private static void initializeApp(Context context){
-        setParam(context, appStatus, "OK");
-        setParam(context, appVersion, baseVersion);
-        CacheManager.localDirInitiateSetup(context);
+    private static void initializeApp(){
+        setParam(appStatus, "OK");
+        setParam(appVersion, baseVersion);
+        CacheManager.localDirInitiateSetup(mainContext);
     }
 
     private static void dismissIndicatorAndTryLogin(final Context context, final boolean showAlert){
-        String username = getParam(context, savedUsername);
-        String password = getParam(context, savedPassword);
+        String username = getParam(savedUsername);
+        String password = getParam(savedPassword);
         if(username != null && !username.equals("") && password != null && !password.equals("")){
             WCUserManager.loginUser(context, username, password, new WCUserManager.OnLoginUserListener() {
                 @Override
@@ -241,47 +255,33 @@ public class Utils {
         return matcher.matches();
     }
 
-    public static String checkPasswordStrength(Context context, String password){
+    public static String checkPasswordStrength(String password){
         if (password.length() < 6) {
-            return context.getString(R.string.password_too_short);
+            return mainContext.getString(R.string.password_too_short);
         } else {
             if (password.matches(".*[a-zA-Z].*")) {
                 if (password.matches(".*[0-9].*")) {
                     return "";
                 } else {
-                    return context.getString(R.string.password_no_number);
+                    return mainContext.getString(R.string.password_no_number);
                 }
             } else {
-                return context.getString(R.string.password_no_letter);
+                return mainContext.getString(R.string.password_no_letter);
             }
         }
     }
 
-    //TODO: Are these activity specific preferences really what we need?
-    public static String getParam(Context context, String key){
-        if (context.getClass() == MainTabActivity.class) {
-            return ((MainTabActivity) context).getPreferences(MODE_PRIVATE).getString(key, null);
-        } else if (context.getClass() == ReportActivity.class) {
-            return ((ReportActivity) context).getPreferences(MODE_PRIVATE).getString(key, null);
-        } else {
-            return null;
-        }
+    //Since android preference is activity specific, all preferences are stored under MainTabActivity
+    public static String getParam(String key){
+        return ((MainTabActivity) mainContext).getPreferences(MODE_PRIVATE).getString(key, null);
     }
 
-    public static void setParam(Context context, String key, String value){
-        if (context.getClass() == MainTabActivity.class) {
-            ((MainTabActivity)context).getPreferences(MODE_PRIVATE).edit().putString(key, value).apply();
-        } else if (context.getClass() == ReportActivity.class) {
-            ((ReportActivity)context).getPreferences(MODE_PRIVATE).edit().putString(key, value).apply();
-        }
+    public static void setParam(String key, String value){
+        ((MainTabActivity) mainContext).getPreferences(MODE_PRIVATE).edit().putString(key, value).apply();
     }
 
-    public static void deleteParam(Context context, String key){
-        if (context.getClass() == MainTabActivity.class) {
-            ((MainTabActivity) context).getPreferences(MODE_PRIVATE).edit().remove(key).apply();
-        } else if (context.getClass() == ReportActivity.class) {
-            ((ReportActivity) context).getPreferences(MODE_PRIVATE).edit().remove(key).apply();
-        }
+    public static void deleteParam(String key){
+        ((MainTabActivity) mainContext).getPreferences(MODE_PRIVATE).edit().remove(key).apply();
     }
 
     public static Map<String, String> getHtmlAttributes (String string) {

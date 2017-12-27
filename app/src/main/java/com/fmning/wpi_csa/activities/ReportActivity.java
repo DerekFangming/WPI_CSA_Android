@@ -7,21 +7,22 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.helpers.AppMode;
 import com.fmning.wpi_csa.helpers.Utils;
 import com.fmning.wpi_csa.http.WCService;
 
-/**                                                                                                     WD
+/**
  * Created by Fangming
  * On 12/25/2017.
  */
@@ -50,7 +51,7 @@ public class ReportActivity extends AppCompatActivity {
             reportView.removeView(separator);
             reportView.removeView(reporterEmail);
         } else {
-            String value = Utils.getParam(this, Utils.reportEmail);
+            String value = Utils.getParam(Utils.reportEmail);
             if (value != null) {
                 reporterEmail.setText(value);
                 reportText.requestFocus();
@@ -91,7 +92,7 @@ public class ReportActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int userId = -1;
-                String email;
+                final String email;
 
                 if (Utils.appMode == AppMode.LOGGED_ON) {
                     userId = WCService.currentUser.id;
@@ -99,7 +100,7 @@ public class ReportActivity extends AppCompatActivity {
                 } else {
                     email = reporterEmail.getText().toString().trim();
                     if (!email.equals("") && Utils.isEmailAddress(email)) {
-                        Utils.setParam(ReportActivity.this, Utils.reportEmail, email);
+                        Utils.setParam(Utils.reportEmail, email);
                     } else if (!email.equals("")) {
                         Utils.showAlertMessage(ReportActivity.this, getString(R.string.report_email_error));
                         return;
@@ -117,7 +118,19 @@ public class ReportActivity extends AppCompatActivity {
                         report, new WCService.OnReportProblemListener() {
                     @Override
                     public void OnReportProblemDone(String error) {
-
+                        if (error.equals("")) {
+                            Utils.hideLoadingIndicator();
+                            finish();
+                            overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_down);
+                            String message = email.equals("") ? getString(R.string.report_sent_whtout_email) :
+                                    getString(R.string.report_sent_with_email);
+                            Toast toast = Toast.makeText(ReportActivity.this, message, Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+                        } else {
+                            Utils.hideLoadingIndicator();
+                            Utils.processErrorMessage(ReportActivity.this, error, true);
+                        }
                     }
                 });
             }
