@@ -19,6 +19,8 @@
             android:layout_marginStart="0dp"
             android:text="@string/setting_tab"
             android:textColor="@color/colorAccent"
+            android:drawableStart="@drawable/verified"
+            android:gravity="start|center_vertical"
             android:textAllCaps="false"
             android:background="?android:attr/selectableItemBackground"/>
 
