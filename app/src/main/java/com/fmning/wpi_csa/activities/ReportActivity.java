@@ -30,6 +30,7 @@ import com.fmning.wpi_csa.http.WCService;
 public class ReportActivity extends AppCompatActivity {
 
     private EditText reportText;
+    private int currentMenuId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,8 @@ public class ReportActivity extends AppCompatActivity {
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR |
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
+        currentMenuId = getIntent().getIntExtra("menuId", 0);
 
         LinearLayout reportView = (LinearLayout) findViewById(R.id.reportView);
         final EditText reporterEmail = (EditText) findViewById(R.id.reporterEmail);
@@ -114,7 +117,7 @@ public class ReportActivity extends AppCompatActivity {
                 }
 
                 Utils.showLoadingIndicator(ReportActivity.this);
-                WCService.reportSGProblem(ReportActivity.this, 0, userId, email,
+                WCService.reportSGProblem(ReportActivity.this, currentMenuId, userId, email,
                         report, new WCService.OnReportProblemListener() {
                     @Override
                     public void OnReportProblemDone(String error) {

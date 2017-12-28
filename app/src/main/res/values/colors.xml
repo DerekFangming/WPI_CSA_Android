@@ -9,4 +9,5 @@
     <color name="white">#FFFFFF</color>
     <color name="clear">#00FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="splashTopColor">#8ACDD6</color>
 </resources>

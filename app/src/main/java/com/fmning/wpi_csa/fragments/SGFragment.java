@@ -36,6 +36,7 @@ public class SGFragment extends Fragment {
     private List<Menu> menuList = new ArrayList<>();
     private boolean isShowingNavBar = true;
     private final AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
+    private int currentMenuId = 0;
 
     private OnSGListener listener;
 
@@ -56,16 +57,18 @@ public class SGFragment extends Fragment {
         final SGListAdapter sgListAdapter = new SGListAdapter(getActivity());
         sgListAdapter.setListener(new SGListAdapter.SGListListener() {
             @Override
-            public void OnPrevArticleShown(int color) {
+            public void OnPrevArticleShown(int color, int menuId) {
                 tableView.scrollToPosition(0);
+                currentMenuId = menuId;
                 if (color != -1) {
                     navigationBar.setBackgroundColor(color);
                 }
             }
 
             @Override
-            public void OnNextArticleShown(int color) {
+            public void OnNextArticleShown(int color, int menuId) {
                 tableView.scrollToPosition(0);
+                currentMenuId = menuId;
                 if (color != -1) {
                     navigationBar.setBackgroundColor(color);
                 }
@@ -90,6 +93,7 @@ public class SGFragment extends Fragment {
                     navigationBar.setBackgroundColor(article.themeColor);
                 }
 
+                currentMenuId = article.menuId;
             }
         });
 
@@ -112,6 +116,8 @@ public class SGFragment extends Fragment {
                 if (article.themeColor != -1) {
                     navigationBar.setBackgroundColor(article.themeColor);
                 }
+
+                currentMenuId = article.menuId;
             }
         });
         menuView.setAdapter(menuListAdapter);
@@ -153,6 +159,7 @@ public class SGFragment extends Fragment {
                 v.startAnimation(buttonClick);
                 if (Utils.appMode == AppMode.LOGGED_ON) {
                     Intent intent = new Intent(getActivity(), ReportActivity.class);
+                    intent.putExtra("menuId", currentMenuId);
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
                 } else {
@@ -172,6 +179,7 @@ public class SGFragment extends Fragment {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     Intent intent = new Intent(getActivity(), ReportActivity.class);
+                                    intent.putExtra("menuId", currentMenuId);
                                     startActivity(intent);
                                     getActivity().overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
                                 }

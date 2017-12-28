@@ -116,9 +116,11 @@ public class SettingFragment extends Fragment {
             public void OnUserDetailClick() {
                 Fragment fragment = new UserDetailFragment();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                //fragmentManager.beginTransaction().replace(R.id.settingFragment, fragment).commit();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.settingFragment, fragment);
-                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
+                //fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
 

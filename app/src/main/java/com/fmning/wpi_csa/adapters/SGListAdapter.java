@@ -103,7 +103,7 @@ public class SGListAdapter extends RecyclerView.Adapter<ViewHolder> {
                     notifyDataSetChanged();
 
                     if (listener != null) {
-                        listener.OnPrevArticleShown(article.themeColor);
+                        listener.OnPrevArticleShown(article.themeColor, article.menuId);
                     }
                 }
             });
@@ -118,7 +118,7 @@ public class SGListAdapter extends RecyclerView.Adapter<ViewHolder> {
                     article.processContent(context);
                     notifyDataSetChanged();
                     if (listener != null) {
-                        listener.OnNextArticleShown(article.themeColor);
+                        listener.OnNextArticleShown(article.themeColor, article.menuId);
                     }
                 }
             });
@@ -219,7 +219,7 @@ public class SGListAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
     public interface SGListListener {
-        void OnPrevArticleShown(int color);
-        void OnNextArticleShown(int color);
+        void OnPrevArticleShown(int color, int menuId);
+        void OnNextArticleShown(int color, int menuId);
     }
 }
