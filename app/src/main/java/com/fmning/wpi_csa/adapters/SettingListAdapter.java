@@ -1,6 +1,7 @@
 package com.fmning.wpi_csa.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
@@ -18,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fmning.wpi_csa.R;
+import com.fmning.wpi_csa.cache.CacheManager;
 import com.fmning.wpi_csa.helpers.AppMode;
 import com.fmning.wpi_csa.helpers.Utils;
 import com.fmning.wpi_csa.http.WCService;
@@ -112,7 +114,7 @@ public class SettingListAdapter extends RecyclerView.Adapter<ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        View cell = holder.itemView;
+        final View cell = holder.itemView;
         if (position == 1) {
             if (Utils.appMode == AppMode.OFFLINE) {
                 Button reconButton = (Button) cell.findViewById(R.id.settingReconnectButton);
@@ -179,6 +181,16 @@ public class SettingListAdapter extends RecyclerView.Adapter<ViewHolder> {
                     Drawable img = ContextCompat.getDrawable(context, R.drawable.not_verified);
                     img.setBounds(0, 0, imageSize, imageSize);
                     verifiedView.setCompoundDrawables(img, null, null, null);
+                }
+
+                if (user.avatarId != -1) {
+                    CacheManager.getImage(context, Utils.convertToWCImageId(WCService.currentUser.avatarId), new CacheManager.OnCacheGetImageListener() {
+                        @Override
+                        public void OnCacheGetImageDone(String error, final Bitmap image) {
+                            ((ImageView) cell.findViewById(R.id.settingUserAvatar)).setImageBitmap(image);
+
+                        }
+                    });
                 }
 
                 cell.setOnClickListener(new View.OnClickListener() {

@@ -58,9 +58,7 @@ public class RegisterListAdapter extends RecyclerView.Adapter<ViewHolder> {
                 context.getString(R.string.register_hint_classof), context.getString(R.string.register_hint_major));
     }
 
-    public void setAvatarUri(Uri uri) {
-        avatarUri = uri;
-    }
+
 
     @Override
     public int getItemViewType(int position) {
@@ -234,6 +232,10 @@ public class RegisterListAdapter extends RecyclerView.Adapter<ViewHolder> {
     @Override
     public int getItemCount() {
         return 14;
+    }
+
+    public void setAvatarUri(Uri uri) {
+        avatarUri = uri;
     }
 
     public interface RegisterListListener {

@@ -29,5 +29,7 @@ public class WCUser {
         this.birthday = "";
         this.classOf = "";
         this.major = "";
+
+        this.avatarId = -1;
     }
 }
