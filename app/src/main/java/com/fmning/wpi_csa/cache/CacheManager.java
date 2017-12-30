@@ -161,6 +161,23 @@ public class CacheManager {
 
     }
 
+    public static void saveImageToLocal(Context context, Bitmap image, int id) {
+
+        String appRootPath = context.getApplicationInfo().dataDir;
+        final String imgFileName = appRootPath + CacheManager.IMG_CACHE_SUB_PATH + Integer.toString(id) + ".jpg";
+
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(imgFileName);
+            image.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.close();
+
+            Database.createOrUpdateImageCache(context, id);
+        } catch (Exception e) {
+            Utils.logMsg(e.toString());
+        }
+    }
+
     public interface OnCacheGetImageListener {
         void OnCacheGetImageDone(String error, Bitmap image);
     }

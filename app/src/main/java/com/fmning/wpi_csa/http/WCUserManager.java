@@ -247,10 +247,10 @@ public class WCUserManager {
     }
 
     public static void saveCurrentUserDetails(final Context context, String name, String birthday, String classOf,
-                                              String major, final OnSaveUserDetailsListener listener){
+                                              String major, String avatar, final OnSaveUserDetailsListener listener){
         if (WCUtils.localMode) {
             List<Object> mock = RequestMocker.getFakeResponse(WCUtils.pathSaveUserDetails);
-            listener.OnSaveUserDetailsDone((String)mock.get(0));
+            listener.OnSaveUserDetailsDone((String)mock.get(0), (int)mock.get(1));
             return;
         }
 
@@ -270,9 +270,12 @@ public class WCUserManager {
             if (major != null){
                 params.put("major", major);
             }
+            if (avatar != null) {
+                params.put("avatar", avatar);
+            }
 
             if (params.length() == 1){
-                listener.OnSaveUserDetailsDone(context.getString(R.string.user_detail_update_error));
+                listener.OnSaveUserDetailsDone(context.getString(R.string.user_detail_update_error), -1);
             }
 
             entity = new StringEntity(params.toString());
@@ -286,21 +289,25 @@ public class WCUserManager {
                         try {
                             String error = response.getString("error");
                             if (!error.equals("")){
-                                listener.OnSaveUserDetailsDone(error);
+                                listener.OnSaveUserDetailsDone(error, -1);
                             } else {
-                                listener.OnSaveUserDetailsDone("");
+                                int imageId = -1;
+                                try {
+                                    imageId = response.getInt("imageId");
+                                }catch (JSONException ignored){}
+                                listener.OnSaveUserDetailsDone("", imageId);
                             }
                         } catch(JSONException e){
-                            listener.OnSaveUserDetailsDone(context.getString(R.string.respond_format_error));
+                            listener.OnSaveUserDetailsDone(context.getString(R.string.respond_format_error), -1);
                         } catch(Exception e){
-                            listener.OnSaveUserDetailsDone(context.getString(R.string.unknown_error));
+                            listener.OnSaveUserDetailsDone(context.getString(R.string.unknown_error), -1);
                         }
                     }
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
                         Utils.logMsg(res);
-                        listener.OnSaveUserDetailsDone(context.getString(R.string.server_down_error));
+                        listener.OnSaveUserDetailsDone(context.getString(R.string.server_down_error), -1);
                     }
 
                     @Override
@@ -425,7 +432,7 @@ public class WCUserManager {
     }
 
     public interface OnSaveUserDetailsListener {
-        void OnSaveUserDetailsDone(String error);
+        void OnSaveUserDetailsDone(String error, int imageId);
     }
 
     public interface OnSendEmailConfirmationListener {

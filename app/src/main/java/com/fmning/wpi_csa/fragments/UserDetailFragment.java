@@ -3,11 +3,14 @@ package com.fmning.wpi_csa.fragments;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +20,15 @@ import android.widget.Toast;
 
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.adapters.UserDetailListAdapter;
+import com.fmning.wpi_csa.cache.CacheManager;
+import com.fmning.wpi_csa.cache.Database;
 import com.fmning.wpi_csa.helpers.Utils;
+import com.fmning.wpi_csa.http.WCService;
+import com.fmning.wpi_csa.http.WCUserManager;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -31,6 +41,8 @@ import static android.app.Activity.RESULT_OK;
 public class UserDetailFragment extends Fragment {
 
     private UserDetailListAdapter tableViewAdapter;
+    private Uri selectedImageUri;
+    private Bitmap selectedImage;
 
     public UserDetailFragment(){}
 
@@ -76,11 +88,15 @@ public class UserDetailFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (tableViewAdapter.isValueChanged()) {
+
+                    boolean avatarUpdated = false;
+                    boolean userDetailUpdated = false;
+
                     List<String> userDetails = tableViewAdapter.getUserDetails();
-                    String name = userDetails.get(0).trim();
-                    String birthday = userDetails.get(1).trim();
-                    String classOf = userDetails.get(2).trim();
-                    String major = userDetails.get(3).trim();
+                    final String name = userDetails.get(0).trim();
+                    final String birthday = userDetails.get(1).trim();
+                    final String classOf = userDetails.get(2).trim();
+                    final String major = userDetails.get(3).trim();
 
                     if (name.equals("")) {
                         Utils.showAlertMessage(getActivity(), getString(R.string.name_empty_error));
@@ -108,7 +124,48 @@ public class UserDetailFragment extends Fragment {
                         return;
                     }
 
+                    String base64 = null;
+                    if (selectedImageUri != null) {
+                        try {
+                            selectedImage = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImageUri);
+                            //int compressRate = Utils.compressRateForSize(selectedImage, 250);
+                            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                            //TODO: Find a better way to compress. Currently default to 80
+                            selectedImage.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
+                            base64 = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
+                        } catch (IOException e) {
+                            Utils.logMsg(e.getMessage());//TODO: Do something here?
+                        }
+                    }
+
                     Utils.showLoadingIndicator(getActivity());
+                    WCUserManager.saveCurrentUserDetails(getActivity(), name, birthday, classOf, major, base64, new WCUserManager.OnSaveUserDetailsListener() {
+                        @Override
+                        public void OnSaveUserDetailsDone(String error, int imageId) {
+                            if (!error.equals("")) {
+                                Utils.hideLoadingIndicator();
+                                Utils.processErrorMessage(getActivity(), error, true);
+                            } else {
+                                WCService.currentUser.name = name;
+                                WCService.currentUser.birthday = birthday;
+                                WCService.currentUser.classOf = classOf;
+                                WCService.currentUser.major = major;
+                                if (imageId != -1) {
+                                    WCService.currentUser.avatarId = imageId;
+                                    CacheManager.saveImageToLocal(getActivity(), selectedImage, imageId);
+                                }
+
+                                Utils.hideLoadingIndicator();
+                                getActivity().getSupportFragmentManager().popBackStack();
+                                Toast toast = Toast.makeText(getActivity(), getActivity().getString(R.string.user_detail_saved),
+                                        Toast.LENGTH_LONG);
+                                toast.setGravity(Gravity.CENTER, 0, 0);
+                                toast.show();
+                                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("reloadUserCell"));
+                            }
+                        }
+                    });
+
 
                 } else {
                     getActivity().getSupportFragmentManager().popBackStack();
@@ -128,8 +185,8 @@ public class UserDetailFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         if(resultCode == RESULT_OK){
-            Uri selectedImage = imageReturnedIntent.getData();
-            tableViewAdapter.setAvatarUri(selectedImage);
+            selectedImageUri = imageReturnedIntent.getData();
+            tableViewAdapter.setAvatarUri(selectedImageUri);
             tableViewAdapter.notifyItemChanged(1);
         }
     }

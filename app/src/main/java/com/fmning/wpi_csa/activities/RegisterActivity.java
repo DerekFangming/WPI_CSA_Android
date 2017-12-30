@@ -117,9 +117,9 @@ public class RegisterActivity extends AppCompatActivity {
                                             WCService.currentUser = user;
                                             Utils.appMode = AppMode.LOGGED_ON;
                                             WCUserManager.saveCurrentUserDetails(RegisterActivity.this, name.trim(),
-                                                birthday, classOf, major, new WCUserManager.OnSaveUserDetailsListener() {
+                                                birthday, classOf, major, null, new WCUserManager.OnSaveUserDetailsListener() {
                                                     @Override
-                                                    public void OnSaveUserDetailsDone(String error) {
+                                                    public void OnSaveUserDetailsDone(String error, int imageId) {
                                                         if (error.equals("")) {
                                                             WCService.currentUser.name = name.trim();
                                                             if (birthday != null) {

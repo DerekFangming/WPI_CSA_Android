@@ -65,6 +65,7 @@
     <string name="report_sent_whtout_email">Thank you for your report. We will not get back to you since you do not have email on record.</string>
     <string name="user_detail_discard_confirm">You have unsaved changes. Are you sure about discarding them?</string>
     <string name="user_detail_no_change">Nothing is changed</string>
+    <string name="user_detail_saved">Saved successfully</string>
 
 
     <string name="ok" tools:ignore="ButtonCase,Typos">Ok</string>

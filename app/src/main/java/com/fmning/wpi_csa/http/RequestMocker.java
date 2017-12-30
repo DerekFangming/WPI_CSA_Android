@@ -64,7 +64,8 @@ public class RequestMocker {
                 user.name = "Fangming Ning";
                 return new ArrayList<>(Arrays.asList("", user));
             case WCUtils.pathSaveUserDetails:
-                return new ArrayList<Object>(Collections.singleton(""));
+                return new ArrayList<Object>(Arrays.asList("", 1));
+                //return new ArrayList<Object>(Collections.singleton(""));
             default:
                 return new ArrayList<>();
         }
