@@ -120,7 +120,7 @@
 
     <!--String formats with place holders-->
     <string name="simple_date">%1$s/%2$s/%3$s</string>
-    <string name="name_register_fail_error">User created but name is not stored correctly. %1$s</string>
+    <string name="register_detail_fail_error">User created but user details are not stored correctly. %1$s</string>
     <string name="register_done_message">An email has been sent to %1$s with a link to confirm your email. Please click on the link in 24 hours. Please check your junk folder if you cannot see the email.</string>
     <string name="sg_nav_prev">Previous\n%1$s</string>
     <string name="sg_nav_next">Next\n%1$s</string>

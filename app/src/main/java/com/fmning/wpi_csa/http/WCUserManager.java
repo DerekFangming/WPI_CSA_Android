@@ -157,6 +157,7 @@ public class WCUserManager {
         try {
             JSONObject params = new JSONObject();
             params.put("username", username);
+            params.put("offset", -4); //TODO: Remove this offset
             entity = new StringEntity(params.toString());
         }catch (JSONException | UnsupportedEncodingException ignored){}
 

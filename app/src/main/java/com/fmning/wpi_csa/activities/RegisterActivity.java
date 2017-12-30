@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.View;
 
 import com.fmning.wpi_csa.R;
@@ -22,6 +23,7 @@ import com.fmning.wpi_csa.http.WCUserManager;
 import com.fmning.wpi_csa.http.WCUtils;
 import com.fmning.wpi_csa.http.objects.WCUser;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
@@ -32,6 +34,7 @@ import java.io.IOException;
 public class RegisterActivity extends AppCompatActivity {
 
     RegisterListAdapter tableViewAdapter;
+    private Bitmap selectedImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,8 +119,23 @@ public class RegisterActivity extends AppCompatActivity {
                                         if (error.equals("")) {
                                             WCService.currentUser = user;
                                             Utils.appMode = AppMode.LOGGED_ON;
+
+                                            String base64 = null;
+                                            if (avatar != null) {
+                                                try {
+                                                    selectedImage = MediaStore.Images.Media.getBitmap(RegisterActivity.this.getContentResolver(), avatar);
+                                                    //int compressRate = Utils.compressRateForSize(selectedImage, 250);
+                                                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                                                    //TODO: Find a better way to compress. Currently default to 80
+                                                    selectedImage.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
+                                                    base64 = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
+                                                } catch (IOException e) {
+                                                    Utils.logMsg(e.getMessage());//TODO: Do something here?
+                                                }
+                                            }
+
                                             WCUserManager.saveCurrentUserDetails(RegisterActivity.this, name.trim(),
-                                                birthday, classOf, major, null, new WCUserManager.OnSaveUserDetailsListener() {
+                                                birthday, classOf, major, base64, new WCUserManager.OnSaveUserDetailsListener() {
                                                     @Override
                                                     public void OnSaveUserDetailsDone(String error, int imageId) {
                                                         if (error.equals("")) {
@@ -131,70 +149,29 @@ public class RegisterActivity extends AppCompatActivity {
                                                             if (major != null) {
                                                                 WCService.currentUser.major = major;
                                                             }
-                                                            Utils.setParam(Utils.savedUsername, username.trim());
-                                                            Utils.setParam(Utils.savedPassword,
-                                                                    WCUtils.md5(password + salt));
-
-                                                            if (avatar != null) {
-                                                                try {
-                                                                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(RegisterActivity.this.getContentResolver(), avatar);
-                                                                    CacheManager.uploadImage(RegisterActivity.this, bitmap, "Avatar", 250,
-                                                                            new CacheManager.OnCacheUploadImageListener() {
-                                                                        @Override
-                                                                        public void OnCacheUploadImageDone(String error, int id) {
-                                                                            if (!error.equals("")) {
-                                                                                Utils.logMsg(error);
-                                                                            }
-                                                                            WCService.currentUser.avatarId = id;
-                                                                            LocalBroadcastManager.getInstance(RegisterActivity.this)
-                                                                                    .sendBroadcast(new Intent("reloadUserCell"));
-                                                                            Utils.hideLoadingIndicator();
-                                                                            AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                                                                            builder.setTitle(null)
-                                                                                    .setCancelable(false)
-                                                                                    .setMessage(String.format(RegisterActivity.this
-                                                                                            .getString(R.string.register_done_message), user.username))
-                                                                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                                                                        public void onClick(DialogInterface dialog, int which) {
-                                                                                            finish();
-                                                                                        }
-                                                                                    })
-                                                                                    .show();
-                                                                        }
-                                                                    });
-                                                                } catch (IOException e) {
-                                                                    Utils.logMsg(e.getMessage());
-                                                                    LocalBroadcastManager.getInstance(RegisterActivity.this)
-                                                                            .sendBroadcast(new Intent("reloadUserCell"));
-                                                                    Utils.hideLoadingIndicator();
-                                                                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                                                                    builder.setTitle(null)
-                                                                            .setCancelable(false)
-                                                                            .setMessage(String.format(RegisterActivity.this
-                                                                                    .getString(R.string.register_done_message), user.username))
-                                                                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                                                                public void onClick(DialogInterface dialog, int which) {
-                                                                                    finish();
-                                                                                }
-                                                                            })
-                                                                            .show();
-                                                                }
-                                                            } else {
-                                                                LocalBroadcastManager.getInstance(RegisterActivity.this)
-                                                                        .sendBroadcast(new Intent("reloadUserCell"));
-                                                                Utils.hideLoadingIndicator();
-                                                                AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                                                                builder.setTitle(null)
-                                                                        .setCancelable(false)
-                                                                        .setMessage(String.format(RegisterActivity.this
-                                                                                .getString(R.string.register_done_message), user.username))
-                                                                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                                                            public void onClick(DialogInterface dialog, int which) {
-                                                                                finish();
-                                                                            }
-                                                                        })
-                                                                        .show();
+                                                            if (imageId != -1) {
+                                                                WCService.currentUser.avatarId = imageId;
+                                                                CacheManager.saveImageToLocal(RegisterActivity.this, selectedImage, imageId);
                                                             }
+                                                            Utils.setParam(Utils.savedUsername, username.trim());
+                                                            Utils.setParam(Utils.savedPassword, WCUtils.md5(password + salt));
+
+                                                            LocalBroadcastManager.getInstance(RegisterActivity.this)
+                                                                    .sendBroadcast(new Intent("reloadUserCell"));
+                                                            Utils.hideLoadingIndicator();
+                                                            AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                                                            builder.setTitle(null)
+                                                                    .setCancelable(false)
+                                                                    .setMessage(String.format(RegisterActivity.this
+                                                                            .getString(R.string.register_done_message), user.username))
+                                                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                                                        public void onClick(DialogInterface dialog, int which) {
+                                                                            finish();
+                                                                        }
+                                                                    })
+                                                                    .show();
+
+
                                                         } else {
                                                             LocalBroadcastManager.getInstance(RegisterActivity.this)
                                                                     .sendBroadcast(new Intent("reloadUserCell"));
@@ -203,7 +180,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                             builder.setTitle(null)
                                                                     .setCancelable(false)
                                                                     .setMessage(String.format(RegisterActivity.this
-                                                                            .getString(R.string.name_register_fail_error), error))
+                                                                            .getString(R.string.register_detail_fail_error), error))
                                                                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                                                         public void onClick(DialogInterface dialog, int which) {
                                                                             finish();
