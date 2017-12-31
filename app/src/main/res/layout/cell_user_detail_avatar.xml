@@ -11,7 +11,7 @@
         android:layout_height="100dp"
         android:layout_centerInParent="true"
         android:scaleType="centerCrop"
-        android:contentDescription="@string/user_detail_avatar"/>
+        android:contentDescription="@string/user_detail_avatar_desc"/>
     
 
     <View

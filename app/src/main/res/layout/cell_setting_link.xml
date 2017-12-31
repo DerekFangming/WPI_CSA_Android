@@ -6,30 +6,35 @@
     android:background="@drawable/ripple_background"
     >
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/settingLinkIcon"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="20dp"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/setting_link_icon_desc"/>
+
+    <TextView
+        android:id="@+id/settingLinkText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_centerInParent="true">
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@id/settingLinkIcon"
+        android:layout_toStartOf="@id/settingLinkArrow"
+        android:textColor="@color/black"
+        android:textSize="15sp"/>
 
-        <ImageView
-            android:id="@+id/settingLinkIcon"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginStart="20dp"
-            android:contentDescription="@string/setting_link_icon_desc"/>
-
-        <TextView
-            android:id="@+id/settingLinkText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:textColor="@color/black"
-            android:textSize="15sp"/>
-
-    </LinearLayout>
-
+    <ImageView
+        android:id="@+id/settingLinkArrow"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="15dp"
+        android:contentDescription="@string/setting_forward_icon_desc"
+        android:src="@drawable/forward_arrow_colored"/>
 
 
     <View

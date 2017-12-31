@@ -9,6 +9,7 @@
     <string name="sg_tab">Survival Guide</string>
     <string name="setting_tab">Setting</string>
     <string name="title_activity_life">Life</string>
+    <string name="title_fragment_feed">Feed</string>
 
 
     <string name="feed_loading">  Loading …</string>
@@ -111,12 +112,13 @@
     <string name="feed_reload_desc">Feed reload</string>
     <string name="setting_default_avatar_desc">Setting default avatar</string>
     <string name="setting_link_icon_desc">Setting link icon</string>
+    <string name="setting_forward_icon_desc">Setting forward arrow</string>
     <string name="register_avatar_desc">Register avatar</string>
     <string name="sg_cover_desc">SG Cover image</string>
     <string name="sg_menu_status_desc">SG Menu Status</string>
     <string name="sg_imgtxt_image_desc">SG Image Text image</string>
     <string name="sg_image_desc">SG image</string>
-    <string name="user_detail_avatar">User Detail Avatar</string>
+    <string name="user_detail_avatar_desc">User Detail Avatar</string>
 
     <!--String formats with place holders-->
     <string name="simple_date">%1$s/%2$s/%3$s</string>

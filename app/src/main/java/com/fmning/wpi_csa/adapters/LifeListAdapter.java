@@ -28,9 +28,9 @@ public class LifeListAdapter extends RecyclerView.Adapter<ViewHolder> {
     private List<WCFeed> feedList;
     private boolean stopLoadingFlag;
     private Context context;
-    private FeedListListener listener;
+    private LifeListListener listener;
 
-    public LifeListAdapter(Context context, FeedListListener listener) {
+    public LifeListAdapter(Context context, LifeListListener listener) {
         this.feedList = new ArrayList<>();
         this.stopLoadingFlag = false;
         this.context = context;
@@ -105,7 +105,7 @@ public class LifeListAdapter extends RecyclerView.Adapter<ViewHolder> {
             cell.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    listener.OnFeedClick(holder.getLayoutPosition());
+                    listener.OnFeedClick(feedList.get(holder.getLayoutPosition()));
                 }
             });
 
@@ -139,8 +139,8 @@ public class LifeListAdapter extends RecyclerView.Adapter<ViewHolder> {
         this.stopLoadingFlag = stopLoadingFlag;
     }
 
-    public interface FeedListListener {
-        void OnFeedClick(int index);
+    public interface LifeListListener {
+        void OnFeedClick(WCFeed feed);
         void OnScrollToLastFeed();
     }
 }

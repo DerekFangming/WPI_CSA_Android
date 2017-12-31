@@ -3,15 +3,11 @@ package com.fmning.wpi_csa.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.util.Linkify;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +18,8 @@ import com.fmning.wpi_csa.helpers.LoadingView;
 import com.fmning.wpi_csa.helpers.Utils;
 import com.fmning.wpi_csa.http.WCFeedManager;
 import com.fmning.wpi_csa.http.objects.WCFeed;
-import com.fmning.wpi_csa.objects.Menu;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 public class LifeFragment extends Fragment {
@@ -46,17 +38,6 @@ public class LifeFragment extends Fragment {
     LifeListAdapter tableViewAdapter;
 
     public LifeFragment(){}
-
-    public static LifeFragment newInstance(String param1, String param2) {
-        LifeFragment fragment = new LifeFragment();
-        /*Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        fragment.mParam1 = param1;*/
-        return fragment;
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -101,15 +82,22 @@ public class LifeFragment extends Fragment {
         tableView.setLayoutManager(new LinearLayoutManager(context));
 
 
-        tableViewAdapter = new LifeListAdapter(getActivity(), new LifeListAdapter.FeedListListener() {
+        tableViewAdapter = new LifeListAdapter(getActivity(), new LifeListAdapter.LifeListListener() {
             @Override
-            public void OnFeedClick(int index) {
-                Utils.logMsg(Integer.toString(index) + " is clicked");
+            public void OnFeedClick(WCFeed feed) {
+                //Utils.logMsg(Integer.toString(index) + " is clicked");
+                Fragment fragment = FeedFragment.withFeed(feed);
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left,
+                        R.anim.slide_in_right, R.anim.slide_out_right);
+                fragmentTransaction.replace(R.id.lifeFragment, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
 
             @Override
             public void OnScrollToLastFeed() {
-                Utils.logMsg("End");
                 if (!stopLoadingFlag) {
                     keepLoading();
                 }
@@ -122,7 +110,7 @@ public class LifeFragment extends Fragment {
         Utils.checkVerisonInfoAndLoginUser(getActivity(), false);
 
         //Setting up loading view
-        loadingView = (LoadingView) refreshControl.findViewById(R.id.loadingView);
+        loadingView = (LoadingView) refreshControl.findViewById(R.id.lifeLoadingView);
         loadingView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

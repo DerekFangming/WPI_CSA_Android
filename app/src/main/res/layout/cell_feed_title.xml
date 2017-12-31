@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/feedTitleText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:textColor="@color/black"
+        android:textSize="25sp"/>
+
+    <TextView
+        android:id="@+id/feedTypeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/feedTitleText"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:textSize="15sp"
+        android:background="@drawable/rounded_gray_border"/>
+
+    <TextView
+        android:id="@+id/feedCreatedTimeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/feedTitleText"
+        android:layout_toEndOf="@id/feedTypeText"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:textSize="15sp"/>
+
+    <TextView
+        android:id="@+id/feedCreatorText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/feedTitleText"
+        android:layout_toEndOf="@id/feedCreatedTimeText"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/black"
+        android:textSize="15sp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/feedTypeText"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="15dp"
+        android:background="@color/gray"/>
+
+</RelativeLayout>

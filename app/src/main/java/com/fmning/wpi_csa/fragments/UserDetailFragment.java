@@ -12,6 +12,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -179,6 +180,21 @@ public class UserDetailFragment extends Fragment {
 
         tableView.setAdapter(tableViewAdapter);
 
+        //TODO: Code for detecting back button click
+//        view.setFocusableInTouchMode(true);
+//        view.requestFocus();
+//        view.setOnKeyListener(new View.OnKeyListener() {
+//            @Override
+//            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//                if( keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP)
+//                {
+//                    Utils.logMsg("clicked");
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
+
         return view;
     }
 
@@ -190,4 +206,9 @@ public class UserDetailFragment extends Fragment {
             tableViewAdapter.notifyItemChanged(1);
         }
     }
+
+//    @Override
+//    public void onBackPressed() {
+//
+//    }
 }
