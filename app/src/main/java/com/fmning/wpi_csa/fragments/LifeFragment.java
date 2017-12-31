@@ -86,7 +86,7 @@ public class LifeFragment extends Fragment {
             @Override
             public void OnFeedClick(WCFeed feed) {
                 //Utils.logMsg(Integer.toString(index) + " is clicked");
-                Fragment fragment = FeedFragment.withFeed(feed);
+                Fragment fragment = FeedFragment.withFeed(getActivity(), feed);
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left,

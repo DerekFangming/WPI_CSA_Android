@@ -12,7 +12,7 @@
         android:background="@color/white">
 
         <Button
-            android:id="@+id/userDetailBack"
+            android:id="@+id/feedBackButton"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_marginTop="35dp"

@@ -145,7 +145,7 @@ public class WCFeedManager {
                         WCFeed feed = new WCFeed(id, title, type, body, createdAt);
 
                         try {
-                            JSONObject eventDic = response.getJSONObject("");
+                            JSONObject eventDic = response.getJSONObject("event");
                             int eventId = eventDic.getInt("id");
                             String eventTitle = eventDic.getString("title");
                             Date startTime = Utils.iso8601DateUTC(eventDic.getString("startTime"));

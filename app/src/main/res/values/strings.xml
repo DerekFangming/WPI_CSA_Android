@@ -67,6 +67,7 @@
     <string name="user_detail_discard_confirm">You have unsaved changes. Are you sure about discarding them?</string>
     <string name="user_detail_no_change">Nothing is changed</string>
     <string name="user_detail_saved">Saved successfully</string>
+    <string name="feed_add_calendar">Add to calendar</string>
 
 
     <string name="ok" tools:ignore="ButtonCase,Typos">Ok</string>
@@ -126,6 +127,8 @@
     <string name="register_done_message">An email has been sent to %1$s with a link to confirm your email. Please click on the link in 24 hours. Please check your junk folder if you cannot see the email.</string>
     <string name="sg_nav_prev">Previous\n%1$s</string>
     <string name="sg_nav_next">Next\n%1$s</string>
+    <string name="feed_time">%1$s to %2$s</string>
+    <string name="feed_location">Location: %1$s</string>
 
     <!-- The following are default texts -->
     <string name="d_name">Fangming Ning</string>
