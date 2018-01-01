@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -18,6 +19,8 @@ import com.fmning.wpi_csa.http.objects.WCFeed;
 import com.fmning.wpi_csa.objects.Article;
 import com.fmning.wpi_csa.objects.Paragraph;
 import com.fmning.wpi_csa.objects.ParagraphType;
+
+import java.util.Locale;
 
 /**
  * Created by Fangming
@@ -140,7 +143,14 @@ public class FeedListAdapter extends RecyclerView.Adapter<ViewHolder> {
                             }
                         });
                     } else {
-                        cell.findViewById(R.id.feedTicketButton).setOnClickListener(new View.OnClickListener() {
+                        Button button = (Button) cell.findViewById(R.id.feedTicketButton);
+                        if (feed.event.fee == 0) {
+                            button.setText(context.getString(R.string.feed_free_ticket));
+                        } else {
+                            button.setText(String.format(context.getString(R.string.feed_paid_ticket),
+                                    String.format(Locale.getDefault(), "%.2f", feed.event.fee)));
+                        }
+                        button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 if (listener!= null) {
@@ -167,7 +177,14 @@ public class FeedListAdapter extends RecyclerView.Adapter<ViewHolder> {
                         }
                     });
                 } else {
-                    cell.findViewById(R.id.feedTicketButton).setOnClickListener(new View.OnClickListener() {
+                    Button button = (Button) cell.findViewById(R.id.feedTicketButton);
+                    if (feed.event.fee == 0) {
+                        button.setText(context.getString(R.string.feed_free_ticket));
+                    } else {
+                        button.setText(String.format(context.getString(R.string.feed_paid_ticket),
+                                String.format(Locale.getDefault(), "%.2f", feed.event.fee)));
+                    }
+                    button.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             if (listener!= null) {

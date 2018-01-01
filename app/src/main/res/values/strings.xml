@@ -68,6 +68,7 @@
     <string name="user_detail_no_change">Nothing is changed</string>
     <string name="user_detail_saved">Saved successfully</string>
     <string name="feed_add_calendar">Add to calendar</string>
+    <string name="feed_free_ticket">Free - Get ticket</string>
 
 
     <string name="ok" tools:ignore="ButtonCase,Typos">Ok</string>
@@ -103,6 +104,12 @@
     <string name="report_not_loggedin">No user logged in. Please login so that we can get back to you and keep track of reports.</string>
     <string name="report_email_error">Please check email format</string>
     <string name="report_empty_error">Please enter a valid report</string>
+    <string name="ticket_not_implemented_error">If you see this message and your app is the latest version, please contact admin@fmning.com</string>
+    <string name="ticket_not_loggedin_error">You have to log in to buy ticket</string>
+    <string name="ticket_not_wpi_email_error">To get free ticket, you have to log in with your wpi email, with the email verified.</string>
+    <string name="ticket_email_unconfirmed_error">To get free ticket, you have to log in with your wpi email, with the email verified.</string>
+    <string name="storage_permission_error">Cannot get ticket. Please allow access to your storage so that we can download ticket. Alternatively, you can go to your phone\'s Setting -> Apps -> WPI CSA -> Permissions and manually allow Storage access</string>
+    <string name="no_ticket_app_error">The ticket has been saved to your Download folder. You cannot open it yet since you do not seem to have ticket app installed. Please install one and click on the ticket file, or get ticket again. Here are some of the ticket apps: Wallet Passes, Pass2U Wallet, PassAndroid, etc.</string>
     <!--Known server side error that needs to be handled-->
     <string name="no_more_feed_error">There are no more feeds.</string>
     <string name="no_event_error">The event you are looking for does not exist.</string>
@@ -127,8 +134,10 @@
     <string name="register_done_message">An email has been sent to %1$s with a link to confirm your email. Please click on the link in 24 hours. Please check your junk folder if you cannot see the email.</string>
     <string name="sg_nav_prev">Previous\n%1$s</string>
     <string name="sg_nav_next">Next\n%1$s</string>
+    <string name="feed_type_padding">\u0020%1$s\u0020</string>
     <string name="feed_time">%1$s to %2$s</string>
     <string name="feed_location">Location: %1$s</string>
+    <string name="feed_paid_ticket">$%1$s - Pay and get ticket</string>
 
     <!-- The following are default texts -->
     <string name="d_name">Fangming Ning</string>

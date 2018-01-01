@@ -149,11 +149,59 @@ public class WCService {
                 });
     }
 
-    public interface OnReportProblemListener {
-        void OnReportProblemDone(String error);
+    public static void getTicket(final Context context, int id, final OnGetTicketListener listener) {
+        StringEntity entity = null;
+        try {
+            JSONObject params = new JSONObject();
+            params.put("id", id);
+            params.put("accessToken", WCService.currentUser.accessToken);
+            entity = new StringEntity(params.toString());
+        }catch (JSONException | UnsupportedEncodingException ignored){}
+
+        client.post(context, WCUtils.serviceBase + WCUtils.pathGetTicket, entity,
+                ContentType.APPLICATION_JSON.getMimeType(), new JsonHttpResponseHandler(){
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        try {
+                            String error = response.getString("error");
+                            if (!error.equals("")){
+                                listener.OnGetTicketDone(error, null);
+                            } else {
+                                listener.OnGetTicketDone("", response.getString("ticket"));
+                            }
+                        } catch(JSONException e){
+                            listener.OnGetTicketDone(context.getString(R.string.respond_format_error), null);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
+                        listener.OnGetTicketDone(context.getString(R.string.server_down_error), null);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                        onFailure(statusCode, headers, throwable.getLocalizedMessage(), throwable);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        onFailure(statusCode, headers, throwable.getLocalizedMessage(), throwable);
+                    }
+                });
     }
+
 
     public interface OnCheckSoftwareVersionListener {
         void OnCheckSoftwareVersionDone(String status, String title, String msg, String updates, String version);
     }
+
+    public interface OnReportProblemListener {
+        void OnReportProblemDone(String error);
+    }
+
+    public interface OnGetTicketListener {
+        void OnGetTicketDone(String error, String ticket);
+    }
+
 }

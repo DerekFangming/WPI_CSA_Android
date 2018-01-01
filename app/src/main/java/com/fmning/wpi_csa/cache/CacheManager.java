@@ -3,6 +3,9 @@ package com.fmning.wpi_csa.cache;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Environment;
+import android.util.Base64;
 
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.helpers.Utils;
@@ -12,6 +15,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -176,6 +180,22 @@ public class CacheManager {
         } catch (Exception e) {
             Utils.logMsg(e.toString());
         }
+    }
+
+    public static Uri saveTicket(Context context, String base64) {
+        byte[] pdfAsBytes = Base64.decode(base64, 0);
+
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "ticket.pkpass");
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(file, false);
+            fos.write(pdfAsBytes);
+            fos.flush();
+            fos.close();
+        } catch (IOException e) {
+            return null;
+        }
+        return Uri.fromFile(file);
     }
 
     public interface OnCacheGetImageListener {
