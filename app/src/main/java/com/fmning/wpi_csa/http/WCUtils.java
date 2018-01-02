@@ -1,8 +1,6 @@
 package com.fmning.wpi_csa.http;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 
 import org.json.JSONObject;
 

@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.cache.Database;
-import com.fmning.wpi_csa.helpers.Utils;
 import com.fmning.wpi_csa.objects.Menu;
 
 import java.util.ArrayList;

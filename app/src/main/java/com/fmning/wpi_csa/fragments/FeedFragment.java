@@ -168,7 +168,7 @@ public class FeedFragment extends Fragment {
                 } else {
                     if (status.equals("ok")) {
                         if (ticketStatus.equals("ok")) {
-                            Uri uri = CacheManager.saveTicket(getActivity(), ticket);
+                            Uri uri = CacheManager.saveTicket(ticket);
                             try {
                                 Intent intent = new Intent(Intent.ACTION_VIEW);
                                 intent.setDataAndType(uri, "application/pkpass");
@@ -192,7 +192,7 @@ public class FeedFragment extends Fragment {
                                                 if (!error.equals("")) {
                                                     Utils.processErrorMessage(getActivity(), error, true);
                                                 } else {
-                                                    Uri uri = CacheManager.saveTicket(getActivity(), ticket);
+                                                    Uri uri = CacheManager.saveTicket(ticket);
 
                                                     try {
                                                         Intent intent = new Intent(Intent.ACTION_VIEW);

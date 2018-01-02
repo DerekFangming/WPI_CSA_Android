@@ -21,16 +21,14 @@ import java.util.List;
  */
 //TODO: for all functions, handle failure
 public class Database {
-    private final Context context;
     private SQLiteDatabase database;
     private DatabaseOpenHelper dbHelper;
 
     public Database(Context context){
-        this.context = context;
         dbHelper = new DatabaseOpenHelper(context);
     }
 
-    public Database open() throws SQLException
+    public void open() throws SQLException
     {
         try
         {
@@ -42,7 +40,6 @@ public class Database {
         {
             Utils.logMsg(e.toString());
         }
-        return this;
     }
 
     public void close()
@@ -148,7 +145,7 @@ public class Database {
         return menuList;
     }
 
-    public String getMenuTitle(int menuId) {
+    private String getMenuTitle(int menuId) {
         String query = "SELECT TITLE FROM ARTICLES WHERE ID = " + Integer.toString(menuId);
         String name = "";
 
@@ -201,6 +198,7 @@ public class Database {
         return article;
     }
 
+    @SuppressWarnings("unused")
     public static Cache getCache(Context context, CacheType type) {
         return getCache(context, type, 0);
     }
@@ -247,7 +245,6 @@ public class Database {
 
             Cursor cursor = db.database.rawQuery(query, null);
             if (cursor.moveToFirst()){
-                int cacheId = cursor.getInt(0);
                 String updateQuery = "UPDATE CACHE SET VALUE = VALUE + 1 WHERE ID = ";
                 updateQuery += Integer.toString(imageId);
                 run(context, updateQuery);

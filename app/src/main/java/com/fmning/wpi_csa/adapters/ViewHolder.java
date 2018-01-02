@@ -8,8 +8,8 @@ import android.view.View;
  * On 11/21/17.
  */
 
-public class ViewHolder extends RecyclerView.ViewHolder {
-    public ViewHolder(View view) {
+class ViewHolder extends RecyclerView.ViewHolder {
+    ViewHolder(View view) {
         super(view);
     }
 }

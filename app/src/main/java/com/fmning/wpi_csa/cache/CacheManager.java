@@ -15,7 +15,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,6 +30,7 @@ public class CacheManager {
     private static final String IMG_CACHE_SUB_PATH = "/imageCache/";
     //private static final String PDF_CACHE = "pdfCache";
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void localDirInitiateSetup(Context context){
         String appRootPath = context.getApplicationInfo().dataDir;
 
@@ -72,7 +72,7 @@ public class CacheManager {
     }
 
     public static void getImage(final Context context, String name, final OnCacheGetImageListener listener){
-        int id = 0;
+        int id;
         if (name.startsWith("WCImage_")){
             try {
                 id = Integer.parseInt(name.replace("WCImage_", ""));
@@ -112,7 +112,7 @@ public class CacheManager {
             @Override
             public void OnGetImageDone(String error, Bitmap image) {
                 if (error.equals("")){
-                    FileOutputStream out = null;
+                    FileOutputStream out;
                     try {
                         out = new FileOutputStream(imgFileName);
                         //int compressRate = Utils.compressRateForSize(image, 500);
@@ -133,6 +133,7 @@ public class CacheManager {
 
     }
 
+    @SuppressWarnings("unused")
     public static void uploadImage(final Context context, final Bitmap image, String type, int targetSize, final OnCacheUploadImageListener listener) {
         int compressRate = 100;
         if (targetSize != -1) {
@@ -146,7 +147,7 @@ public class CacheManager {
                     String appRootPath = context.getApplicationInfo().dataDir;
                     final String imgFileName = appRootPath + IMG_CACHE_SUB_PATH + Integer.toString(id) + ".jpg";
 
-                    FileOutputStream out = null;
+                    FileOutputStream out;
                     try {
                         out = new FileOutputStream(imgFileName);
                         image.compress(Bitmap.CompressFormat.JPEG, 100, out);
@@ -170,7 +171,7 @@ public class CacheManager {
         String appRootPath = context.getApplicationInfo().dataDir;
         final String imgFileName = appRootPath + CacheManager.IMG_CACHE_SUB_PATH + Integer.toString(id) + ".jpg";
 
-        FileOutputStream out = null;
+        FileOutputStream out;
         try {
             out = new FileOutputStream(imgFileName);
             image.compress(Bitmap.CompressFormat.JPEG, 100, out);
@@ -182,11 +183,11 @@ public class CacheManager {
         }
     }
 
-    public static Uri saveTicket(Context context, String base64) {
+    public static Uri saveTicket(String base64) {
         byte[] pdfAsBytes = Base64.decode(base64, 0);
 
         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "ticket.pkpass");
-        FileOutputStream fos = null;
+        FileOutputStream fos;
         try {
             fos = new FileOutputStream(file, false);
             fos.write(pdfAsBytes);

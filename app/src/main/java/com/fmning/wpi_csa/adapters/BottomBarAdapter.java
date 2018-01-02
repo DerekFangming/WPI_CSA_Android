@@ -7,7 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by fangmingning on 10/31/17.
+ * Created by fangmingning
+ * On 10/31/17.
  */
 
 public class BottomBarAdapter extends SmartFragmentStatePagerAdapter {

@@ -12,7 +12,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +21,11 @@ import android.widget.Toast;
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.adapters.UserDetailListAdapter;
 import com.fmning.wpi_csa.cache.CacheManager;
-import com.fmning.wpi_csa.cache.Database;
 import com.fmning.wpi_csa.helpers.Utils;
 import com.fmning.wpi_csa.http.WCService;
 import com.fmning.wpi_csa.http.WCUserManager;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -89,9 +86,6 @@ public class UserDetailFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (tableViewAdapter.isValueChanged()) {
-
-                    boolean avatarUpdated = false;
-                    boolean userDetailUpdated = false;
 
                     List<String> userDetails = tableViewAdapter.getUserDetails();
                     final String name = userDetails.get(0).trim();
