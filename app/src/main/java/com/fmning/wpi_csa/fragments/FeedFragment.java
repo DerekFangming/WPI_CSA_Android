@@ -1,8 +1,10 @@
 package com.fmning.wpi_csa.fragments;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -14,7 +16,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.adapters.FeedListAdapter;
@@ -23,6 +24,7 @@ import com.fmning.wpi_csa.helpers.AppMode;
 import com.fmning.wpi_csa.helpers.LoadingView;
 import com.fmning.wpi_csa.helpers.Utils;
 import com.fmning.wpi_csa.http.WCFeedManager;
+import com.fmning.wpi_csa.http.WCPaymentManager;
 import com.fmning.wpi_csa.http.WCService;
 import com.fmning.wpi_csa.http.objects.WCEvent;
 import com.fmning.wpi_csa.http.objects.WCFeed;
@@ -156,25 +158,71 @@ public class FeedFragment extends Fragment {
     }
 
     private void payAndGetTicket() {
-        //Utils.showLoadingIndicator(getActivity());
-        WCService.getTicket(getActivity(), 7, new WCService.OnGetTicketListener() {
+        Utils.showLoadingIndicator(getActivity());
+        WCPaymentManager.makePayment(getActivity(), "Event", eventToPay.id, eventToPay.fee, new WCPaymentManager.OnMakePaymentListener() {
             @Override
-            public void OnGetTicketDone(String error, String ticket) {
+            public void OnMakePaymentDone(String error, String status, String ticketStatus, final int ticketId, String ticket) {
+                Utils.hideLoadingIndicator();
                 if (!error.equals("")) {
-                    Utils.logMsg(error);
+                    Utils.processErrorMessage(getActivity(), error, true);
                 } else {
-                    Uri uri = CacheManager.saveTicket(getActivity(), ticket);
+                    if (status.equals("ok")) {
+                        if (ticketStatus.equals("ok")) {
+                            Uri uri = CacheManager.saveTicket(getActivity(), ticket);
+                            try {
+                                Intent intent = new Intent(Intent.ACTION_VIEW);
+                                intent.setDataAndType(uri, "application/pkpass");
+                                startActivity(intent);
+                            } catch (ActivityNotFoundException e) {
+                                Utils.showAlertMessage(getActivity(), getString(R.string.no_ticket_app_error));
+                            }
+                        } else {
+                            Utils.showAlertMessage(getActivity(), String.format(getString(R.string.payment_ticket_failed), ticketStatus));
+                        }
+                    } else if (status.equals("AlreadyPaid")) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setTitle(null).setCancelable(false).setMessage(getString(R.string.get_ticket_again))
+                                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Utils.showLoadingIndicator(getActivity());
+                                        WCService.getTicket(getActivity(), ticketId, new WCService.OnGetTicketListener() {
+                                            @Override
+                                            public void OnGetTicketDone(String error, String ticket) {
+                                                Utils.hideLoadingIndicator();
+                                                if (!error.equals("")) {
+                                                    Utils.processErrorMessage(getActivity(), error, true);
+                                                } else {
+                                                    Uri uri = CacheManager.saveTicket(getActivity(), ticket);
 
-                    try {
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setDataAndType(uri, "application/pkpass");
-                        startActivity(intent);
-                    } catch (ActivityNotFoundException e) {
-                        Utils.showAlertMessage(getActivity(), getString(R.string.no_ticket_app_error));
+                                                    try {
+                                                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                                                        intent.setDataAndType(uri, "application/pkpass");
+                                                        startActivity(intent);
+                                                    } catch (ActivityNotFoundException e) {
+                                                        Utils.showAlertMessage(getActivity(), getString(R.string.no_ticket_app_error));
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    }
+                                })
+                                .setNegativeButton(getString(R.string.no), null)
+                                .show();
+                    } else {
+                        Utils.showAlertMessage(getActivity(), String.format(getString(R.string.payment_status_unknown), status));
                     }
                 }
             }
         });
+
+
+
+
+
+
+
+
+
     }
 
     @Override

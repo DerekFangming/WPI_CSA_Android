@@ -69,6 +69,7 @@
     <string name="user_detail_saved">Saved successfully</string>
     <string name="feed_add_calendar">Add to calendar</string>
     <string name="feed_free_ticket">Free - Get ticket</string>
+    <string name="get_ticket_again">You have already paid for it. Do you want to download ticket again?</string>
 
 
     <string name="ok" tools:ignore="ButtonCase,Typos">Ok</string>
@@ -138,6 +139,8 @@
     <string name="feed_time">%1$s to %2$s</string>
     <string name="feed_location">Location: %1$s</string>
     <string name="feed_paid_ticket">$%1$s - Pay and get ticket</string>
+    <string name="payment_ticket_failed">Transaction is successful. %1$s Please contact admin@fmning.com</string>
+    <string name="payment_status_unknown">Unknown status. %1$s</string>
 
     <!-- The following are default texts -->
     <string name="d_name">Fangming Ning</string>
