@@ -1,11 +1,11 @@
-package com.fmning.wpi_csa.http;
+package com.fmning.wpi_csa.webService;
 
 import android.content.Context;
 
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.helpers.Utils;
-import com.fmning.wpi_csa.http.objects.WCEvent;
-import com.fmning.wpi_csa.http.objects.WCFeed;
+import com.fmning.wpi_csa.webService.objects.WCEvent;
+import com.fmning.wpi_csa.webService.objects.WCFeed;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;

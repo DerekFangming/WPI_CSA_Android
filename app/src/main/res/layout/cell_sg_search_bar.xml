@@ -16,6 +16,6 @@
         android:inputType="textNoSuggestions"
         android:maxLines="1"
         android:imeOptions="actionDone"
-        android:drawableLeft="@android:drawable/ic_menu_search"/>
+        android:drawableStart="@android:drawable/ic_menu_search"/>
 
 </LinearLayout>

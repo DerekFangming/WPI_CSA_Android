@@ -12,24 +12,21 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
-    public static final String DB_NAME = "Database.sqlite";
-    public static final String DB_SUB_PATH = "/databases/" + DB_NAME;
+    static final String DB_NAME = "Database.sqlite";
+    static final String DB_SUB_PATH = "/databases/" + DB_NAME;
     private static String APP_DATA_PATH = "";
     private SQLiteDatabase dataBase;
-    private final Context context;
 
-    public DatabaseOpenHelper(Context context){
+    DatabaseOpenHelper(Context context){
         super(context, DB_NAME, null, 1);
         APP_DATA_PATH = context.getApplicationInfo().dataDir;
-        this.context = context;
     }
 
-    public boolean openDataBase() throws SQLException
+    void openDataBase() throws SQLException
     {
         String mPath = APP_DATA_PATH + DB_SUB_PATH;
         //Note that this method assumes that the db file is already copied in place
         dataBase = SQLiteDatabase.openDatabase(mPath, null, SQLiteDatabase.OPEN_READWRITE);
-        return dataBase != null;
     }
 
     @Override

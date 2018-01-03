@@ -23,11 +23,11 @@ import com.fmning.wpi_csa.cache.CacheManager;
 import com.fmning.wpi_csa.helpers.AppMode;
 import com.fmning.wpi_csa.helpers.LoadingView;
 import com.fmning.wpi_csa.helpers.Utils;
-import com.fmning.wpi_csa.http.WCFeedManager;
-import com.fmning.wpi_csa.http.WCPaymentManager;
-import com.fmning.wpi_csa.http.WCService;
-import com.fmning.wpi_csa.http.objects.WCEvent;
-import com.fmning.wpi_csa.http.objects.WCFeed;
+import com.fmning.wpi_csa.webService.WCFeedManager;
+import com.fmning.wpi_csa.webService.WCPaymentManager;
+import com.fmning.wpi_csa.webService.WCService;
+import com.fmning.wpi_csa.webService.objects.WCEvent;
+import com.fmning.wpi_csa.webService.objects.WCFeed;
 
 /**
  * Created by Fangming
@@ -160,6 +160,7 @@ public class FeedFragment extends Fragment {
     private void payAndGetTicket() {
         Utils.showLoadingIndicator(getActivity());
         WCPaymentManager.makePayment(getActivity(), "Event", eventToPay.id, eventToPay.fee, new WCPaymentManager.OnMakePaymentListener() {
+            @SuppressWarnings("IfCanBeSwitch")
             @Override
             public void OnMakePaymentDone(String error, String status, String ticketStatus, final int ticketId, String ticket) {
                 Utils.hideLoadingIndicator();
@@ -216,15 +217,9 @@ public class FeedFragment extends Fragment {
         });
 
 
-
-
-
-
-
-
-
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults) {

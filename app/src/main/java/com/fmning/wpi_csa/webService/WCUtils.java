@@ -1,8 +1,6 @@
-package com.fmning.wpi_csa.http;
+package com.fmning.wpi_csa.webService;
 
 import android.content.Context;
-
-import org.json.JSONObject;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -35,20 +33,20 @@ public class WCUtils {
     static final String pathSendVerificationEmail = "send_verification_email";
     static final String pathChangePassword = "update_password";
     static final String pathCreateReport = "create_sg_report";
+    @SuppressWarnings("unused")
     static final String pathCreateArticle = "create_sg_article";
     static final String pathGetImage = "get_image";
     static final String pathSaveTUImage = "save_type_unique_image";
     static final String pathGetRecentFeeds = "get_recent_feeds";
+    @SuppressWarnings("unused")
     static final String pathGetEvent = "get_event";
     static final String pathGetFeed = "get_feed";
     static final String pathGetTicket = "get_ticket";
     static final String pathMakePayment = "make_payment";
 
     public Context context;
-    public static JSONObject serverDownResponse;
 
-
-
+    @SuppressWarnings("StringConcatenationInLoop")
     public static String md5(final String s) {
         final String MD5 = "MD5";
         try {

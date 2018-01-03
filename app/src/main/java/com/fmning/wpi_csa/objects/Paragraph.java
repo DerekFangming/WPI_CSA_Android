@@ -2,7 +2,6 @@ package com.fmning.wpi_csa.objects;
 
 import android.text.Html;
 import android.text.Spanned;
-import android.text.util.Linkify;
 
 import java.util.Map;
 

@@ -39,7 +39,7 @@ public class Article {
         paragraphs = new ArrayList<>();
     }
 
-    public void processContent(Context context) {
+    public void processContent() {
         List<String> matchs = new ArrayList<>();
         int count = 0;
 

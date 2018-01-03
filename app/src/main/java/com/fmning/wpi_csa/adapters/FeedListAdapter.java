@@ -14,8 +14,8 @@ import android.widget.TextView;
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.cache.CacheManager;
 import com.fmning.wpi_csa.helpers.Utils;
-import com.fmning.wpi_csa.http.objects.WCEvent;
-import com.fmning.wpi_csa.http.objects.WCFeed;
+import com.fmning.wpi_csa.webService.objects.WCEvent;
+import com.fmning.wpi_csa.webService.objects.WCFeed;
 import com.fmning.wpi_csa.objects.Article;
 import com.fmning.wpi_csa.objects.Paragraph;
 import com.fmning.wpi_csa.objects.ParagraphType;
@@ -220,7 +220,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<ViewHolder> {
     public void setAndProcessFeed (WCFeed feed) {
         this.feed = feed;
         article = new Article(feed.body);
-        article.processContent(context);
+        article.processContent();
     }
 
     public interface FeedListListener {

@@ -1,4 +1,4 @@
-package com.fmning.wpi_csa.http.objects;
+package com.fmning.wpi_csa.webService.objects;
 
 /**
  * Created by fangmingning
@@ -17,6 +17,7 @@ public class WCUser {
     public String classOf;
     public String major;
 
+    @SuppressWarnings("unused")
     public WCUser(int id){
         this(id, null, null);
     }

@@ -1,10 +1,10 @@
-package com.fmning.wpi_csa.http;
+package com.fmning.wpi_csa.webService;
 
 import android.content.Context;
 
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.helpers.Utils;
-import com.fmning.wpi_csa.http.objects.WCUser;
+import com.fmning.wpi_csa.webService.objects.WCUser;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 

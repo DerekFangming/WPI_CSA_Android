@@ -1,4 +1,4 @@
-package com.fmning.wpi_csa.http.objects;
+package com.fmning.wpi_csa.webService.objects;
 
 import java.util.Calendar;
 import java.util.Date;

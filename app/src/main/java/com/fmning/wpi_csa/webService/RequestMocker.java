@@ -1,13 +1,12 @@
-package com.fmning.wpi_csa.http;
+package com.fmning.wpi_csa.webService;
 
 import com.fmning.wpi_csa.helpers.Utils;
-import com.fmning.wpi_csa.http.objects.WCEvent;
-import com.fmning.wpi_csa.http.objects.WCFeed;
-import com.fmning.wpi_csa.http.objects.WCUser;
+import com.fmning.wpi_csa.webService.objects.WCEvent;
+import com.fmning.wpi_csa.webService.objects.WCFeed;
+import com.fmning.wpi_csa.webService.objects.WCUser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -16,9 +15,9 @@ import java.util.List;
  * On 11/2/17.
  */
 
-public class RequestMocker {
+class RequestMocker {
 
-    public static List<Object> getFakeResponse(String requestPath) {
+    static List<Object> getFakeResponse(String requestPath) {
         switch(requestPath){
             case WCUtils.pathGetVersionInfo:
                 return new ArrayList<Object>(Arrays.asList("OK", "", "", "", ""));

@@ -1,4 +1,4 @@
-package com.fmning.wpi_csa.http;
+package com.fmning.wpi_csa.webService;
 
 import android.content.Context;
 import android.graphics.Bitmap;

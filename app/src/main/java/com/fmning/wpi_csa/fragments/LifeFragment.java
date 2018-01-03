@@ -16,8 +16,8 @@ import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.adapters.LifeListAdapter;
 import com.fmning.wpi_csa.helpers.LoadingView;
 import com.fmning.wpi_csa.helpers.Utils;
-import com.fmning.wpi_csa.http.WCFeedManager;
-import com.fmning.wpi_csa.http.objects.WCFeed;
+import com.fmning.wpi_csa.webService.WCFeedManager;
+import com.fmning.wpi_csa.webService.objects.WCFeed;
 
 import java.util.List;
 

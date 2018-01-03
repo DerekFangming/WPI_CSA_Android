@@ -13,7 +13,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,10 +24,10 @@ import com.fmning.wpi_csa.activities.RegisterActivity;
 import com.fmning.wpi_csa.adapters.SettingListAdapter;
 import com.fmning.wpi_csa.helpers.AppMode;
 import com.fmning.wpi_csa.helpers.Utils;
-import com.fmning.wpi_csa.http.WCService;
-import com.fmning.wpi_csa.http.WCUserManager;
-import com.fmning.wpi_csa.http.WCUtils;
-import com.fmning.wpi_csa.http.objects.WCUser;
+import com.fmning.wpi_csa.webService.WCService;
+import com.fmning.wpi_csa.webService.WCUserManager;
+import com.fmning.wpi_csa.webService.WCUtils;
+import com.fmning.wpi_csa.webService.objects.WCUser;
 
 /**
  * Created by fangmingning

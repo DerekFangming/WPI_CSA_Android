@@ -20,7 +20,7 @@ import android.widget.Toast;
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.helpers.AppMode;
 import com.fmning.wpi_csa.helpers.Utils;
-import com.fmning.wpi_csa.http.WCService;
+import com.fmning.wpi_csa.webService.WCService;
 
 /**
  * Created by Fangming

@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.cache.CacheManager;
 import com.fmning.wpi_csa.helpers.Utils;
-import com.fmning.wpi_csa.http.objects.WCFeed;
+import com.fmning.wpi_csa.webService.objects.WCFeed;
 
 import java.util.ArrayList;
 import java.util.List;

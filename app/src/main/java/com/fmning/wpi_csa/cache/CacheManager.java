@@ -9,7 +9,7 @@ import android.util.Base64;
 
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.helpers.Utils;
-import com.fmning.wpi_csa.http.WCImageManager;
+import com.fmning.wpi_csa.webService.WCImageManager;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;

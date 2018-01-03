@@ -22,8 +22,8 @@ import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.adapters.UserDetailListAdapter;
 import com.fmning.wpi_csa.cache.CacheManager;
 import com.fmning.wpi_csa.helpers.Utils;
-import com.fmning.wpi_csa.http.WCService;
-import com.fmning.wpi_csa.http.WCUserManager;
+import com.fmning.wpi_csa.webService.WCService;
+import com.fmning.wpi_csa.webService.WCUserManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

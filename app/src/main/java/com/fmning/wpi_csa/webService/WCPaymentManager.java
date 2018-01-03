@@ -1,4 +1,4 @@
-package com.fmning.wpi_csa.http;
+package com.fmning.wpi_csa.webService;
 
 import android.content.Context;
 
@@ -26,6 +26,7 @@ public class WCPaymentManager {
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 
+    @SuppressWarnings("SameParameterValue")
     public static void makePayment(final Context context, String type, int id, double amount,
                                    final OnMakePaymentListener listener) {
         StringEntity entity = null;

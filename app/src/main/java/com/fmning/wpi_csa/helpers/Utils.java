@@ -1,5 +1,6 @@
 package com.fmning.wpi_csa.helpers;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -16,9 +17,9 @@ import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.activities.MainTabActivity;
 import com.fmning.wpi_csa.cache.CacheManager;
 import com.fmning.wpi_csa.cache.Database;
-import com.fmning.wpi_csa.http.WCService;
-import com.fmning.wpi_csa.http.WCUserManager;
-import com.fmning.wpi_csa.http.objects.WCUser;
+import com.fmning.wpi_csa.webService.WCService;
+import com.fmning.wpi_csa.webService.WCUserManager;
+import com.fmning.wpi_csa.webService.objects.WCUser;
 
 import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
@@ -49,15 +50,17 @@ public class Utils {
 
     //Format: AppMajorVerion.AppSubVersion.ContentVersion
     //Update this number results server version update
-    public static final String baseVersion = "1.03.001";
+    private static final String baseVersion = "1.03.001";
 
     //All application parameters are declared here
-    public static final String appVersion = "appVersion";
-    public static final String appStatus = "appStatus";
+    private static final String appVersion = "appVersion";
+    private static final String appStatus = "appStatus";
     public static final String reportEmail = "email";
     public static final String savedUsername = "username";
     public static final String savedPassword = "password";
+    @SuppressWarnings("unused")
     public static final String localTitle = "title";
+    @SuppressWarnings("unused")
     public static final String localArticle = "article";
 
     //The padding values will get initiated before any segments are created
@@ -108,6 +111,7 @@ public class Utils {
         }
 
         WCService.checkSoftwareVersion(context, versionToCheck, new WCService.OnCheckSoftwareVersionListener() {
+            @SuppressWarnings("IfCanBeSwitch")
             @Override
             public void OnCheckSoftwareVersionDone(String status, String title, String msg, String updates, final String version) {
                 appMode = AppMode.LOGIN;
@@ -224,12 +228,14 @@ public class Utils {
                 .setPositiveButton(android.R.string.ok, null).show();
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static void showLoadingIndicator(Context context){
         if (loadingDialog != null){
             return;
         }
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        @SuppressLint("InflateParams")
         View indicator = inflater.inflate(R.layout.view_loading_indicator, null);
 
         loadingDialog = new ProgressDialog(context, R.style.DialogStyle);

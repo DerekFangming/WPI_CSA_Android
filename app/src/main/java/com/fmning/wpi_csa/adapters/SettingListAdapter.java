@@ -22,8 +22,8 @@ import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.cache.CacheManager;
 import com.fmning.wpi_csa.helpers.AppMode;
 import com.fmning.wpi_csa.helpers.Utils;
-import com.fmning.wpi_csa.http.WCService;
-import com.fmning.wpi_csa.http.objects.WCUser;
+import com.fmning.wpi_csa.webService.WCService;
+import com.fmning.wpi_csa.webService.objects.WCUser;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 

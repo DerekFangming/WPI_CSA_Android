@@ -99,7 +99,7 @@ public class SGListAdapter extends RecyclerView.Adapter<ViewHolder> {
                     article = db.getArticle(article.prevMenuId);
                     db.close();
 
-                    article.processContent(context);
+                    article.processContent();
                     notifyDataSetChanged();
 
                     if (listener != null) {
@@ -115,7 +115,7 @@ public class SGListAdapter extends RecyclerView.Adapter<ViewHolder> {
                     article = db.getArticle(article.nextMenuId);
                     db.close();
 
-                    article.processContent(context);
+                    article.processContent();
                     notifyDataSetChanged();
                     if (listener != null) {
                         listener.OnNextArticleShown(article.themeColor, article.menuId);
@@ -215,7 +215,7 @@ public class SGListAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     public void setAndProcessArticle(Article article) {
         this.article = article;
-        this.article.processContent(context);
+        this.article.processContent();
     }
 
     public interface SGListListener {
