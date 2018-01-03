@@ -12,10 +12,12 @@ import java.security.NoSuchAlgorithmException;
 
 public class WCUtils {
 
-    //public static final String serviceBase = "https://wcservice.fmning.com/"; //*****************PROD
-    static final String serviceBase = "http://wc.fmning.com/"; //********************TEST
+    //If set to false, all request will go to test server
+    private static final Boolean prodMode = true;
     //If enabled, most of the HTTP request will return faked local value, instead of making network calls
     static final Boolean localMode = false;
+
+    static final String serviceBase = prodMode ? "https://wcservice.fmning.com/" : "http://wc.fmning.com/";
 
     /*
         Web request URL standard:

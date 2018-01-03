@@ -105,7 +105,9 @@ public class FeedListAdapter extends RecyclerView.Adapter<ViewHolder> {
             ((TextView) cell.findViewById(R.id.feedTitleText)).setText(feed.title);
             String feedType = String.format(context.getString(R.string.feed_type_padding), feed.type);
             ((TextView) cell.findViewById(R.id.feedTypeText)).setText(feedType);
+            Utils.logMsg("title is " + feed.title);
             ((TextView) cell.findViewById(R.id.feedCreatedTimeText)).setText(Utils.dateToString(feed.createdAt));
+            Utils.logMsg("Name is " + feed.ownerName);
             ((TextView) cell.findViewById(R.id.feedCreatorText)).setText(feed.ownerName);
         } else {
             if (article != null) {
@@ -138,7 +140,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<ViewHolder> {
                             @Override
                             public void onClick(View v) {
                                 if (listener != null) {
-                                    listener.addToCalendar(feed.event);
+                                    listener.addToCalendar();
                                 }
                             }
                         });
@@ -154,7 +156,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<ViewHolder> {
                             @Override
                             public void onClick(View v) {
                                 if (listener!= null) {
-                                    listener.payAndGetTicket(feed.event);
+                                    listener.payAndGetTicket();
                                 }
                             }
                         });
@@ -172,7 +174,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<ViewHolder> {
                         @Override
                         public void onClick(View v) {
                             if (listener != null) {
-                                listener.addToCalendar(feed.event);
+                                listener.addToCalendar();
                             }
                         }
                     });
@@ -188,7 +190,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<ViewHolder> {
                         @Override
                         public void onClick(View v) {
                             if (listener!= null) {
-                                listener.payAndGetTicket(feed.event);
+                                listener.payAndGetTicket();
                             }
                         }
                     });
@@ -224,8 +226,8 @@ public class FeedListAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
     public interface FeedListListener {
-        void addToCalendar(WCEvent event);
-        void payAndGetTicket(WCEvent event);
+        void addToCalendar();
+        void payAndGetTicket();
     }
 
 }

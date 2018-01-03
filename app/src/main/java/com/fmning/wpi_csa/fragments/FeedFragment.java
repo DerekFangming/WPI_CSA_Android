@@ -37,8 +37,7 @@ import com.fmning.wpi_csa.webService.objects.WCFeed;
 
 public class FeedFragment extends Fragment {
 
-    private static int feedId;
-    private WCEvent eventToPay;
+    private static WCFeed feed;
 
     private static int EXT_STORE_REQUEST_CODE = 100;
 
@@ -48,7 +47,7 @@ public class FeedFragment extends Fragment {
 
     public static FeedFragment withFeed(Context context, WCFeed feed) {
         FeedFragment fragment = new FeedFragment();
-        feedId = feed.id;
+        FeedFragment.feed = feed;
         fragment.tableViewAdapter = new FeedListAdapter(context, feed);
         return fragment;
     }
@@ -68,12 +67,14 @@ public class FeedFragment extends Fragment {
             }
         });
 
-        WCFeedManager.getFeed(getActivity(), feedId, new WCFeedManager.OnGetFeedListener() {
+        WCFeedManager.getFeed(getActivity(), feed.id, new WCFeedManager.OnGetFeedListener() {
             @Override
-            public void OnGetFeedDone(String error, WCFeed feed) {
+            public void OnGetFeedDone(String error, WCFeed feedWithBodyAndEvent) {
                 if (!error.equals("")) {
                     Utils.processErrorMessage(getActivity(), error, true);
                 } else {
+                    feed.body = feedWithBodyAndEvent.body;
+                    feed.event = feedWithBodyAndEvent.event;
                     tableViewAdapter.setAndProcessFeed(feed);
                     tableViewAdapter.notifyDataSetChanged();
                     loadingView.setVisibility(View.GONE);
@@ -83,7 +84,7 @@ public class FeedFragment extends Fragment {
 
         tableViewAdapter.setOnFeedListener(new FeedListAdapter.FeedListListener() {
             @Override
-            public void addToCalendar(WCEvent event) {
+            public void addToCalendar() {
 
 //                Uri.Builder eventsUriBuilder = CalendarContract.Instances.CONTENT_URI.buildUpon();
 //                ContentUris.appendId(eventsUriBuilder, event.startTime.getTime());
@@ -119,18 +120,18 @@ public class FeedFragment extends Fragment {
 //
                 Intent intent = new Intent(Intent.ACTION_EDIT);
                 intent.setData(CalendarContract.Events.CONTENT_URI);
-                intent.putExtra(CalendarContract.Events.TITLE, event.title);
-                intent.putExtra(CalendarContract.Events.DESCRIPTION, event.description);
-                intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, event.startTime.getTime());
-                intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, event.endTime.getTime());
-                intent.putExtra(CalendarContract.Events.EVENT_LOCATION, event.location);
+                intent.putExtra(CalendarContract.Events.TITLE, feed.event.title);
+                intent.putExtra(CalendarContract.Events.DESCRIPTION, feed.event.description);
+                intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, feed.event.startTime.getTime());
+                intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, feed.event.endTime.getTime());
+                intent.putExtra(CalendarContract.Events.EVENT_LOCATION, feed.event.location);
 
                 startActivity(intent);
             }
 
             @Override
-            public void payAndGetTicket(WCEvent event) {
-                if (event.fee > 0) {
+            public void payAndGetTicket() {
+                if (feed.event.fee > 0) {
                     Utils.showAlertMessage(getActivity(), getActivity().getString(R.string.ticket_not_implemented_error));
                 } else if (Utils.appMode != AppMode.LOGGED_ON) {
                     Utils.showAlertMessage(getActivity(), getActivity().getString(R.string.ticket_not_loggedin_error));
@@ -140,7 +141,6 @@ public class FeedFragment extends Fragment {
                     } else if (!WCService.currentUser.emailConfirmed) {
                         Utils.showAlertMessage(getActivity(), getActivity().getString(R.string.ticket_email_unconfirmed_error));
                     } else {
-                        eventToPay = event;
                         //TODO: M is 23. Currently built for 21 but many fearures require 23. So change to 23???????
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                                 && getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -153,6 +153,7 @@ public class FeedFragment extends Fragment {
                 }
             }
         });
+        Utils.logMsg("called set adapter");
         tableView.setAdapter(tableViewAdapter);
 
         return view;
@@ -160,7 +161,7 @@ public class FeedFragment extends Fragment {
 
     private void payAndGetTicket() {
         Utils.showLoadingIndicator(getActivity());
-        WCPaymentManager.makePayment(getActivity(), "Event", eventToPay.id, eventToPay.fee, new WCPaymentManager.OnMakePaymentListener() {
+        WCPaymentManager.makePayment(getActivity(), "Event", feed.event.id, feed.event.fee, new WCPaymentManager.OnMakePaymentListener() {
             @SuppressWarnings("IfCanBeSwitch")
             @Override
             public void OnMakePaymentDone(String error, String status, String ticketStatus, final int ticketId, String ticket) {
