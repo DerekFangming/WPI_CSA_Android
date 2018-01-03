@@ -164,7 +164,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                                     .setCancelable(false)
                                                                     .setMessage(String.format(RegisterActivity.this
                                                                             .getString(R.string.register_done_message), user.username))
-                                                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                                                    .setPositiveButton(RegisterActivity.this.getString(R.string.ok), new DialogInterface.OnClickListener() {
                                                                         public void onClick(DialogInterface dialog, int which) {
                                                                             finish();
                                                                         }
@@ -181,7 +181,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                                     .setCancelable(false)
                                                                     .setMessage(String.format(RegisterActivity.this
                                                                             .getString(R.string.register_detail_fail_error), error))
-                                                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                                                    .setPositiveButton(RegisterActivity.this.getString(R.string.ok), new DialogInterface.OnClickListener() {
                                                                         public void onClick(DialogInterface dialog, int which) {
                                                                             finish();
                                                                         }

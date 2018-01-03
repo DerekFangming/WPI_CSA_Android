@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.util.Base64;
 
 import com.fmning.wpi_csa.R;
@@ -183,7 +184,7 @@ public class CacheManager {
         }
     }
 
-    public static Uri saveTicket(String base64) {
+    public static Uri saveTicket(Context context, String base64) {
         byte[] pdfAsBytes = Base64.decode(base64, 0);
 
         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "ticket.pkpass");
@@ -196,7 +197,7 @@ public class CacheManager {
         } catch (IOException e) {
             return null;
         }
-        return Uri.fromFile(file);
+        return FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".helpers.GenericFileProvider", file);
     }
 
     public interface OnCacheGetImageListener {

@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -169,7 +170,7 @@ public class FeedFragment extends Fragment {
                 } else {
                     if (status.equals("ok")) {
                         if (ticketStatus.equals("ok")) {
-                            Uri uri = CacheManager.saveTicket(ticket);
+                            Uri uri = CacheManager.saveTicket(getActivity(), ticket);
                             try {
                                 Intent intent = new Intent(Intent.ACTION_VIEW);
                                 intent.setDataAndType(uri, "application/pkpass");
@@ -193,7 +194,7 @@ public class FeedFragment extends Fragment {
                                                 if (!error.equals("")) {
                                                     Utils.processErrorMessage(getActivity(), error, true);
                                                 } else {
-                                                    Uri uri = CacheManager.saveTicket(ticket);
+                                                    Uri uri = CacheManager.saveTicket(getActivity(), ticket);
 
                                                     try {
                                                         Intent intent = new Intent(Intent.ACTION_VIEW);

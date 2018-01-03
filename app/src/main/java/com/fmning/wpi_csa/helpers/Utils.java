@@ -225,7 +225,7 @@ public class Utils {
     public static void showAlertMessage(Context context, String alert){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCancelable(false).setTitle(null).setMessage(alert)
-                .setPositiveButton(android.R.string.ok, null).show();
+                .setPositiveButton(context.getString(R.string.ok), null).show();
     }
 
     @SuppressWarnings("ConstantConditions")
