@@ -103,15 +103,17 @@ public class UserDetailFragment extends Fragment {
                         return;
                     }
 
-                    try {
-                        int year = Integer.parseInt(classOf);
-                        if (String.valueOf(year).length() != 4) {
+                    if (classOf.length() > 0) {
+                        try {
+                            int year = Integer.parseInt(classOf);
+                            if (String.valueOf(year).length() != 4) {
+                                Utils.showAlertMessage(getActivity(), getString(R.string.year_format_error));
+                                return;
+                            }
+                        } catch (NumberFormatException e) {
                             Utils.showAlertMessage(getActivity(), getString(R.string.year_format_error));
                             return;
                         }
-                    } catch (NumberFormatException e) {
-                        Utils.showAlertMessage(getActivity(), getString(R.string.year_format_error));
-                        return;
                     }
 
                     if (major.length() > 10) {

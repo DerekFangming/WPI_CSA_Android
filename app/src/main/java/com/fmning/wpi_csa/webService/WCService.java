@@ -42,6 +42,7 @@ public class WCService {
 
         RequestParams params = new RequestParams();
         params.put("version", version);
+        params.put("device", "android");
 
         client.get(WCUtils.serviceBase + WCUtils.pathGetVersionInfo, params,
                 new JsonHttpResponseHandler(){
