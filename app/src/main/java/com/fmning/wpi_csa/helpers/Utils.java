@@ -215,7 +215,7 @@ public class Utils {
             if (showAlert) {
                 showAlertMessage(context, errMsg);
             } else {
-                Utils.logMsg("server down but not shown");
+                //Utils.logMsg("server down but not shown");
             }
         } else {
             showAlertMessage(context, errMsg);
@@ -395,6 +395,7 @@ public class Utils {
         Log.wtf("csa.debug", msg);
     }
 
+    @SuppressWarnings({"unused", "WeakerAccess"})
     public static void logLong(String content) {
         if (content.length() > 4000) {
             Log.wtf("csa.debug", content.substring(0, 4000));
