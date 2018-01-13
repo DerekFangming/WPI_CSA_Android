@@ -1,13 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<com.fmning.wpi_csa.helpers.CustomDrawer
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/list"
-    android:name="com.fmning.wpi_csa.fragments.SGFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    app:layoutManager="LinearLayoutManager"
-    tools:context="com.fmning.wpi_csa.fragments.SGFragment"
-    tools:listitem="@layout/cell_default" />
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/SGList"
+            android:name="com.fmning.wpi_csa.fragments.SGFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="LinearLayoutManager"
+            tools:context="com.fmning.wpi_csa.fragments.SGFragment"
+            tools:listitem="@layout/cell_default" />
+
+        <RelativeLayout
+            android:id="@+id/SGNavigationBar"
+            android:layout_width="match_parent"
+            android:layout_height="74dp">
+
+
+            <Button
+                android:id="@+id/SGMenuButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="35dp"
+                android:layout_marginStart="15dp"
+                android:background="@drawable/menu_light"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toEndOf="@+id/SGMenuButton"
+                android:layout_toStartOf="@id/SGReportButton"
+                android:textColor="@color/white"
+                android:layout_marginTop="24dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:text="@string/sg_tab"/>
+
+            <Button
+                android:id="@+id/SGReportButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="35dp"
+                android:layout_marginEnd="15dp"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/report_problem"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+    <ImageView
+        android:id="@+id/SGCoverImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/sg_cover"
+        android:contentDescription="@string/sg_cover_desc"/>
+
+    <android.support.v7.widget.RecyclerView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/SGMenu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@drawable/menu_gradient_background"
+        app:layoutManager="LinearLayoutManager"/>
+
+</com.fmning.wpi_csa.helpers.CustomDrawer>

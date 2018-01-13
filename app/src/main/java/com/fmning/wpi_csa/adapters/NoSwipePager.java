@@ -1,5 +1,6 @@
 package com.fmning.wpi_csa.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -18,22 +19,18 @@ public class NoSwipePager extends ViewPager {
         this.enabled = true;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (this.enabled) {
-            return super.onTouchEvent(event);
-        }
-        return false;
+        return this.enabled && super.onTouchEvent(event);
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-        if (this.enabled) {
-            return super.onInterceptTouchEvent(event);
-        }
-        return false;
+        return this.enabled && super.onInterceptTouchEvent(event);
     }
 
+    @SuppressWarnings("SameParameterValue")
     public void setPagingEnabled(boolean enabled) {
         this.enabled = enabled;
     }

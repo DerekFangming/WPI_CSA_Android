@@ -8,6 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="splashScreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimaryDark">@color/splashTopColor</item>
+        <item name="android:windowBackground">@drawable/landing</item>
+    </style>
+
     <style name="DialogStyle" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:layout_width">wrap_content</item>
     </style>

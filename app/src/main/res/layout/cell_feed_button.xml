@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp">
+
+    <Button
+        android:id="@+id/feedTicketButton"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:maxLines="1"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="15dp"
+        android:layout_centerInParent="true"
+        android:backgroundTint="@color/colorAccent"
+        style="?android:attr/borderlessButtonStyle"
+        android:background="@drawable/sg_nav_border"/>
+
+</RelativeLayout>

@@ -1,5 +1,6 @@
 package com.fmning.wpi_csa.helpers;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -7,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,14 +17,19 @@ import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.activities.MainTabActivity;
 import com.fmning.wpi_csa.cache.CacheManager;
 import com.fmning.wpi_csa.cache.Database;
-import com.fmning.wpi_csa.http.WCService;
-import com.fmning.wpi_csa.http.objects.WCUser;
-import com.fmning.wpi_csa.http.WCUserManager;
+import com.fmning.wpi_csa.webService.WCService;
+import com.fmning.wpi_csa.webService.WCUserManager;
+import com.fmning.wpi_csa.webService.objects.WCUser;
 
+import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,24 +43,45 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class Utils {
 
+    //This is the context from MainTabActivity
+    //This is used to get screen dimentions, access strings, etc.
+    //This is NOT used to show UI elements since it may NOT be the current active activity
+    private static Context mainContext;
+
     //Format: AppMajorVerion.AppSubVersion.ContentVersion
     //Update this number results server version update
-    public static final String baseVersion = "1.03.001";
+    private static final String baseVersion = "1.03.001";
 
     //All application parameters are declared here
-    public static final String appVersion = "appVersion";
-    public static final String appStatus = "appStatus";
+    private static final String appVersion = "appVersion";
+    private static final String appStatus = "appStatus";
     public static final String reportEmail = "email";
     public static final String savedUsername = "username";
     public static final String savedPassword = "password";
+    @SuppressWarnings("unused")
     public static final String localTitle = "title";
+    @SuppressWarnings("unused")
     public static final String localArticle = "article";
 
+    //The padding values will get initiated before any segments are created
+    public static int padding15;
+    public static int padding50;
+    public static int padding72;
+    public static int paddingFullWidth;
 
     private static ProgressDialog loadingDialog;
 
     public static AppMode appMode = AppMode.OFFLINE;
+    public static List<Integer> menuOrderList = new ArrayList<>();
 
+    public static void initialize(Context context) {
+        mainContext = context;
+        DisplayMetrics window = mainContext.getResources().getDisplayMetrics();
+        padding15 = (int)(window.density * 15);
+        padding50 = (int)(window.density * 50);
+        padding72 = (int)(window.density * 72);
+        paddingFullWidth = window.widthPixels;
+    }
 
 
     public static void checkVerisonInfoAndLoginUser(final Context context, final boolean showAlert){
@@ -62,34 +90,35 @@ public class Utils {
         }
 
         String versionToCheck = baseVersion;
-        String version = getParam(context, appVersion);
+        String version = getParam(appVersion);
         if (version != null) {
             versionToCheck = version;
             String[] versionArr = version.split("\\.");
             if (versionArr.length != 3) {                                    //Corrupted data
                 versionToCheck = baseVersion;
-                initializeApp(context);
+                initializeApp();
             } else if (!versionArr[1].equals(baseVersion.split("\\.")[1])) { //Software version mismatch
                 versionToCheck = baseVersion;
-                initializeApp(context);// TODO: merge top if nothing special
+                initializeApp();// TODO: merge top if nothing special
             }
         } else {//First time install
-            initializeApp(context);
+            initializeApp();
         }
 
-        String status = getParam(context, appStatus);
+        String status = getParam(appStatus);
         if (status != null && !status.equals("OK")) {
             return; //TODO: Any friendly message?
         }
 
         WCService.checkSoftwareVersion(context, versionToCheck, new WCService.OnCheckSoftwareVersionListener() {
+            @SuppressWarnings("IfCanBeSwitch")
             @Override
             public void OnCheckSoftwareVersionDone(String status, String title, String msg, String updates, final String version) {
                 appMode = AppMode.LOGIN;
                 if (status.equals("OK")) {
                     dismissIndicatorAndTryLogin(context, showAlert);
                 } else if (status.equals("CU")) {
-                    setParam(context, appVersion, version);
+                    setParam(appVersion, version);
                     Database.run(context, updates);
                     dismissIndicatorAndTryLogin(context, showAlert);
                 } else if (status.equals("BM")) {
@@ -100,7 +129,7 @@ public class Utils {
                     hideLoadingIndicator();
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    AlertDialog show = builder.setTitle(title)
+                    builder.setTitle(title)
                             .setCancelable(false)
                             .setMessage(msg)
                             .setPositiveButton(context.getString(R.string.remind_later), new DialogInterface.OnClickListener() {
@@ -110,15 +139,15 @@ public class Utils {
                                         int prevVersion = Integer.parseInt(currVersion) - 1;
                                         String prevVersionStr = version.substring(0, version.length() - 3) +
                                                 String.format(Locale.getDefault(), "%03d", prevVersion);
-                                        setParam(context, appVersion, prevVersionStr);
+                                        setParam(appVersion, prevVersionStr);
                                     } catch (NumberFormatException e) {
-                                        setParam(context, appVersion, version);//TODO: Do something here
+                                        setParam(appVersion, version);//TODO: Do something here
                                     }
                                 }
                             })
                             .setNegativeButton(context.getString(R.string.never_show_again), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    setParam(context, appVersion, version);
+                                    setParam(appVersion, version);
                                 }
                             })
                             .show();
@@ -127,13 +156,13 @@ public class Utils {
                     hideLoadingIndicator();
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    AlertDialog show = builder.setTitle(title)
+                    builder.setTitle(title)
                             .setCancelable(false)
                             .setMessage(msg)
                             .setPositiveButton(context.getString(R.string.remind_later), null)
                             .setNegativeButton(context.getString(R.string.never_show_again), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    setParam(context, appStatus, "");
+                                    setParam(appStatus, "");
                                 }
                             })
                             .show();
@@ -147,15 +176,15 @@ public class Utils {
 
     }
 
-    private static void initializeApp(Context context){
-        setParam(context, appStatus, "OK");
-        setParam(context, appVersion, baseVersion);
-        CacheManager.localDirInitiateSetup(context);
+    private static void initializeApp(){
+        setParam(appStatus, "OK");
+        setParam(appVersion, baseVersion);
+        CacheManager.localDirInitiateSetup(mainContext);
     }
 
     private static void dismissIndicatorAndTryLogin(final Context context, final boolean showAlert){
-        String username = getParam(context, savedUsername);
-        String password = getParam(context, savedPassword);
+        String username = getParam(savedUsername);
+        String password = getParam(savedPassword);
         if(username != null && !username.equals("") && password != null && !password.equals("")){
             WCUserManager.loginUser(context, username, password, new WCUserManager.OnLoginUserListener() {
                 @Override
@@ -186,7 +215,7 @@ public class Utils {
             if (showAlert) {
                 showAlertMessage(context, errMsg);
             } else {
-                Utils.logMsg("server down but not shown");
+                //Utils.logMsg("server down but not shown");
             }
         } else {
             showAlertMessage(context, errMsg);
@@ -196,15 +225,17 @@ public class Utils {
     public static void showAlertMessage(Context context, String alert){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCancelable(false).setTitle(null).setMessage(alert)
-                .setPositiveButton(android.R.string.ok, null).show();
+                .setPositiveButton(context.getString(R.string.ok), null).show();
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static void showLoadingIndicator(Context context){
         if (loadingDialog != null){
             return;
         }
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        @SuppressLint("InflateParams")
         View indicator = inflater.inflate(R.layout.view_loading_indicator, null);
 
         loadingDialog = new ProgressDialog(context, R.style.DialogStyle);
@@ -230,34 +261,49 @@ public class Utils {
         return matcher.matches();
     }
 
-    public static String checkPasswordStrength(Context context, String password){
+    public static String checkPasswordStrength(String password){
         if (password.length() < 6) {
-            return context.getString(R.string.password_too_short);
+            return mainContext.getString(R.string.password_too_short);
         } else {
             if (password.matches(".*[a-zA-Z].*")) {
                 if (password.matches(".*[0-9].*")) {
                     return "";
                 } else {
-                    return context.getString(R.string.password_no_number);
+                    return mainContext.getString(R.string.password_no_number);
                 }
             } else {
-                return context.getString(R.string.password_no_letter);
+                return mainContext.getString(R.string.password_no_letter);
             }
         }
     }
 
-    public static String getParam(Context context, String key){
-        return ((MainTabActivity)context).getPreferences(MODE_PRIVATE).getString(key,null);
+    //Since android preference is activity specific, all preferences are stored under MainTabActivity
+    public static String getParam(String key){
+        return ((MainTabActivity) mainContext).getPreferences(MODE_PRIVATE).getString(key, null);
     }
 
-    public static void setParam(Context context, String key, String value){
-        ((MainTabActivity)context).getPreferences(MODE_PRIVATE).edit().putString(key, value).apply();
+    public static void setParam(String key, String value){
+        ((MainTabActivity) mainContext).getPreferences(MODE_PRIVATE).edit().putString(key, value).apply();
     }
 
-    public static void deleteParam(Context context, String key){
-        ((MainTabActivity)context).getPreferences(MODE_PRIVATE).edit().remove(key).apply();
+    public static void deleteParam(String key){
+        ((MainTabActivity) mainContext).getPreferences(MODE_PRIVATE).edit().remove(key).apply();
     }
 
+    public static Map<String, String> getHtmlAttributes (String string) {
+        Map<String, String> dic = new HashMap<>();
+        Matcher m = Pattern.compile("\\w+\\s?=\\s?\".*?\"").matcher(string);
+
+        while (m.find()) {
+            String match = m.group(0);
+            String key = match.split("=")[0].trim();
+            String value = match.replace(key, "")
+                    .replace("=", "").replaceAll("\"", "").trim();
+
+            dic.put(key, value);
+        }
+        return dic;
+    }
 
     /**
      UTC Time formatter that converts iso-8601 with millisecond.
@@ -326,8 +372,37 @@ public class Utils {
         return image;
     }
 
+    public static int compressRateForSize(Bitmap bitmap, int target) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        int fullSize = stream.toByteArray().length;
+        int rate = fullSize / target;
+
+        if (rate == 0) {
+            return 100;
+        } else if (rate <= 2) {
+            return 90;
+        } else if (rate <= 4) {
+            return 60;
+        } else if (rate <= 8) {
+            return 20;
+        } else {
+            return 0;
+        }
+    }
+
     public static void logMsg(String msg){
         Log.wtf("csa.debug", msg);
+    }
+
+    @SuppressWarnings({"unused", "WeakerAccess"})
+    public static void logLong(String content) {
+        if (content.length() > 4000) {
+            Log.wtf("csa.debug", content.substring(0, 4000));
+            logLong(content.substring(4000));
+        } else {
+            Log.wtf("csa.debug", content);
+        }
     }
 }
 

@@ -9,6 +9,8 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,13 +20,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.fmning.wpi_csa.R;
+import com.fmning.wpi_csa.activities.RegisterActivity;
 import com.fmning.wpi_csa.adapters.SettingListAdapter;
 import com.fmning.wpi_csa.helpers.AppMode;
 import com.fmning.wpi_csa.helpers.Utils;
-import com.fmning.wpi_csa.http.WCService;
-import com.fmning.wpi_csa.http.WCUtils;
-import com.fmning.wpi_csa.http.objects.WCUser;
-import com.fmning.wpi_csa.http.WCUserManager;
+import com.fmning.wpi_csa.webService.WCService;
+import com.fmning.wpi_csa.webService.WCUserManager;
+import com.fmning.wpi_csa.webService.WCUtils;
+import com.fmning.wpi_csa.webService.objects.WCUser;
 
 /**
  * Created by fangmingning
@@ -62,7 +65,14 @@ public class SettingFragment extends Fragment {
 
             @Override
             public void OnLogInClick(final String username, final String password) {
-                Utils.logMsg("log in " + username + "  "  + password);
+                View view = getActivity().getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
+                }
+
                 Utils.showLoadingIndicator(getActivity());
                 WCUserManager.getSaltForUser(getActivity(), username, new WCUserManager.OnGetUserSaltListener() {
                     @Override
@@ -76,8 +86,8 @@ public class SettingFragment extends Fragment {
                                     if (error.equals("")) {
                                         WCService.currentUser = user;
                                         Utils.appMode = AppMode.LOGGED_ON;
-                                        Utils.setParam(getActivity(), Utils.savedUsername, username);
-                                        Utils.setParam(getActivity(), Utils.savedPassword, encryptedPassword);
+                                        Utils.setParam(Utils.savedUsername, username);
+                                        Utils.setParam(Utils.savedPassword, encryptedPassword);
                                         Utils.hideLoadingIndicator();
                                         tableViewAdapter.notifyDataSetChanged();
                                     } else {
@@ -96,12 +106,22 @@ public class SettingFragment extends Fragment {
 
             @Override
             public void OnRegisterClick() {
-                Utils.logMsg("register");
+
+                Intent intent = new Intent(getActivity(), RegisterActivity.class);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
             }
 
             @Override
             public void OnUserDetailClick() {
-                Utils.logMsg("go to user detail");
+                Fragment fragment = new UserDetailFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left,
+                        R.anim.slide_in_right, R.anim.slide_out_right);
+                fragmentTransaction.replace(R.id.settingFragment, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
 
             @Override
@@ -131,22 +151,50 @@ public class SettingFragment extends Fragment {
                         .setPositiveButton(getActivity().getString(R.string.confirm), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                String oldPass = oldPwd.getText().toString();
-                                String newPass = newPwd.getText().toString();
+                                final String oldPass = oldPwd.getText().toString();
+                                final String newPass = newPwd.getText().toString();
                                 String confirmNewPass = confirmPwd.getText().toString();
-                                String error = "";
+                                String error;
 
                                 if (oldPass.trim().equals("")) {
                                     error = getActivity().getString(R.string.new_pwd_empty_error);
                                 } else {
-                                    error = Utils.checkPasswordStrength(getActivity(), newPass);
+                                    error = Utils.checkPasswordStrength(newPass);
                                     if (error.equals("") && !newPass.equals(confirmNewPass)) {
                                         error = getActivity().getString(R.string.pwd_not_match_error);
                                     }
                                 }
 
                                 if (error.equals("")){
+                                    String username = WCService.currentUser.username;
+                                    Utils.showLoadingIndicator(getActivity());
+                                    WCUserManager.getSaltForUser(getActivity(), username, new WCUserManager.OnGetUserSaltListener() {
+                                        @Override
+                                        public void OnGetUserSaltDone(String error, String salt) {
+                                            if (error.equals("")) {
+                                                final String encryptedNewPwd = WCUtils.md5(newPass + salt);
+                                                WCUserManager.changePassword(getActivity(), WCUtils.md5(oldPass + salt),
+                                                        encryptedNewPwd, new WCUserManager.OnChangePasswordListener() {
+                                                            @Override
+                                                            public void OnChangePasswordDone(String error, String accessToken) {
+                                                                if (error.equals("")) {
+                                                                    WCService.currentUser.accessToken = accessToken;
+                                                                    Utils.setParam(Utils.savedPassword, encryptedNewPwd);
+                                                                    Utils.hideLoadingIndicator();
+                                                                    Utils.showAlertMessage(getActivity(), getActivity().getString(R.string.done));
+                                                                } else {
+                                                                    Utils.hideLoadingIndicator();
+                                                                    Utils.processErrorMessage(getActivity(), error, true);
+                                                                }
+                                                            }
+                                                        });
 
+                                            } else {
+                                                Utils.hideLoadingIndicator();
+                                                Utils.processErrorMessage(getActivity(), error, true);
+                                            }
+                                        }
+                                    });
                                 } else {
                                     Utils.showAlertMessage(getActivity(), error);
                                 }
@@ -173,12 +221,35 @@ public class SettingFragment extends Fragment {
 
             @Override
             public void OnVerifyEmailClick() {
-                Utils.logMsg("verify email");
+                WCUserManager.sendEmailConfirmation(getActivity(), new WCUserManager.OnSendEmailConfirmationListener() {
+                    @Override
+                    public void OnSendEmailConfirmationDone(String error) {
+                        if (error.equals("")) {
+                            Utils.showAlertMessage(getActivity(), getActivity().getString(R.string.setting_email_confirm_msg1)
+                                    + WCService.currentUser.username + getActivity().getString(R.string.setting_email_confirm_msg2));
+                        } else {
+                            Utils.processErrorMessage(getActivity(), error, true);
+                        }
+                    }
+                });
             }
 
             @Override
             public void OnLogOutClick() {
-                Utils.logMsg("log out");
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setCancelable(false).setTitle(getActivity().getString(R.string.setting_logout_title))
+                        .setMessage(getActivity().getString(R.string.setting_logout_message))
+                        .setPositiveButton(getActivity().getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                WCService.currentUser = null;
+                                Utils.appMode = AppMode.LOGIN;
+                                Utils.deleteParam(Utils.savedUsername);
+                                Utils.deleteParam(Utils.savedPassword);
+                                tableViewAdapter.notifyDataSetChanged();
+                            }
+                        })
+                        .setNegativeButton(getActivity().getString(R.string.cancel), null).show();
             }
         });
 

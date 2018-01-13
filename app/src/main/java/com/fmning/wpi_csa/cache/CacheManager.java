@@ -3,10 +3,14 @@ package com.fmning.wpi_csa.cache;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Environment;
+import android.support.v4.content.FileProvider;
+import android.util.Base64;
 
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.helpers.Utils;
-import com.fmning.wpi_csa.http.WCImageManager;
+import com.fmning.wpi_csa.webService.WCImageManager;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -27,6 +31,7 @@ public class CacheManager {
     private static final String IMG_CACHE_SUB_PATH = "/imageCache/";
     //private static final String PDF_CACHE = "pdfCache";
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void localDirInitiateSetup(Context context){
         String appRootPath = context.getApplicationInfo().dataDir;
 
@@ -67,8 +72,8 @@ public class CacheManager {
         }
     }
 
-    public static void getImage(final Context context, String name, final OnCacheGetImageDoneListener listener){
-        int id = 0;
+    public static void getImage(final Context context, String name, final OnCacheGetImageListener listener){
+        int id;
         if (name.startsWith("WCImage_")){
             try {
                 id = Integer.parseInt(name.replace("WCImage_", ""));
@@ -107,10 +112,11 @@ public class CacheManager {
         WCImageManager.getImage(context, imageId, new WCImageManager.OnGetImageDoneListener() {
             @Override
             public void OnGetImageDone(String error, Bitmap image) {
-                if (error == "" ){
-                    FileOutputStream out = null;
+                if (error.equals("")){
+                    FileOutputStream out;
                     try {
                         out = new FileOutputStream(imgFileName);
+                        //int compressRate = Utils.compressRateForSize(image, 500);
                         image.compress(Bitmap.CompressFormat.JPEG, 100, out);
                         out.close();
 
@@ -126,37 +132,79 @@ public class CacheManager {
             }
         });
 
-        /*Bitmap bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_avatar);
-
-
-        */
-
-        /*AsyncHttpClient client = new AsyncHttpClient();
-        RequestParams params = new RequestParams();
-        params.put("id", 1);
-        client.get("https://wcservice.fmning.com/get_image", params, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                Bitmap image = BitmapFactory.decodeByteArray(responseBody, 0, responseBody.length);
-                String error = "";
-                if (image == null) {
-                    error = new String(responseBody);
-                    if(error == null || error.equals("")){
-                        error = context.getString(R.string.unknown_error);
-                    }
-                }
-                listener.OnCacheGetImageDone(error, image);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                listener.OnCacheGetImageDone(context.getString(R.string.server_down_error), null);
-            }
-        });*/
     }
 
+    @SuppressWarnings("unused")
+    public static void uploadImage(final Context context, final Bitmap image, String type, int targetSize, final OnCacheUploadImageListener listener) {
+        int compressRate = 100;
+        if (targetSize != -1) {
+            compressRate = Utils.compressRateForSize(image, targetSize);
+        }
 
-    public interface OnCacheGetImageDoneListener {
+        WCImageManager.saveTypeUniqueImg(context, image, type, compressRate, new WCImageManager.OnUploadImageDoneListener() {
+            @Override
+            public void OnUploadImageDone(String error, int id) {
+                if (error.equals("")) {
+                    String appRootPath = context.getApplicationInfo().dataDir;
+                    final String imgFileName = appRootPath + IMG_CACHE_SUB_PATH + Integer.toString(id) + ".jpg";
+
+                    FileOutputStream out;
+                    try {
+                        out = new FileOutputStream(imgFileName);
+                        image.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                        out.close();
+
+                        Database.createOrUpdateImageCache(context, id);
+                    } catch (Exception e) {
+                        Utils.logMsg(e.toString());
+                    }
+                    listener.OnCacheUploadImageDone("", id);
+                } else {
+                    listener.OnCacheUploadImageDone(error, -1);
+                }
+            }
+        });
+
+    }
+
+    public static void saveImageToLocal(Context context, Bitmap image, int id) {
+
+        String appRootPath = context.getApplicationInfo().dataDir;
+        final String imgFileName = appRootPath + CacheManager.IMG_CACHE_SUB_PATH + Integer.toString(id) + ".jpg";
+
+        FileOutputStream out;
+        try {
+            out = new FileOutputStream(imgFileName);
+            image.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.close();
+
+            Database.createOrUpdateImageCache(context, id);
+        } catch (Exception e) {
+            Utils.logMsg(e.toString());
+        }
+    }
+
+    public static Uri saveTicket(Context context, String base64) {
+        byte[] pdfAsBytes = Base64.decode(base64, 0);
+
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "ticket.pkpass");
+        FileOutputStream fos;
+        try {
+            fos = new FileOutputStream(file, false);
+            fos.write(pdfAsBytes);
+            fos.flush();
+            fos.close();
+        } catch (IOException e) {
+            return null;
+        }
+        return FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".helpers.GenericFileProvider", file);
+    }
+
+    public interface OnCacheGetImageListener {
         void OnCacheGetImageDone(String error, Bitmap image);
+    }
+
+    public interface OnCacheUploadImageListener {
+        void OnCacheUploadImageDone(String error, int id);
     }
 }

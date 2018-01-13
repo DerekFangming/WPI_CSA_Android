@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.cache.CacheManager;
 import com.fmning.wpi_csa.helpers.Utils;
-import com.fmning.wpi_csa.http.objects.WCFeed;
+import com.fmning.wpi_csa.webService.objects.WCFeed;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +28,9 @@ public class LifeListAdapter extends RecyclerView.Adapter<ViewHolder> {
     private List<WCFeed> feedList;
     private boolean stopLoadingFlag;
     private Context context;
-    private FeedListListener listener;
+    private LifeListListener listener;
 
-    public LifeListAdapter(Context context, FeedListListener listener) {
+    public LifeListAdapter(Context context, LifeListListener listener) {
         this.feedList = new ArrayList<>();
         this.stopLoadingFlag = false;
         this.context = context;
@@ -53,12 +53,9 @@ public class LifeListAdapter extends RecyclerView.Adapter<ViewHolder> {
             case 1:
                 View view1 = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_feed, parent, false);
                 return new ViewHolder(view1);
-
             case 2:
                 View view2 = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_feed_loading, parent, false);
                 return new ViewHolder(view2);
-
-
         }
         return null;
     }
@@ -76,7 +73,7 @@ public class LifeListAdapter extends RecyclerView.Adapter<ViewHolder> {
             ((TextView) cell.findViewById(R.id.feedCellCreatedAt)).setText(Utils.dateToString(feed.createdAt));
 
             if (feed.avatarId != -1) {
-                CacheManager.getImage(context, Utils.convertToWCImageId(feed.avatarId), new CacheManager.OnCacheGetImageDoneListener() {
+                CacheManager.getImage(context, Utils.convertToWCImageId(feed.avatarId), new CacheManager.OnCacheGetImageListener() {
                     @Override
                     public void OnCacheGetImageDone(String error, Bitmap image) {
                         if (error.equals("")) {
@@ -95,7 +92,7 @@ public class LifeListAdapter extends RecyclerView.Adapter<ViewHolder> {
             ((ImageView) cell.findViewById(R.id.feedCellCoverImage))
                     .setImageBitmap(Utils.createImage(context.getResources().getColor(R.color.white)));
             if (feed.coverImgId != -1) {
-                CacheManager.getImage(context, Utils.convertToWCImageId(feed.coverImgId), new CacheManager.OnCacheGetImageDoneListener() {
+                CacheManager.getImage(context, Utils.convertToWCImageId(feed.coverImgId), new CacheManager.OnCacheGetImageListener() {
                     @Override
                     public void OnCacheGetImageDone(String error, Bitmap image) {
                         if (error.equals("")) {
@@ -108,7 +105,7 @@ public class LifeListAdapter extends RecyclerView.Adapter<ViewHolder> {
             cell.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    listener.OnFeedClick(holder.getLayoutPosition());
+                    listener.OnFeedClick(feedList.get(holder.getLayoutPosition()));
                 }
             });
 
@@ -142,8 +139,8 @@ public class LifeListAdapter extends RecyclerView.Adapter<ViewHolder> {
         this.stopLoadingFlag = stopLoadingFlag;
     }
 
-    public interface FeedListListener {
-        void OnFeedClick(int index);
+    public interface LifeListListener {
+        void OnFeedClick(WCFeed feed);
         void OnScrollToLastFeed();
     }
 }

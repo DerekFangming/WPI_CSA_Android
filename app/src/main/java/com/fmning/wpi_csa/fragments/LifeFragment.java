@@ -1,10 +1,10 @@
 package com.fmning.wpi_csa.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,13 +14,10 @@ import android.view.ViewGroup;
 
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.adapters.LifeListAdapter;
-import com.fmning.wpi_csa.helpers.AppMode;
 import com.fmning.wpi_csa.helpers.LoadingView;
 import com.fmning.wpi_csa.helpers.Utils;
-import com.fmning.wpi_csa.http.WCFeedManager;
-import com.fmning.wpi_csa.http.WCService;
-import com.fmning.wpi_csa.http.objects.WCFeed;
-import com.fmning.wpi_csa.http.objects.WCUser;
+import com.fmning.wpi_csa.webService.WCFeedManager;
+import com.fmning.wpi_csa.webService.objects.WCFeed;
 
 import java.util.List;
 
@@ -42,17 +39,6 @@ public class LifeFragment extends Fragment {
 
     public LifeFragment(){}
 
-    public static LifeFragment newInstance(String param1, String param2) {
-        LifeFragment fragment = new LifeFragment();
-        /*Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        fragment.mParam1 = param1;*/
-        return fragment;
-    }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -67,11 +53,13 @@ public class LifeFragment extends Fragment {
 //                Utils.appMode = AppMode.LOGGED_ON;
 //                WCUser user = new WCUser(1, "fangming", "token");
 //                user.name = "Fangming Ning";
-//                //user.emailConfirmed = true;
+//                user.emailConfirmed = true;
 //                WCService.currentUser = user;
 //                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("reloadUserCell"));
 //            }
 //        }, 2000);
+
+        //String a = Utils.getParam(getActivity(), Utils.reportEmail);
 
 
         Utils.logMsg("bkpoint for testing area");
@@ -94,15 +82,22 @@ public class LifeFragment extends Fragment {
         tableView.setLayoutManager(new LinearLayoutManager(context));
 
 
-        tableViewAdapter = new LifeListAdapter(getActivity(), new LifeListAdapter.FeedListListener() {
+        tableViewAdapter = new LifeListAdapter(getActivity(), new LifeListAdapter.LifeListListener() {
             @Override
-            public void OnFeedClick(int index) {
-                Utils.logMsg(Integer.toString(index) + " is clicked");
+            public void OnFeedClick(WCFeed feed) {
+                //Utils.logMsg(Integer.toString(index) + " is clicked");
+                Fragment fragment = FeedFragment.withFeed(getActivity(), feed);
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left,
+                        R.anim.slide_in_right, R.anim.slide_out_right);
+                fragmentTransaction.replace(R.id.lifeFragment, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
 
             @Override
             public void OnScrollToLastFeed() {
-                Utils.logMsg("End");
                 if (!stopLoadingFlag) {
                     keepLoading();
                 }
@@ -115,7 +110,7 @@ public class LifeFragment extends Fragment {
         Utils.checkVerisonInfoAndLoginUser(getActivity(), false);
 
         //Setting up loading view
-        loadingView = (LoadingView) refreshControl.findViewById(R.id.loadingView);
+        loadingView = (LoadingView) refreshControl.findViewById(R.id.lifeLoadingView);
         loadingView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

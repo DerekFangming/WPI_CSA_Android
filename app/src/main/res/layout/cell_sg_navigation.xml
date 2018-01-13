@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="20dp"
+    android:orientation="horizontal"
+    android:gravity="center">
+
+    <Button
+        android:id="@+id/sgPrevButton"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_weight="1"
+        android:maxLines="2"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:layout_margin="10dp"
+        style="?android:attr/borderlessButtonStyle"
+        android:background="@drawable/sg_nav_border"/>
+
+    <Button
+        android:id="@+id/sgNextButton"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_weight="1"
+        android:maxLines="2"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:layout_margin="10dp"
+        style="?android:attr/borderlessButtonStyle"
+        android:background="@drawable/sg_nav_border"/>
+
+</LinearLayout>

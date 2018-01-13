@@ -1,10 +1,15 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">WPI_CSA</string>
+    <string name="app_name">WPI CSA</string>
+
+    <string name="register_activity">Register</string>
+    <string name="report_activity">Report a problem</string>
+    <string name="user_detail_fragment">User Details</string>
 
     <string name="life_tab">Life</string>
     <string name="sg_tab">Survival Guide</string>
     <string name="setting_tab">Setting</string>
     <string name="title_activity_life">Life</string>
+    <string name="title_fragment_feed">Feed</string>
 
 
     <string name="feed_loading">  Loading …</string>
@@ -29,12 +34,56 @@
     <string name="setting_change_pwd_confirm"><font size="15">Confirm new password</font></string>
     <string name="setting_email_verified">Verified</string>
     <string name="setting_email_not_verified">Not Verified</string>
+    <string name="setting_email_confirm_msg1">An email has been sent to </string>
+    <string name="setting_email_confirm_msg2"> with a link to confirm your email. Please click on the link in 24 hours. Please check your junk folder if you cannot see the email.</string>
+    <string name="setting_logout_title">Are you sure</string>
+    <string name="setting_logout_message">Your credentials will be removed</string>
+    <string name="register_greeting_msg">Welcome to CSA</string>
+    <string name="register_header_avatar">AVATAR</string>
+    <string name="register_header_required">REQUIRED</string>
+    <string name="register_header_optional">OPTIONAL</string>
+    <string name="register_label_username">Username</string>
+    <string name="register_label_name">Name</string>
+    <string name="register_label_password">Password</string>
+    <string name="register_label_confirm">Confirm</string>
+    <string name="register_label_birthday">Birthday</string>
+    <string name="register_label_classof">Class of</string>
+    <string name="register_label_major">Major</string>
+    <string name="register_hint_username">Your email address</string>
+    <string name="register_hint_name">Your name</string>
+    <string name="register_hint_password">6 characters with number and letter</string>
+    <string name="register_hint_confirm">Confirm your password</string>
+    <string name="register_hint_birthday">Your birthday</string>
+    <string name="register_hint_classof">Graduation year, like 2020</string>
+    <string name="register_hint_major">Abbreviation of your major</string>
+    <string name="sg_nav_prev_end">Previous</string>
+    <string name="sg_nav_next_end">Next</string>
+    <string name="sg_nav_search_hint">Search</string>
+    <string name="report_email_hint">Please enter email</string>
+    <string name="report_report_hint">Please enter report</string>
+    <string name="report_cancel_confirm">Are you sure you want to cancel?</string>
+    <string name="report_sent_with_email">Thank you for your report. We will get back to you as soon as possible.</string>
+    <string name="report_sent_whtout_email">Thank you for your report. We will not get back to you since you do not have email on record.</string>
+    <string name="user_detail_discard_confirm">You have unsaved changes. Are you sure about discarding them?</string>
+    <string name="user_detail_no_change">Nothing is changed</string>
+    <string name="user_detail_saved">Saved successfully</string>
+    <string name="feed_add_calendar">Add to calendar</string>
+    <string name="feed_free_ticket">Free - Get ticket</string>
+    <string name="get_ticket_again">You have already paid for it. Do you want to download ticket again?</string>
+
 
     <string name="ok" tools:ignore="ButtonCase,Typos">Ok</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+    <string name="done">Done</string>
+    <string name="save">Save</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
     <string name="remind_later">Remind me later</string>
     <string name="never_show_again">Never show this again</string>
+    <string name="login_register">Login &amp; Register</string>
+    <string name="report_anyway">Report anyway</string>
+
 
     <!--Error messages-->
     <string name="unknown_error">Unknown error. Please contact support at admin@fmning.com</string>
@@ -46,17 +95,52 @@
     <string name="password_no_number">Password must have at least 1 number</string>
     <string name="password_no_letter">Password must have at least 1 letter</string>
     <string name="new_pwd_empty_error">Enter current password</string>
-    <string name="pwd_not_match_error">New passwords don\'t match.</string>
+    <string name="pwd_not_match_error">Two passwords don\'t match.</string>
+    <string name="username_format_error">Username is not a well fomatted email</string>
+    <string name="name_empty_error">You must enter your name</string>
+    <string name="name_too_long_error">Name needs to be less that 20 characters</string>
+    <string name="password_empty_error">You must enter a password</string>
+    <string name="year_format_error">Graduation year must be a four digits number</string>
+    <string name="major_too_long_error">Please use abbreviation for major, like CS, ECE, etc</string>
+    <string name="report_not_loggedin">No user logged in. Please login so that we can get back to you and keep track of reports.</string>
+    <string name="report_email_error">Please check email format</string>
+    <string name="report_empty_error">Please enter a valid report</string>
+    <string name="ticket_not_implemented_error">If you see this message and your app is the latest version, please contact admin@fmning.com</string>
+    <string name="ticket_not_loggedin_error">You have to log in to buy ticket</string>
+    <string name="ticket_not_wpi_email_error">To get free ticket, you have to log in with your wpi email, with the email verified.</string>
+    <string name="ticket_email_unconfirmed_error">To get free ticket, you have to log in with your wpi email, with the email verified.</string>
+    <string name="storage_permission_error">Cannot get ticket. Please allow access to your storage so that we can download ticket. Alternatively, you can go to your phone\'s Setting -> Apps -> WPI CSA -> Permissions and manually allow Storage access</string>
+    <string name="no_ticket_app_error">The ticket has been saved to your Download folder. You cannot open it yet since you do not seem to have ticket app installed. Please install one and click on the ticket file, or get ticket again. Here are some of the ticket apps: Wallet Passes, Pass2U Wallet, PassAndroid, etc.</string>
     <!--Known server side error that needs to be handled-->
     <string name="no_more_feed_error">There are no more feeds.</string>
     <string name="no_event_error">The event you are looking for does not exist.</string>
 
-    <!-- Image View content descriptions -->
+    <!--Image View content descriptions -->
     <string name="feed_cover_desc">Feed cover</string>
     <string name="feed_avatar_desc">Feed avatar</string>
     <string name="feed_reload_desc">Feed reload</string>
     <string name="setting_default_avatar_desc">Setting default avatar</string>
-    <string name="setting_link_icon">Setting link icon</string>
+    <string name="setting_link_icon_desc">Setting link icon</string>
+    <string name="setting_forward_icon_desc">Setting forward arrow</string>
+    <string name="register_avatar_desc">Register avatar</string>
+    <string name="sg_cover_desc">SG Cover image</string>
+    <string name="sg_menu_status_desc">SG Menu Status</string>
+    <string name="sg_imgtxt_image_desc">SG Image Text image</string>
+    <string name="sg_image_desc">SG image</string>
+    <string name="user_detail_avatar_desc">User Detail Avatar</string>
+
+    <!--String formats with place holders-->
+    <string name="simple_date">%1$s/%2$s/%3$s</string>
+    <string name="register_detail_fail_error">User created but user details are not stored correctly. %1$s</string>
+    <string name="register_done_message">An email has been sent to %1$s with a link to confirm your email. Please click on the link in 24 hours. Please check your junk folder if you cannot see the email.</string>
+    <string name="sg_nav_prev">Previous\n%1$s</string>
+    <string name="sg_nav_next">Next\n%1$s</string>
+    <string name="feed_type_padding">\u0020%1$s\u0020</string>
+    <string name="feed_time">%1$s to %2$s</string>
+    <string name="feed_location">Location: %1$s</string>
+    <string name="feed_paid_ticket">$%1$s - Pay and get ticket</string>
+    <string name="payment_ticket_failed">Transaction is successful. %1$s Please contact admin@fmning.com</string>
+    <string name="payment_status_unknown">Unknown status. %1$s</string>
 
     <!-- The following are default texts -->
     <string name="d_name">Fangming Ning</string>

@@ -1,6 +1,7 @@
 package com.fmning.wpi_csa.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
@@ -18,10 +19,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fmning.wpi_csa.R;
+import com.fmning.wpi_csa.cache.CacheManager;
 import com.fmning.wpi_csa.helpers.AppMode;
 import com.fmning.wpi_csa.helpers.Utils;
-import com.fmning.wpi_csa.http.WCService;
-import com.fmning.wpi_csa.http.objects.WCUser;
+import com.fmning.wpi_csa.webService.WCService;
+import com.fmning.wpi_csa.webService.objects.WCUser;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
@@ -34,12 +36,10 @@ public class SettingListAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     private Context context;
     private SettingListListener listener;
-    private float dpRatio;
 
     public SettingListAdapter(Context context, SettingListListener listener){
         this.context = context;
         this.listener = listener;
-        dpRatio = context.getResources().getDisplayMetrics().density;
     }
 
     @Override
@@ -66,12 +66,16 @@ public class SettingListAdapter extends RecyclerView.Adapter<ViewHolder> {
             if (WCService.currentUser != null && WCService.currentUser.emailConfirmed){
                 if (position == 8) {
                     return 6;
-                } else {
+                } else if (position == 10){
+                    return 7;
+                }  else {
                     return 5;//log out button
                 }
             } else {
                 if (position == 8 || position == 10) {
                     return 5;//confirm and log outbutton
+                } else if (position == 11){
+                    return 7;
                 } else {
                     return 6;
                 }
@@ -95,12 +99,14 @@ public class SettingListAdapter extends RecyclerView.Adapter<ViewHolder> {
                 View view4 = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_setting_link, parent, false);
                 return new ViewHolder(view4);
             case 5:
-                View view5 = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_setting_button, parent, false);
+                View view5 = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_list_button, parent, false);
                 return new ViewHolder(view5);
             case 6:
-                View view6 = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_setting_separator, parent, false);
+                View view6 = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_list_separator, parent, false);
                 return new ViewHolder(view6);
-
+            case 7:
+                View view7 = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_list_footer, parent, false);
+                return new ViewHolder(view7);
         }
         return null;
     }
@@ -108,7 +114,7 @@ public class SettingListAdapter extends RecyclerView.Adapter<ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        View cell = holder.itemView;
+        final View cell = holder.itemView;
         if (position == 1) {
             if (Utils.appMode == AppMode.OFFLINE) {
                 Button reconButton = (Button) cell.findViewById(R.id.settingReconnectButton);
@@ -164,7 +170,7 @@ public class SettingListAdapter extends RecyclerView.Adapter<ViewHolder> {
                 ((TextView) cell.findViewById(R.id.settingUserNameText)).setText(user.name);
                 ((TextView) cell.findViewById(R.id.settingUserEmaillText)).setText(user.username);
                 TextView verifiedView = (TextView) cell.findViewById(R.id.settingUserEmailVerifiedText);
-                int imageSize = (int)(dpRatio * 15);
+                int imageSize = Utils.padding15;
                 if (user.emailConfirmed) {
                     verifiedView.setText(context.getString(R.string.setting_email_verified));
                     Drawable img = ContextCompat.getDrawable(context, R.drawable.verified);
@@ -175,6 +181,16 @@ public class SettingListAdapter extends RecyclerView.Adapter<ViewHolder> {
                     Drawable img = ContextCompat.getDrawable(context, R.drawable.not_verified);
                     img.setBounds(0, 0, imageSize, imageSize);
                     verifiedView.setCompoundDrawables(img, null, null, null);
+                }
+
+                if (user.avatarId != -1) {
+                    CacheManager.getImage(context, Utils.convertToWCImageId(WCService.currentUser.avatarId), new CacheManager.OnCacheGetImageListener() {
+                        @Override
+                        public void OnCacheGetImageDone(String error, final Bitmap image) {
+                            ((ImageView) cell.findViewById(R.id.settingUserAvatar)).setImageBitmap(image);
+
+                        }
+                    });
                 }
 
                 cell.setOnClickListener(new View.OnClickListener() {
@@ -190,7 +206,7 @@ public class SettingListAdapter extends RecyclerView.Adapter<ViewHolder> {
             ((TextView) cell.findViewById(R.id.settingLinkText)).setText(context.getString(R.string.setting_facebook));
 
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) cell.findViewById(R.id.settingLinkBotLine).getLayoutParams();
-            layoutParams.setMarginStart((int)(15 * dpRatio));
+            layoutParams.setMarginStart(Utils.padding15);
 
             cell.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -204,7 +220,7 @@ public class SettingListAdapter extends RecyclerView.Adapter<ViewHolder> {
             ((TextView) cell.findViewById(R.id.settingLinkText)).setText(context.getString(R.string.setting_instagram));
 
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) cell.findViewById(R.id.settingLinkBotLine).getLayoutParams();
-            layoutParams.setMarginStart((int)(15 * dpRatio));
+            layoutParams.setMarginStart(Utils.padding15);
 
             cell.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -276,12 +292,12 @@ public class SettingListAdapter extends RecyclerView.Adapter<ViewHolder> {
         if (Utils.appMode == AppMode.LOGGED_ON) {
             WCUser user = WCService.currentUser;
             if (user != null && !user.emailConfirmed) {
-                return 11;// 1 sep cell, 1 user cell, 1 sep cell, 3 link cells, 1 sep cell, 2 password and email cells, 1 sep cell, 1 logout cell
+                return 12;// 1 sep cell, 1 user cell, 1 sep cell, 3 link cells, 1 sep cell, 2 password and email cells, 1 sep cell, 1 logout cell, 1 footer cell
             } else {
-                return 10;// 1 sep cell, 1 user cell, 1 sep cell, 3 link cells, 1 sep cell, 1 password cell, 1 sep cell, 1 logout cell
+                return 11;// 1 sep cell, 1 user cell, 1 sep cell, 3 link cells, 1 sep cell, 1 password cell, 1 sep cell, 1 logout cell, 1 footer cell
             }
         } else {
-            return 6;// 1 sep cell, 1 user cell, 1 sep cell and 3 link cells
+            return 6;// 1 sep cell, 1 user cell, 1 sep cell, 3 link cells
         }
     }
 
