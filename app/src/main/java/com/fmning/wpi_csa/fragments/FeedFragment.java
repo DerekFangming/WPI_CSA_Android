@@ -174,6 +174,7 @@ public class FeedFragment extends Fragment {
                             Uri uri = CacheManager.saveTicket(getActivity(), ticket);
                             try {
                                 Intent intent = new Intent(Intent.ACTION_VIEW);
+                                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                                 intent.setDataAndType(uri, "application/pkpass");
                                 startActivity(intent);
                             } catch (ActivityNotFoundException e) {
@@ -199,6 +200,7 @@ public class FeedFragment extends Fragment {
 
                                                     try {
                                                         Intent intent = new Intent(Intent.ACTION_VIEW);
+                                                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                                                         intent.setDataAndType(uri, "application/pkpass");
                                                         startActivity(intent);
                                                     } catch (ActivityNotFoundException e) {
