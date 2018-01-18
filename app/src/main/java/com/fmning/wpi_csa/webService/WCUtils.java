@@ -13,11 +13,13 @@ import java.security.NoSuchAlgorithmException;
 public class WCUtils {
 
     //If set to false, all request will go to test server
-    private static final Boolean prodMode = true;
+    private static final Boolean prodMode = false;
     //If enabled, most of the HTTP request will return faked local value, instead of making network calls
     static final Boolean localMode = false;
 
     static final String serviceBase = prodMode ? "https://wcservice.fmning.com/" : "http://wc.fmning.com/";
+
+    public static final String clientToken = "sandbox_bk8pdqf3_wnbj3bx4nwmtyz77";
 
     /*
         Web request URL standard:
@@ -44,6 +46,7 @@ public class WCUtils {
     static final String pathGetEvent = "get_event";
     static final String pathGetFeed = "get_feed";
     static final String pathGetTicket = "get_ticket";
+    static final String pathCheckPaymentStatus = "check_payment_status";
     static final String pathMakePayment = "make_payment";
 
     public Context context;

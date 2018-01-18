@@ -1,6 +1,7 @@
 package com.fmning.wpi_csa.fragments;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -18,6 +19,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.braintreepayments.api.dropin.DropInActivity;
+import com.braintreepayments.api.dropin.DropInRequest;
+import com.braintreepayments.api.dropin.DropInResult;
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.adapters.FeedListAdapter;
 import com.fmning.wpi_csa.cache.CacheManager;
@@ -27,6 +31,7 @@ import com.fmning.wpi_csa.helpers.Utils;
 import com.fmning.wpi_csa.webService.WCFeedManager;
 import com.fmning.wpi_csa.webService.WCPaymentManager;
 import com.fmning.wpi_csa.webService.WCService;
+import com.fmning.wpi_csa.webService.WCUtils;
 import com.fmning.wpi_csa.webService.objects.WCEvent;
 import com.fmning.wpi_csa.webService.objects.WCFeed;
 
@@ -39,7 +44,11 @@ public class FeedFragment extends Fragment {
 
     private static WCFeed feed;
 
+    private String paymentMethod = null;
+    private String paymentNonce = null;
+
     private static int EXT_STORE_REQUEST_CODE = 100;
+    private static int BRAIN_TREE_REQUEST_CODE = 101;
 
     private FeedListAdapter tableViewAdapter;
 
@@ -85,39 +94,6 @@ public class FeedFragment extends Fragment {
         tableViewAdapter.setOnFeedListener(new FeedListAdapter.FeedListListener() {
             @Override
             public void addToCalendar() {
-
-//                Uri.Builder eventsUriBuilder = CalendarContract.Instances.CONTENT_URI.buildUpon();
-//                ContentUris.appendId(eventsUriBuilder, event.startTime.getTime());
-//                ContentUris.appendId(eventsUriBuilder, event.endTime.getTime());
-//                Uri eventsUri = eventsUriBuilder.build();
-//
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && getActivity().checkSelfPermission(Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-//                    Utils.logMsg("REQUESTING");
-//                    requestPermissions(new String[]{Manifest.permission.READ_CALENDAR}, 100);
-//                }
-//
-//
-//                Cursor cursor = getActivity().getContentResolver().query(
-//                        eventsUri,
-//                        new String[] {CalendarContract.Instances.DTSTART, CalendarContract.Instances.TITLE},
-//                        CalendarContract.Instances.DTSTART + " >= " + event.startTime.getTime() + " and " + CalendarContract.Instances.DTSTART
-//                                + " <= " + event.endTime.getTime() + " and " + CalendarContract.Instances.VISIBLE + " = 1",
-//                        null,
-//                        CalendarContract.Instances.DTSTART + " ASC");
-//
-//                try {
-//                    if (cursor.getCount() > 0) {
-//                        while (cursor.moveToNext()) {
-//                            String name = cursor.getString(0);
-//                            String displayName = cursor.getString(1);
-//                            // This is actually a better pattern:
-//                            String color = cursor.getString(cursor.getColumnIndex(CalendarContract.Calendars.CALENDAR_COLOR));
-//                            Boolean selected = !cursor.getString(3).equals("0");
-//                            //calendars.add(displayName);
-//                        }
-//                    }
-//                } catch (AssertionError ex) { }
-//
                 Intent intent = new Intent(Intent.ACTION_EDIT);
                 intent.setData(CalendarContract.Events.CONTENT_URI);
                 intent.putExtra(CalendarContract.Events.TITLE, feed.event.title);
@@ -131,11 +107,29 @@ public class FeedFragment extends Fragment {
 
             @Override
             public void payAndGetTicket() {
-                if (feed.event.fee > 0) {
-                    Utils.showAlertMessage(getActivity(), getActivity().getString(R.string.ticket_not_implemented_error));
-                } else if (Utils.appMode != AppMode.LOGGED_ON) {
+                if (Utils.appMode != AppMode.LOGGED_ON) {
                     Utils.showAlertMessage(getActivity(), getActivity().getString(R.string.ticket_not_loggedin_error));
-                } else {
+                } else if (!WCService.currentUser.emailConfirmed) {
+                    Utils.showAlertMessage(getActivity(), getActivity().getString(R.string.ticket_email_unconfirmed_error));
+                } else if (feed.event.fee > 0) {
+                    Utils.showLoadingIndicator(getActivity());
+                    WCPaymentManager.checkPaymentStatus(getActivity(), "Event", feed.event.id, new WCPaymentManager.OnCheckPaymentStatusListener() {
+                        @Override
+                        public void OnCheckPaymentStatusDone(String error, String status, int ticketId) {
+                            Utils.hideLoadingIndicator();
+                            if (!error.equals("")) {
+                                Utils.processErrorMessage(getActivity(), error, true);
+                            } else if (status.equals("AlreadyPaid")) {
+                                promptToDownloadTicket(ticketId);
+                            } else if (status.equals("NotExist") || status.equals("Rejected")) {
+                                DropInRequest dropInRequest = new DropInRequest().clientToken(WCUtils.clientToken);
+                                startActivityForResult(dropInRequest.getIntent(getActivity()), BRAIN_TREE_REQUEST_CODE);
+                            } else {
+                                Utils.showAlertMessage(getActivity(), String.format(getString(R.string.payment_status_unknown), status));
+                            }
+                        }
+                    });
+                } else if (feed.event.fee == 0) {
                     if (!WCService.currentUser.username.trim().toLowerCase().endsWith("@wpi.edu")) {
                         Utils.showAlertMessage(getActivity(), getActivity().getString(R.string.ticket_not_wpi_email_error));
                     } else if (!WCService.currentUser.emailConfirmed) {
@@ -146,81 +140,91 @@ public class FeedFragment extends Fragment {
                                 && getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, EXT_STORE_REQUEST_CODE);
                         } else {
-                            FeedFragment.this.payAndGetTicket();
+                            makePaymentRequest();
                         }
 
                     }
+                } else {
+                    Utils.showAlertMessage(getActivity(), getString(R.string.internal_error));
                 }
             }
         });
-        Utils.logMsg("called set adapter");
+
         tableView.setAdapter(tableViewAdapter);
 
         return view;
     }
+    private void makePaymentRequest() {
+        String method = paymentMethod;
+        String nonce = paymentNonce;
 
-    private void payAndGetTicket() {
+        if (paymentNonce != null) {
+            paymentNonce = null;
+            paymentMethod = null;
+        }
+
         Utils.showLoadingIndicator(getActivity());
-        WCPaymentManager.makePayment(getActivity(), "Event", feed.event.id, feed.event.fee, new WCPaymentManager.OnMakePaymentListener() {
+        WCPaymentManager.makePayment(getActivity(), "Event", feed.event.id, feed.event.fee, method, nonce,
+                new WCPaymentManager.OnMakePaymentListener() {
             @SuppressWarnings("IfCanBeSwitch")
             @Override
-            public void OnMakePaymentDone(String error, String status, String ticketStatus, final int ticketId, String ticket) {
+            public void OnMakePaymentDone(String error, String status, final int ticketId, String ticket) {
                 Utils.hideLoadingIndicator();
                 if (!error.equals("")) {
                     Utils.processErrorMessage(getActivity(), error, true);
-                } else {
-                    if (status.equals("ok")) {
-                        if (ticketStatus.equals("ok")) {
-                            Uri uri = CacheManager.saveTicket(getActivity(), ticket);
-                            try {
-                                Intent intent = new Intent(Intent.ACTION_VIEW);
-                                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                                intent.setDataAndType(uri, "application/pkpass");
-                                startActivity(intent);
-                            } catch (ActivityNotFoundException e) {
-                                Utils.showAlertMessage(getActivity(), getString(R.string.no_ticket_app_error));
-                            }
-                        } else {
-                            Utils.showAlertMessage(getActivity(), String.format(getString(R.string.payment_ticket_failed), ticketStatus));
-                        }
-                    } else if (status.equals("AlreadyPaid")) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setTitle(null).setCancelable(false).setMessage(getString(R.string.get_ticket_again))
-                                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Utils.showLoadingIndicator(getActivity());
-                                        WCService.getTicket(getActivity(), ticketId, new WCService.OnGetTicketListener() {
-                                            @Override
-                                            public void OnGetTicketDone(String error, String ticket) {
-                                                Utils.hideLoadingIndicator();
-                                                if (!error.equals("")) {
-                                                    Utils.processErrorMessage(getActivity(), error, true);
-                                                } else {
-                                                    Uri uri = CacheManager.saveTicket(getActivity(), ticket);
-
-                                                    try {
-                                                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                                                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                                                        intent.setDataAndType(uri, "application/pkpass");
-                                                        startActivity(intent);
-                                                    } catch (ActivityNotFoundException e) {
-                                                        Utils.showAlertMessage(getActivity(), getString(R.string.no_ticket_app_error));
-                                                    }
-                                                }
-                                            }
-                                        });
-                                    }
-                                })
-                                .setNegativeButton(getString(R.string.no), null)
-                                .show();
-                    } else {
-                        Utils.showAlertMessage(getActivity(), String.format(getString(R.string.payment_status_unknown), status));
+                } else if (status.equals("Done")) {
+                    Uri uri = CacheManager.saveTicket(getActivity(), ticket);
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        intent.setDataAndType(uri, "application/pkpass");
+                        startActivity(intent);
+                    } catch (ActivityNotFoundException e) {
+                        Utils.showAlertMessage(getActivity(), getString(R.string.no_ticket_app_error));
+                    } catch (Exception e) {
+                        Utils.showAlertMessage(getActivity(), getString(R.string.internal_error) + e.getMessage());
                     }
+                } else if (status.equals("AlreadyPaid")) {
+                    promptToDownloadTicket(ticketId);
+                } else {
+                    Utils.showAlertMessage(getActivity(), String.format(getString(R.string.payment_status_unknown), status));
                 }
             }
         });
 
 
+    }
+
+    private void promptToDownloadTicket (final int ticketId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(null).setCancelable(false).setMessage(getString(R.string.get_ticket_again))
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Utils.showLoadingIndicator(getActivity());
+                        WCService.getTicket(getActivity(), ticketId, new WCService.OnGetTicketListener() {
+                            @Override
+                            public void OnGetTicketDone(String error, String ticket) {
+                                Utils.hideLoadingIndicator();
+                                if (!error.equals("")) {
+                                    Utils.processErrorMessage(getActivity(), error, true);
+                                } else {
+                                    Uri uri = CacheManager.saveTicket(getActivity(), ticket);
+
+                                    try {
+                                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                        intent.setDataAndType(uri, "application/pkpass");
+                                        startActivity(intent);
+                                    } catch (ActivityNotFoundException e) {
+                                        Utils.showAlertMessage(getActivity(), getString(R.string.no_ticket_app_error));
+                                    }
+                                }
+                            }
+                        });
+                    }
+                })
+                .setNegativeButton(getString(R.string.no), null)
+                .show();
     }
 
     @SuppressWarnings("NullableProblems")
@@ -229,10 +233,44 @@ public class FeedFragment extends Fragment {
                                            int[] grantResults) {
         if (requestCode == EXT_STORE_REQUEST_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                payAndGetTicket();
+                makePaymentRequest();
             } else {
                 Utils.showAlertMessage(getActivity(), getString(R.string.storage_permission_error));
             }
         }
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == BRAIN_TREE_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                DropInResult result = data.getParcelableExtra(DropInResult.EXTRA_DROP_IN_RESULT);
+                try {
+                    paymentNonce = result.getPaymentMethodNonce().getNonce();
+                    try {
+                        paymentMethod = result.getPaymentMethodType().getCanonicalName();
+                    } catch (Exception e) {
+                        paymentMethod = "Unknown";
+                    }
+                    if (paymentMethod.equals("American Express"))
+                        paymentMethod = "AMEX";
+                } catch (NullPointerException e) {
+                    Utils.showAlertMessage(getActivity(), getString(R.string.brain_tree_error));
+                }
+                //TODO: M is 23. Currently built for 21 but many fearures require 23. So change to 23???????
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                        && getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, EXT_STORE_REQUEST_CODE);
+                } else {
+                    makePaymentRequest();
+                }
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Utils.logMsg("CANCELLED");
+            } else {
+                Exception error = (Exception) data.getSerializableExtra(DropInActivity.EXTRA_ERROR);
+                Utils.showAlertMessage(getActivity(), String.format(getString(R.string.brain_tree_error_with_message), error.getMessage()));
+            }
+        }
+    }
+
 }
