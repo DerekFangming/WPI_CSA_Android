@@ -7,7 +7,6 @@ package com.fmning.wpi_csa.webService.objects;
 
 public class WCUser {
 
-    public int id;
     public String username;
     public String accessToken;
     public int avatarId;
@@ -17,13 +16,8 @@ public class WCUser {
     public String classOf;
     public String major;
 
-    @SuppressWarnings("unused")
-    public WCUser(int id){
-        this(id, null, null);
-    }
 
-    public WCUser(int id, String username, String accessToken){
-        this.id = id;
+    public WCUser(String username, String accessToken){
         this.username = username;
         this.accessToken = accessToken;
         this.name = "";

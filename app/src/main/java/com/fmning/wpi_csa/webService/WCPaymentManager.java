@@ -26,6 +26,7 @@ public class WCPaymentManager {
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 
+    @SuppressWarnings("SameParameterValue")
     public static void checkPaymentStatus(final Context context, String type, int id, final OnCheckPaymentStatusListener listener) {
         StringEntity entity = null;
         try {
@@ -45,6 +46,7 @@ public class WCPaymentManager {
                             if (!error.equals("")){
                                 listener.OnCheckPaymentStatusDone(error, null, -1);
                             } else {
+                                WCUtils.checkAndSaveAccessToken(response);
                                 int ticketId = -1;
 
                                 try {
@@ -105,6 +107,7 @@ public class WCPaymentManager {
                             if (!error.equals("")){
                                 listener.OnMakePaymentDone(error, null, -1, null);
                             } else {
+                                WCUtils.checkAndSaveAccessToken(response);
                                 int ticketId = -1;
                                 String ticketStr = null;
 

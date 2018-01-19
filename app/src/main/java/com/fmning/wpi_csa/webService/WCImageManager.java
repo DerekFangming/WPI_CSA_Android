@@ -84,6 +84,7 @@ public class WCImageManager {
                             if (!error.equals("")){
                                 listener.OnUploadImageDone(error, -1);
                             } else {
+                                WCUtils.checkAndSaveAccessToken(response);
                                 listener.OnUploadImageDone("", response.getInt("imageId"));
                             }
                         } catch(JSONException e){

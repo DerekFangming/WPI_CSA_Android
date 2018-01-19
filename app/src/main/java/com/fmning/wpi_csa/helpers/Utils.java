@@ -50,7 +50,7 @@ public class Utils {
 
     //Format: AppMajorVerion.AppSubVersion.ContentVersion
     //Update this number results server version update
-    private static final String baseVersion = "1.03.001";
+    private static final String baseVersion = "1.10.001";
 
     //All application parameters are declared here
     private static final String appVersion = "appVersion";
@@ -58,6 +58,7 @@ public class Utils {
     public static final String reportEmail = "email";
     public static final String savedUsername = "username";
     public static final String savedPassword = "password";
+    public static final String savedAccessToken = "accessToken";
     @SuppressWarnings("unused")
     public static final String localTitle = "title";
     @SuppressWarnings("unused")
@@ -185,13 +186,45 @@ public class Utils {
     private static void dismissIndicatorAndTryLogin(final Context context, final boolean showAlert){
         String username = getParam(savedUsername);
         String password = getParam(savedPassword);
+        final String accessToken = getParam(savedAccessToken);
         if(username != null && !username.equals("") && password != null && !password.equals("")){
-            WCUserManager.loginUser(context, username, password, new WCUserManager.OnLoginUserListener() {
+            //Utils.logMsg("Migration started!");
+            //migration starts
+            Utils.deleteParam(savedUsername);
+            Utils.deleteParam(savedPassword);
+            WCUserManager.loginMigration(context, username, password, new WCUserManager.OnLoginMigrationListener() {
+                @Override
+                public void OnMigrationDone(String error, final String migratedAccessToken) {
+                    if (error.equals("")) {
+                        WCUserManager.loginUser(context, migratedAccessToken, new WCUserManager.OnLoginUserListener() {
+                            @Override
+                            public void OnLoginUserDone(String error, WCUser user) {
+                                if (error.equals("")){
+                                    appMode = AppMode.LOGGED_ON;
+                                    hideLoadingIndicator();
+                                    Utils.logMsg("Migration done!!" + migratedAccessToken);
+                                    LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("reloadUserCell"));
+                                } else {
+                                    appMode = AppMode.LOGIN;
+                                    hideLoadingIndicator();
+                                    LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("reloadUserCell"));
+                                }
+                            }
+                        });
+                    } else {
+                        appMode = AppMode.LOGIN;
+                        hideLoadingIndicator();
+                        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("reloadUserCell"));
+                    }
+                }
+            });
+
+        } else if (accessToken != null && !accessToken.equals("")) {
+            WCUserManager.loginUser(context, accessToken, new WCUserManager.OnLoginUserListener() {
                 @Override
                 public void OnLoginUserDone(String error, WCUser user) {
                     if (error.equals("")){
                         appMode = AppMode.LOGGED_ON;
-                        WCService.currentUser = user;
                         hideLoadingIndicator();
                         LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("reloadUserCell"));
                     } else {

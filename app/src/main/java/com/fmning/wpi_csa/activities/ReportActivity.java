@@ -94,11 +94,11 @@ public class ReportActivity extends AppCompatActivity {
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int userId = -1;
+                String accessToken = null;
                 final String email;
 
                 if (Utils.appMode == AppMode.LOGGED_ON) {
-                    userId = WCService.currentUser.id;
+                    accessToken = WCService.currentUser.accessToken;
                     email = WCService.currentUser.username;
                 } else {
                     email = reporterEmail.getText().toString().trim();
@@ -117,7 +117,7 @@ public class ReportActivity extends AppCompatActivity {
                 }
 
                 Utils.showLoadingIndicator(ReportActivity.this);
-                WCService.reportSGProblem(ReportActivity.this, currentMenuId, userId, email,
+                WCService.reportSGProblem(ReportActivity.this, currentMenuId, accessToken, email,
                         report, new WCService.OnReportProblemListener() {
                     @Override
                     public void OnReportProblemDone(String error) {

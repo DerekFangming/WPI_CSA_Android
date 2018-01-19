@@ -2,6 +2,12 @@ package com.fmning.wpi_csa.webService;
 
 import android.content.Context;
 
+import com.fmning.wpi_csa.helpers.Utils;
+import com.fmning.wpi_csa.webService.objects.WCUser;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -29,9 +35,7 @@ public class WCUtils {
         Save: create a new object if does not exist. update if it exists
     */
     static final String pathGetVersionInfo = "get_version_info";
-    static final String pathGetSalt = "login_for_salt";
     static final String pathLogin = "login";
-    static final String pathRegisterSalt = "register_for_salt";
     static final String pathRegister = "register";
     static final String pathSaveUserDetails = "save_user_detail";
     static final String pathSendVerificationEmail = "send_verification_email";
@@ -51,37 +55,11 @@ public class WCUtils {
 
     public Context context;
 
-    @SuppressWarnings("StringConcatenationInLoop")
-    public static String md5(final String s) {
-        final String MD5 = "MD5";
+    static void checkAndSaveAccessToken(JSONObject response) {
         try {
-            // Create MD5 Hash
-            MessageDigest digest = java.security.MessageDigest
-                    .getInstance(MD5);
-            digest.update(s.getBytes());
-            byte messageDigest[] = digest.digest();
-
-            // Create Hex String
-            StringBuilder hexString = new StringBuilder();
-            for (byte aMessageDigest : messageDigest) {
-                String h = Integer.toHexString(0xFF & aMessageDigest);
-                while (h.length() < 2)
-                    h = "0" + h;
-                hexString.append(h);
-            }
-            return hexString.toString();
-
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return "";
+            String accessToken = response.getString("accessToken");
+            WCService.currentUser.accessToken = accessToken;
+            Utils.setParam(Utils.savedAccessToken, accessToken);// Is it really good to involve Utils here?
+        } catch(Exception ignored){}
     }
-
-//    public static boolean isNetworkAvailable() {
-//        ConnectivityManager connectivityManager
-//                = (ConnectivityManager)  context.getSystemService(Context.CONNECTIVITY_SERVICE);
-//        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-//        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-//
-//    }
 }

@@ -55,10 +55,8 @@ class RequestMocker {
 
                 feed.event = event;
                 return new ArrayList<>(Arrays.asList("", event));
-            case WCUtils.pathGetSalt:
-                return new ArrayList<Object>(Arrays.asList("", "salt"));
             case WCUtils.pathLogin:
-                WCUser user = new WCUser(1, "fning@wpi.edu", "token");
+                WCUser user = new WCUser("fning@wpi.edu", "token");
                 user.emailConfirmed = true;
                 user.name = "Fangming Ning";
                 return new ArrayList<>(Arrays.asList("", user));

@@ -28,55 +28,17 @@ public class WCUserManager {
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 
-    public static void getSaltForUser(final Context context, String username, final OnGetUserSaltListener listener){
 
-        if (WCUtils.localMode) {
-            List<Object> mock = RequestMocker.getFakeResponse(WCUtils.pathGetSalt);
-            listener.OnGetUserSaltDone((String)mock.get(0), (String)mock.get(1));
-            return;
-        }
 
-        StringEntity entity = null;
-        try {
-            JSONObject params = new JSONObject();
-            params.put("username", username);
-            entity = new StringEntity(params.toString());
-        }catch (JSONException | UnsupportedEncodingException ignored){}
-
-        client.post(context, WCUtils.serviceBase + WCUtils.pathGetSalt, entity,
-                ContentType.APPLICATION_JSON.getMimeType(), new JsonHttpResponseHandler(){
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                try {
-                    String error = response.getString("error");
-                    if (!error.equals("")){
-                        listener.OnGetUserSaltDone(error, "");
-                    } else {
-                        listener.OnGetUserSaltDone("", response.getString("salt"));
-                    }
-                } catch(JSONException e){
-                    listener.OnGetUserSaltDone(context.getString(R.string.respond_format_error), "");
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
-                listener.OnGetUserSaltDone(context.getString(R.string.server_down_error), "");
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                onFailure(statusCode, headers, throwable.getLocalizedMessage(), throwable);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                onFailure(statusCode, headers, throwable.getLocalizedMessage(), throwable);
-            }
-        });
+    public static void loginUser(final Context context, String accessToken, final OnLoginUserListener listener){
+        loginUser(context, accessToken, null, null, listener);
     }
 
     public static void loginUser(final Context context, String username, String password, final OnLoginUserListener listener){
+        loginUser(context, null, username, password, listener);
+    }
+
+    private static void loginUser(final Context context, String accessToken, String username, String password, final OnLoginUserListener listener){
         if (WCUtils.localMode) {
             List<Object> mock = RequestMocker.getFakeResponse(WCUtils.pathLogin);
             listener.OnLoginUserDone((String)mock.get(0), (WCUser)mock.get(1));
@@ -86,8 +48,12 @@ public class WCUserManager {
         StringEntity entity = null;
         try {
             JSONObject params = new JSONObject();
-            params.put("username", username);
-            params.put("password", password);
+            if (accessToken != null) {
+                params.put("accessToken", accessToken);
+            } else {
+                params.put("username", username);
+                params.put("password", password);
+            }
             entity = new StringEntity(params.toString());
         }catch (JSONException | UnsupportedEncodingException ignored){}
 
@@ -101,7 +67,7 @@ public class WCUserManager {
                     if (!error.equals("")){
                         listener.OnLoginUserDone(error, null);
                     } else {
-                        WCUser user = new WCUser(response.getInt("userId"), response.getString("username"),
+                        WCUser user = new WCUser(response.getString("username"),
                                 response.getString("accessToken"));
                         user.emailConfirmed = response.getBoolean("emailConfirmed");
 
@@ -123,6 +89,8 @@ public class WCUserManager {
 
                         if (user.name.equals("")){user.name = "Unknown";}
 
+                        WCService.currentUser = user;
+                        WCUtils.checkAndSaveAccessToken(response);
                         listener.OnLoginUserDone("", user);
                     }
                 } catch(JSONException e){
@@ -151,39 +119,57 @@ public class WCUserManager {
 
     }
 
-    public static void regesterSalt(final Context context, String username, final OnRegisterSaltListener listener){
-
+    public static void register(final Context context, final String username, String password, String name, String birthday,
+                                String classOf, String major, String avatar, final OnRegisterListener listener){
         StringEntity entity = null;
         try {
             JSONObject params = new JSONObject();
             params.put("username", username);
-            params.put("offset", -4); //TODO: Remove this offset
+            params.put("password", password);
+            params.put("name", name);
+            if (birthday != null){
+                params.put("birthday", birthday);
+            }
+            if (classOf != null){
+                params.put("year", classOf);
+            }
+            if (major != null){
+                params.put("major", major);
+            }
+            if (avatar != null) {
+                params.put("avatar", avatar);
+            }
             entity = new StringEntity(params.toString());
         }catch (JSONException | UnsupportedEncodingException ignored){}
 
 
-        client.post(context, WCUtils.serviceBase + WCUtils.pathRegisterSalt, entity,
+        client.post(context, WCUtils.serviceBase + WCUtils.pathRegister, entity,
                 ContentType.APPLICATION_JSON.getMimeType(), new JsonHttpResponseHandler(){
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         try {
                             String error = response.getString("error");
                             if (!error.equals("")){
-                                listener.OnRegisterSaltDone(error, "");
+                                listener.OnRegisterDone(error, null);
                             } else {
-                                listener.OnRegisterSaltDone("", response.getString("salt"));
+                                WCUser user = new WCUser(username, response.getString("accessToken"));
+                                user.emailConfirmed = false;
+
+                                WCService.currentUser = user;
+                                WCUtils.checkAndSaveAccessToken(response);
+                                listener.OnRegisterDone("", user);
                             }
                         } catch(JSONException e){
-                            listener.OnRegisterSaltDone(context.getString(R.string.respond_format_error), "");
+                            listener.OnRegisterDone(context.getString(R.string.respond_format_error), null);
                         } catch(Exception e){
-                            listener.OnRegisterSaltDone(context.getString(R.string.unknown_error), "");
+                            listener.OnRegisterDone(context.getString(R.string.unknown_error), null);
                         }
                     }
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
                         Utils.logMsg(res);
-                        listener.OnRegisterSaltDone(context.getString(R.string.server_down_error), "");
+                        listener.OnRegisterDone(context.getString(R.string.server_down_error), null);
                     }
 
                     @Override
@@ -198,7 +184,8 @@ public class WCUserManager {
                 });
     }
 
-    public static void register(final Context context, String username, String password, final OnRegisterListener listener){
+    //version 1.10 migration
+    public static void loginMigration(final Context context, String username, String password, final OnLoginMigrationListener listener){
         StringEntity entity = null;
         try {
             JSONObject params = new JSONObject();
@@ -208,31 +195,29 @@ public class WCUserManager {
         }catch (JSONException | UnsupportedEncodingException ignored){}
 
 
-        client.post(context, WCUtils.serviceBase + WCUtils.pathRegister, entity,
+        client.post(context, WCUtils.serviceBase + "login_migration", entity,
                 ContentType.APPLICATION_JSON.getMimeType(), new JsonHttpResponseHandler(){
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         try {
                             String error = response.getString("error");
                             if (!error.equals("")){
-                                listener.OnRegisterDone(error, null);
+                                listener.OnMigrationDone(error, null);
                             } else {
-                                WCUser user = new WCUser(response.getInt("userId"), response.getString("username"),
-                                        response.getString("accessToken"));
-                                user.emailConfirmed = false;
-                                listener.OnRegisterDone("", user);
+                                WCUtils.checkAndSaveAccessToken(response);
+                                listener.OnMigrationDone("", response.getString("accessToken"));
                             }
                         } catch(JSONException e){
-                            listener.OnRegisterDone(context.getString(R.string.respond_format_error), null);
+                            listener.OnMigrationDone(context.getString(R.string.respond_format_error), null);
                         } catch(Exception e){
-                            listener.OnRegisterDone(context.getString(R.string.unknown_error), null);
+                            listener.OnMigrationDone(context.getString(R.string.unknown_error), null);
                         }
                     }
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
                         Utils.logMsg(res);
-                        listener.OnRegisterDone(context.getString(R.string.server_down_error), null);
+                        listener.OnMigrationDone(context.getString(R.string.server_down_error), null);
                     }
 
                     @Override
@@ -296,6 +281,7 @@ public class WCUserManager {
                                 try {
                                     imageId = response.getInt("imageId");
                                 }catch (JSONException ignored){}
+                                WCUtils.checkAndSaveAccessToken(response);
                                 listener.OnSaveUserDetailsDone("", imageId);
                             }
                         } catch(JSONException e){
@@ -342,6 +328,7 @@ public class WCUserManager {
                             if (!error.equals("")){
                                 listener.OnSendEmailConfirmationDone(error);
                             } else {
+                                WCUtils.checkAndSaveAccessToken(response);
                                 listener.OnSendEmailConfirmationDone("");
                             }
                         } catch(JSONException e){
@@ -387,21 +374,22 @@ public class WCUserManager {
                         try {
                             String error = response.getString("error");
                             if (!error.equals("")){
-                                listener.OnChangePasswordDone(error, "");
+                                listener.OnChangePasswordDone(error);
                             } else {
-                                listener.OnChangePasswordDone("", response.getString("accessToken"));
+                                WCUtils.checkAndSaveAccessToken(response);
+                                listener.OnChangePasswordDone("");
                             }
                         } catch(JSONException e){
-                            listener.OnChangePasswordDone(context.getString(R.string.respond_format_error), "");
+                            listener.OnChangePasswordDone(context.getString(R.string.respond_format_error));
                         } catch(Exception e){
-                            listener.OnChangePasswordDone(context.getString(R.string.unknown_error), "");
+                            listener.OnChangePasswordDone(context.getString(R.string.unknown_error));
                         }
                     }
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
                         Utils.logMsg(res);
-                        listener.OnChangePasswordDone(context.getString(R.string.server_down_error), "");
+                        listener.OnChangePasswordDone(context.getString(R.string.server_down_error));
                     }
 
                     @Override
@@ -416,16 +404,8 @@ public class WCUserManager {
                 });
     }
 
-    public interface OnGetUserSaltListener {
-        void OnGetUserSaltDone(String error, String salt);
-    }
-
     public interface OnLoginUserListener {
         void OnLoginUserDone(String error, WCUser user);
-    }
-
-    public interface OnRegisterSaltListener {
-        void OnRegisterSaltDone(String error, String salt);
     }
 
     public interface OnRegisterListener {
@@ -441,6 +421,10 @@ public class WCUserManager {
     }
 
     public interface OnChangePasswordListener {
-        void OnChangePasswordDone(String error, String accessToken);
+        void OnChangePasswordDone(String error);
+    }
+
+    public interface OnLoginMigrationListener {
+        void OnMigrationDone(String error, String accessToken);
     }
 }
