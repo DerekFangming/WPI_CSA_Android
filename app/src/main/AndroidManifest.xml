@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.fmning.wpi_csa">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -12,15 +13,15 @@
         android:hardwareAccelerated="false"
         android:icon="@mipmap/app_main_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/app_main_icon_round"
         android:largeHeap="true"
+        android:roundIcon="@mipmap/app_main_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.MainTabActivity"
-            android:theme="@style/splashScreenTheme"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
+            android:theme="@style/splashScreenTheme"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,11 +33,19 @@
             android:name=".activities.RegisterActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".activities.ReportActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activities.ReportActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"/>
+      
+
+        <activity
+            android:name=".activities.PostActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
 
         <activity android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"
             android:launchMode="singleTask">
@@ -47,7 +56,7 @@
                 <data android:scheme="com.fmning.wpicsa.braintree" />
             </intent-filter>
         </activity>
-        
+
         <provider
             android:name=".helpers.GenericFileProvider"
             android:authorities="${applicationId}.helpers.GenericFileProvider"
@@ -55,8 +64,10 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
+
+        <activity android:name=".activities.WritePost"></activity>
     </application>
 
 </manifest>

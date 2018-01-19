@@ -16,8 +16,14 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="24dp"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
+
+            <View
+                android:layout_width="174dp"
+                android:layout_height="match_parent">
+
+            </View>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -26,6 +32,16 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:text="@string/life_tab"/>
+
+            <Button
+                android:layout_width="37dp"
+                android:layout_height="36dp"
+                android:layout_marginLeft="125dp"
+                android:shadowColor="@color/clear"
+                android:text="+"
+                android:textColor="@color/black"
+                android:id="@+id/plusB"
+                />
 
         </LinearLayout>
 
