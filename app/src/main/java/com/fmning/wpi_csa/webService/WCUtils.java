@@ -13,7 +13,7 @@ import java.security.NoSuchAlgorithmException;
 public class WCUtils {
 
     //If set to false, all request will go to test server
-    private static final Boolean prodMode = true;
+    private static final Boolean prodMode = false;
     //If enabled, most of the HTTP request will return faked local value, instead of making network calls
     static final Boolean localMode = false;
 
