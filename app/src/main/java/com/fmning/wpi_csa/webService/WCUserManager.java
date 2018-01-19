@@ -119,8 +119,8 @@ public class WCUserManager {
 
     }
 
-    public static void register(final Context context, final String username, String password, String name, String birthday,
-                                String classOf, String major, String avatar, final OnRegisterListener listener){
+    public static void register(final Context context, final String username, String password, final String name, final String birthday,
+                                final String classOf, final String major, String avatar, final OnRegisterListener listener){
         StringEntity entity = null;
         try {
             JSONObject params = new JSONObject();
@@ -154,6 +154,17 @@ public class WCUserManager {
                             } else {
                                 WCUser user = new WCUser(username, response.getString("accessToken"));
                                 user.emailConfirmed = false;
+
+                                user.name = name == null ? "" : name;
+                                user.birthday = birthday == null ? "" : birthday;
+                                user.classOf = classOf == null ? "" : classOf;
+                                user.major = major == null ? "" : major;
+
+                                int imageId = -1;
+                                try {
+                                    imageId = response.getInt("imageId");
+                                    user.avatarId = imageId;
+                                }catch (JSONException ignored){}
 
                                 WCService.currentUser = user;
                                 WCUtils.checkAndSaveAccessToken(response);
@@ -232,8 +243,8 @@ public class WCUserManager {
                 });
     }
 
-    public static void saveCurrentUserDetails(final Context context, String name, String birthday, String classOf,
-                                              String major, String avatar, final OnSaveUserDetailsListener listener){
+    public static void saveCurrentUserDetails(final Context context, final String name, final String birthday, final String classOf,
+                                              final String major, String avatar, final OnSaveUserDetailsListener listener){
         if (WCUtils.localMode) {
             List<Object> mock = RequestMocker.getFakeResponse(WCUtils.pathSaveUserDetails);
             listener.OnSaveUserDetailsDone((String)mock.get(0), (int)mock.get(1));
@@ -280,8 +291,13 @@ public class WCUserManager {
                                 int imageId = -1;
                                 try {
                                     imageId = response.getInt("imageId");
+                                    WCService.currentUser.avatarId = imageId;
                                 }catch (JSONException ignored){}
                                 WCUtils.checkAndSaveAccessToken(response);
+                                WCService.currentUser.name = name == null ? "" : name;
+                                WCService.currentUser.birthday = birthday == null ? "" : birthday;
+                                WCService.currentUser.classOf = classOf == null ? "" : classOf;
+                                WCService.currentUser.major = major == null ? "" : major;
                                 listener.OnSaveUserDetailsDone("", imageId);
                             }
                         } catch(JSONException e){
