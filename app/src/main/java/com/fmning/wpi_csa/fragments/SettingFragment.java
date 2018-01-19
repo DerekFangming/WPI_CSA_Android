@@ -26,7 +26,6 @@ import com.fmning.wpi_csa.helpers.AppMode;
 import com.fmning.wpi_csa.helpers.Utils;
 import com.fmning.wpi_csa.webService.WCService;
 import com.fmning.wpi_csa.webService.WCUserManager;
-import com.fmning.wpi_csa.webService.WCUtils;
 import com.fmning.wpi_csa.webService.objects.WCUser;
 
 /**
@@ -72,6 +71,15 @@ public class SettingFragment extends Fragment {
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     }
                 }
+                if (username.trim().equals("")) {
+                    Utils.showAlertMessage(getActivity(), getString(R.string.login_empty_username));
+                    return;
+                }
+                if (password.trim().equals("")) {
+                    Utils.showAlertMessage(getActivity(), getString(R.string.login_empty_password));
+                    return;
+                }
+
 
                 Utils.showLoadingIndicator(getActivity());
                 WCUserManager.loginUser(getActivity(), username, password, new WCUserManager.OnLoginUserListener() {

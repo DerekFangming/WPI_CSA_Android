@@ -113,6 +113,8 @@
     <string name="no_ticket_app_error">The ticket has been saved to your Download folder. You cannot open it yet since you do not seem to have ticket app installed. Please install one and click on the ticket file, or get ticket again. Here are some of the ticket apps: Wallet Passes, Pass2U Wallet, PassAndroid, etc.</string>
     <string name="internal_error">Internal error. Please contact support.</string>
     <string name="brain_tree_error">Unknown error. Please contact support. You are NOT charged.</string>
+    <string name="login_empty_username">Please enter your username.</string>
+    <string name="login_empty_password">Please enter your password.</string>
     <!--Known server side error that needs to be handled-->
     <string name="no_more_feed_error">There are no more feeds.</string>
     <string name="no_event_error">The event you are looking for does not exist.</string>
