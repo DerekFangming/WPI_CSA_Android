@@ -74,34 +74,20 @@ public class SettingFragment extends Fragment {
                 }
 
                 Utils.showLoadingIndicator(getActivity());
-                WCUserManager.getSaltForUser(getActivity(), username, new WCUserManager.OnGetUserSaltListener() {
+                WCUserManager.loginUser(getActivity(), username, password, new WCUserManager.OnLoginUserListener() {
                     @Override
-                    public void OnGetUserSaltDone(String error, String salt) {
+                    public void OnLoginUserDone(String error, WCUser user) {
                         if (error.equals("")) {
-                            final String encryptedPassword = WCUtils.md5(password + salt);
-                            WCUserManager.loginUser(getActivity(), username, encryptedPassword,
-                                    new WCUserManager.OnLoginUserListener() {
-                                @Override
-                                public void OnLoginUserDone(String error, WCUser user) {
-                                    if (error.equals("")) {
-                                        WCService.currentUser = user;
-                                        Utils.appMode = AppMode.LOGGED_ON;
-                                        Utils.setParam(Utils.savedUsername, username);
-                                        Utils.setParam(Utils.savedPassword, encryptedPassword);
-                                        Utils.hideLoadingIndicator();
-                                        tableViewAdapter.notifyDataSetChanged();
-                                    } else {
-                                        Utils.hideLoadingIndicator();
-                                        Utils.processErrorMessage(getActivity(), error, true);
-                                    }
-                                }
-                            });
+                            Utils.appMode = AppMode.LOGGED_ON;
+                            Utils.hideLoadingIndicator();
+                            tableViewAdapter.notifyDataSetChanged();
                         } else {
                             Utils.hideLoadingIndicator();
                             Utils.processErrorMessage(getActivity(), error, true);
                         }
                     }
                 });
+
             }
 
             @Override
@@ -168,33 +154,19 @@ public class SettingFragment extends Fragment {
                                 if (error.equals("")){
                                     String username = WCService.currentUser.username;
                                     Utils.showLoadingIndicator(getActivity());
-                                    WCUserManager.getSaltForUser(getActivity(), username, new WCUserManager.OnGetUserSaltListener() {
+                                    WCUserManager.changePassword(getActivity(), oldPass, newPass, new WCUserManager.OnChangePasswordListener() {
                                         @Override
-                                        public void OnGetUserSaltDone(String error, String salt) {
+                                        public void OnChangePasswordDone(String error) {
                                             if (error.equals("")) {
-                                                final String encryptedNewPwd = WCUtils.md5(newPass + salt);
-                                                WCUserManager.changePassword(getActivity(), WCUtils.md5(oldPass + salt),
-                                                        encryptedNewPwd, new WCUserManager.OnChangePasswordListener() {
-                                                            @Override
-                                                            public void OnChangePasswordDone(String error, String accessToken) {
-                                                                if (error.equals("")) {
-                                                                    WCService.currentUser.accessToken = accessToken;
-                                                                    Utils.setParam(Utils.savedPassword, encryptedNewPwd);
-                                                                    Utils.hideLoadingIndicator();
-                                                                    Utils.showAlertMessage(getActivity(), getActivity().getString(R.string.done));
-                                                                } else {
-                                                                    Utils.hideLoadingIndicator();
-                                                                    Utils.processErrorMessage(getActivity(), error, true);
-                                                                }
-                                                            }
-                                                        });
-
+                                                Utils.hideLoadingIndicator();
+                                                Utils.showAlertMessage(getActivity(), getActivity().getString(R.string.done));
                                             } else {
                                                 Utils.hideLoadingIndicator();
                                                 Utils.processErrorMessage(getActivity(), error, true);
                                             }
                                         }
                                     });
+
                                 } else {
                                     Utils.showAlertMessage(getActivity(), error);
                                 }
@@ -244,8 +216,7 @@ public class SettingFragment extends Fragment {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 WCService.currentUser = null;
                                 Utils.appMode = AppMode.LOGIN;
-                                Utils.deleteParam(Utils.savedUsername);
-                                Utils.deleteParam(Utils.savedPassword);
+                                Utils.deleteParam(Utils.savedAccessToken);
                                 tableViewAdapter.notifyDataSetChanged();
                             }
                         })

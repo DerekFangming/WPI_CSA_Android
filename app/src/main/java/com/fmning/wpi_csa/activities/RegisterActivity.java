@@ -107,101 +107,52 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                Utils.showLoadingIndicator(RegisterActivity.this);
-                WCUserManager.regesterSalt(RegisterActivity.this, username.trim(), new WCUserManager.OnRegisterSaltListener() {
-                    @Override
-                    public void OnRegisterSaltDone(String error, final String salt) {
-                        if (error.equals("")) {
-                            WCUserManager.register(RegisterActivity.this, username.trim(),
-                                WCUtils.md5(password + salt), new WCUserManager.OnRegisterListener() {
-                                    @Override
-                                    public void OnRegisterDone(String error, final WCUser user) {
-                                        if (error.equals("")) {
-                                            WCService.currentUser = user;
-                                            Utils.appMode = AppMode.LOGGED_ON;
-
-                                            String base64 = null;
-                                            if (avatar != null) {
-                                                try {
-                                                    selectedImage = MediaStore.Images.Media.getBitmap(RegisterActivity.this.getContentResolver(), avatar);
-                                                    //int compressRate = Utils.compressRateForSize(selectedImage, 250);
-                                                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                                                    //TODO: Find a better way to compress. Currently default to 80
-                                                    selectedImage.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
-                                                    base64 = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
-                                                } catch (IOException e) {
-                                                    Utils.logMsg(e.getMessage());//TODO: Do something here?
-                                                }
-                                            }
-
-                                            WCUserManager.saveCurrentUserDetails(RegisterActivity.this, name.trim(),
-                                                birthday, classOf, major, base64, new WCUserManager.OnSaveUserDetailsListener() {
-                                                    @Override
-                                                    public void OnSaveUserDetailsDone(String error, int imageId) {
-                                                        if (error.equals("")) {
-                                                            WCService.currentUser.name = name.trim();
-                                                            if (birthday != null) {
-                                                                WCService.currentUser.birthday = birthday;
-                                                            }
-                                                            if (classOf != null) {
-                                                                WCService.currentUser.classOf = classOf;
-                                                            }
-                                                            if (major != null) {
-                                                                WCService.currentUser.major = major;
-                                                            }
-                                                            if (imageId != -1) {
-                                                                WCService.currentUser.avatarId = imageId;
-                                                                CacheManager.saveImageToLocal(RegisterActivity.this, selectedImage, imageId);
-                                                            }
-                                                            Utils.setParam(Utils.savedUsername, username.trim());
-                                                            Utils.setParam(Utils.savedPassword, WCUtils.md5(password + salt));
-
-                                                            LocalBroadcastManager.getInstance(RegisterActivity.this)
-                                                                    .sendBroadcast(new Intent("reloadUserCell"));
-                                                            Utils.hideLoadingIndicator();
-                                                            AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                                                            builder.setTitle(null)
-                                                                    .setCancelable(false)
-                                                                    .setMessage(String.format(RegisterActivity.this
-                                                                            .getString(R.string.register_done_message), user.username))
-                                                                    .setPositiveButton(RegisterActivity.this.getString(R.string.ok), new DialogInterface.OnClickListener() {
-                                                                        public void onClick(DialogInterface dialog, int which) {
-                                                                            finish();
-                                                                        }
-                                                                    })
-                                                                    .show();
-
-
-                                                        } else {
-                                                            LocalBroadcastManager.getInstance(RegisterActivity.this)
-                                                                    .sendBroadcast(new Intent("reloadUserCell"));
-                                                            Utils.hideLoadingIndicator();
-                                                            AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                                                            builder.setTitle(null)
-                                                                    .setCancelable(false)
-                                                                    .setMessage(String.format(RegisterActivity.this
-                                                                            .getString(R.string.register_detail_fail_error), error))
-                                                                    .setPositiveButton(RegisterActivity.this.getString(R.string.ok), new DialogInterface.OnClickListener() {
-                                                                        public void onClick(DialogInterface dialog, int which) {
-                                                                            finish();
-                                                                        }
-                                                                    })
-                                                                    .show();
-                                                        }
-                                                    }
-                                                });
-                                        } else {
-                                            Utils.hideLoadingIndicator();
-                                            Utils.processErrorMessage(RegisterActivity.this, error, true);
-                                        }
-                                    }
-                                });
-                        } else {
-                            Utils.hideLoadingIndicator();
-                            Utils.processErrorMessage(RegisterActivity.this, error, true);
-                        }
+                String base64 = null;
+                if (avatar != null) {
+                    try {
+                        selectedImage = MediaStore.Images.Media.getBitmap(RegisterActivity.this.getContentResolver(), avatar);
+                        //int compressRate = Utils.compressRateForSize(selectedImage, 250);
+                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                        //TODO: Find a better way to compress. Currently default to 80
+                        selectedImage.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
+                        base64 = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
+                    } catch (IOException e) {
+                        Utils.logMsg(e.getMessage());//TODO: Do something here?
                     }
-                });
+                }
+
+                Utils.showLoadingIndicator(RegisterActivity.this);
+                WCUserManager.register(RegisterActivity.this, username.trim(), password, name.trim(),
+                        birthday, classOf, major, base64, new WCUserManager.OnRegisterListener() {
+                            @Override
+                            public void OnRegisterDone(String error, WCUser user) {
+                                if (error.equals("")) {
+                                    Utils.appMode = AppMode.LOGGED_ON;
+                                    if (user.avatarId != -1) {
+                                        CacheManager.saveImageToLocal(RegisterActivity.this, selectedImage, user.avatarId);
+                                    }
+
+                                    LocalBroadcastManager.getInstance(RegisterActivity.this)
+                                            .sendBroadcast(new Intent("reloadUserCell"));
+                                    Utils.hideLoadingIndicator();
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                                    builder.setTitle(null)
+                                            .setCancelable(false)
+                                            .setMessage(String.format(RegisterActivity.this
+                                                    .getString(R.string.register_done_message), user.username))
+                                            .setPositiveButton(RegisterActivity.this.getString(R.string.ok), new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    finish();
+                                                }
+                                            })
+                                            .show();
+                                } else {
+                                    Utils.hideLoadingIndicator();
+                                    Utils.processErrorMessage(RegisterActivity.this, error, true);
+                                }
+                            }
+                        });
+
 
             }
         });

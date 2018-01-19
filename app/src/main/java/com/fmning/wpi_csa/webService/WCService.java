@@ -103,16 +103,18 @@ public class WCService {
         });
     }
 
-    public static void reportSGProblem(final Context context, int menuId, int userId, String email,
+    public static void reportSGProblem(final Context context, int menuId, String accessToken, String email,
                                        String report, final OnReportProblemListener listener) {
         StringEntity entity = null;
         try {
             JSONObject params = new JSONObject();
             params.put("menuId", menuId);
-            params.put("email", email);
             params.put("report", report);
-            if (userId != -1) {
-                params.put("userId", userId);
+            if (email != null) {
+                params.put("email", email);
+            }
+            if (accessToken != null) {
+                params.put("accessToken", accessToken);
             }
             entity = new StringEntity(params.toString());
         }catch (JSONException | UnsupportedEncodingException ignored){}
@@ -168,6 +170,7 @@ public class WCService {
                             if (!error.equals("")){
                                 listener.OnGetTicketDone(error, null);
                             } else {
+                                WCUtils.checkAndSaveAccessToken(response);
                                 listener.OnGetTicketDone("", response.getString("ticket"));
                             }
                         } catch(JSONException e){

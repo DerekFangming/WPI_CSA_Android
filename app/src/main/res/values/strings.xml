@@ -108,9 +108,11 @@
     <string name="ticket_not_implemented_error">If you see this message and your app is the latest version, please contact admin@fmning.com</string>
     <string name="ticket_not_loggedin_error">You have to log in to buy ticket</string>
     <string name="ticket_not_wpi_email_error">To get free ticket, you have to log in with your wpi email, with the email verified.</string>
-    <string name="ticket_email_unconfirmed_error">To get free ticket, you have to log in with your wpi email, with the email verified.</string>
+    <string name="ticket_email_unconfirmed_error">Please go to App Setting and verify your email before buying ticket.</string>
     <string name="storage_permission_error">Cannot get ticket. Please allow access to your storage so that we can download ticket. Alternatively, you can go to your phone\'s Setting -> Apps -> WPI CSA -> Permissions and manually allow Storage access</string>
     <string name="no_ticket_app_error">The ticket has been saved to your Download folder. You cannot open it yet since you do not seem to have ticket app installed. Please install one and click on the ticket file, or get ticket again. Here are some of the ticket apps: Wallet Passes, Pass2U Wallet, PassAndroid, etc.</string>
+    <string name="internal_error">Internal error. Please contact support.</string>
+    <string name="brain_tree_error">Unknown error. Please contact support. You are NOT charged.</string>
     <!--Known server side error that needs to be handled-->
     <string name="no_more_feed_error">There are no more feeds.</string>
     <string name="no_event_error">The event you are looking for does not exist.</string>
@@ -139,8 +141,8 @@
     <string name="feed_time">%1$s to %2$s</string>
     <string name="feed_location">Location: %1$s</string>
     <string name="feed_paid_ticket">$%1$s - Pay and get ticket</string>
-    <string name="payment_ticket_failed">Transaction is successful. %1$s Please contact admin@fmning.com</string>
-    <string name="payment_status_unknown">Unknown status. %1$s</string>
+    <string name="payment_status_unknown">Unknown status. %1$s Please contact admin@fmning.com</string>
+    <string name="brain_tree_error_with_message">Unknown error. %1$s Please contact support. You are NOT charged.</string>
 
     <!-- The following are default texts -->
     <string name="d_name">Fangming Ning</string>
