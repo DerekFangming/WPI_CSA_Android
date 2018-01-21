@@ -132,8 +132,6 @@ public class FeedFragment extends Fragment {
                 } else if (feed.event.fee == 0) {
                     if (!WCService.currentUser.username.trim().toLowerCase().endsWith("@wpi.edu")) {
                         Utils.showAlertMessage(getActivity(), getActivity().getString(R.string.ticket_not_wpi_email_error));
-                    } else if (!WCService.currentUser.emailConfirmed) {
-                        Utils.showAlertMessage(getActivity(), getActivity().getString(R.string.ticket_email_unconfirmed_error));
                     } else {
                         //TODO: M is 23. Currently built for 21 but many fearures require 23. So change to 23???????
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
@@ -252,8 +250,6 @@ public class FeedFragment extends Fragment {
                     } catch (Exception e) {
                         paymentMethod = "Unknown";
                     }
-                    if (paymentMethod.equals("American Express"))
-                        paymentMethod = "AMEX";
                 } catch (NullPointerException e) {
                     Utils.showAlertMessage(getActivity(), getString(R.string.brain_tree_error));
                 }
