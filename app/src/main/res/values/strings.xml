@@ -21,6 +21,7 @@
     <string name="setting_reconnect">Reconnect</string>
     <string name="setting_register">Register</string>
     <string name="setting_log_in">Log in</string>
+    <string name="setting_forget">Forget?</string>
     <string name="setting_username_hint"><font size="15">Username</font></string>
     <string name="setting_password_hint"><font size="15">Password</font></string>
     <string name="setting_facebook">Facebook</string>
@@ -137,6 +138,7 @@
     <string name="simple_date">%1$s/%2$s/%3$s</string>
     <string name="register_detail_fail_error">User created but user details are not stored correctly. %1$s</string>
     <string name="register_done_message">An email has been sent to %1$s with a link to confirm your email. Please click on the link in 24 hours. Please check your junk folder if you cannot see the email.</string>
+    <string name="pwd_reset_done_message">An email has been sent to %1$s with a link to reset your password. Please click on the link in 24 hours. Please check your junk folder if you cannot see the email.</string>
     <string name="sg_nav_prev">Previous\n%1$s</string>
     <string name="sg_nav_next">Next\n%1$s</string>
     <string name="feed_type_padding">\u0020%1$s\u0020</string>

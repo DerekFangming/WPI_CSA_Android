@@ -80,6 +80,18 @@
                 android:textAllCaps="false"
                 android:text="@string/setting_log_in"/>
 
+            <Button
+                android:id="@+id/settingForgetButton"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:paddingTop="6dp"
+                style="?android:attr/borderlessButtonStyle"
+                android:textColor="@color/colorAccent"
+                android:textAllCaps="false"
+                android:text="@string/setting_forget"/>
+
+
+
         </LinearLayout>
 
     </LinearLayout>

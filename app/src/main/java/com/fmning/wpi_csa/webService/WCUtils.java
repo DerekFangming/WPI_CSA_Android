@@ -3,13 +3,8 @@ package com.fmning.wpi_csa.webService;
 import android.content.Context;
 
 import com.fmning.wpi_csa.helpers.Utils;
-import com.fmning.wpi_csa.webService.objects.WCUser;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 /**
  * Created by fangmingning
@@ -52,6 +47,7 @@ public class WCUtils {
     static final String pathGetTicket = "get_ticket";
     static final String pathCheckPaymentStatus = "check_payment_status";
     static final String pathMakePayment = "make_payment";
+    static final String pathResetPassword = "send_change_pwd_email";
 
     public Context context;
 

@@ -420,6 +420,52 @@ public class WCUserManager {
                 });
     }
 
+    public static void resetPassword(final Context context, String email, final OnResetPasswordListener listener){
+        StringEntity entity = null;
+        try {
+            JSONObject params = new JSONObject();
+            params.put("email", email);
+            entity = new StringEntity(params.toString());
+        }catch (JSONException | UnsupportedEncodingException ignored){}
+
+
+        client.post(context, WCUtils.serviceBase + WCUtils.pathResetPassword, entity,
+                ContentType.APPLICATION_JSON.getMimeType(), new JsonHttpResponseHandler(){
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        try {
+                            String error = response.getString("error");
+                            if (!error.equals("")){
+                                listener.OnResetPasswordDone(error);
+                            } else {
+                                listener.OnResetPasswordDone("");
+                            }
+                        } catch(JSONException e){
+                            listener.OnResetPasswordDone(context.getString(R.string.respond_format_error));
+                        } catch(Exception e){
+                            listener.OnResetPasswordDone(context.getString(R.string.unknown_error));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
+                        Utils.logMsg(res);
+                        listener.OnResetPasswordDone(context.getString(R.string.server_down_error));
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                        onFailure(statusCode, headers, throwable.getLocalizedMessage(), throwable);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        onFailure(statusCode, headers, throwable.getLocalizedMessage(), throwable);
+                    }
+                });
+    }
+
+
     public interface OnLoginUserListener {
         void OnLoginUserDone(String error, WCUser user);
     }
@@ -438,6 +484,10 @@ public class WCUserManager {
 
     public interface OnChangePasswordListener {
         void OnChangePasswordDone(String error);
+    }
+
+    public interface OnResetPasswordListener {
+        void OnResetPasswordDone(String error);
     }
 
     public interface OnLoginMigrationListener {
