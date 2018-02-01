@@ -13,7 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +21,9 @@ import android.view.ViewGroup;
 import com.braintreepayments.api.dropin.DropInActivity;
 import com.braintreepayments.api.dropin.DropInRequest;
 import com.braintreepayments.api.dropin.DropInResult;
+import com.braintreepayments.api.models.CardNonce;
+import com.braintreepayments.api.models.PayPalAccountNonce;
+import com.braintreepayments.api.models.VenmoAccountNonce;
 import com.fmning.wpi_csa.R;
 import com.fmning.wpi_csa.adapters.FeedListAdapter;
 import com.fmning.wpi_csa.cache.CacheManager;
@@ -32,7 +34,6 @@ import com.fmning.wpi_csa.webService.WCFeedManager;
 import com.fmning.wpi_csa.webService.WCPaymentManager;
 import com.fmning.wpi_csa.webService.WCService;
 import com.fmning.wpi_csa.webService.WCUtils;
-import com.fmning.wpi_csa.webService.objects.WCEvent;
 import com.fmning.wpi_csa.webService.objects.WCFeed;
 
 /**
@@ -247,19 +248,54 @@ public class FeedFragment extends Fragment {
                     paymentNonce = result.getPaymentMethodNonce().getNonce();
                     try {
                         paymentMethod = result.getPaymentMethodType().getCanonicalName();
+
                     } catch (Exception e) {
                         paymentMethod = "Unknown";
                     }
                 } catch (NullPointerException e) {
                     Utils.showAlertMessage(getActivity(), getString(R.string.brain_tree_error));
                 }
-                //TODO: M is 23. Currently built for 21 but many fearures require 23. So change to 23???????
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                        && getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, EXT_STORE_REQUEST_CODE);
+
+                String confirmMsg = "Paying for: " + feed.event.title + "\n";
+                confirmMsg += "Amount: $" + Double.toString(feed.event.fee) + "\n";
+                confirmMsg += "Method: " + paymentMethod + "\n";
+
+                if (result.getPaymentMethodNonce() instanceof CardNonce) {
+                    CardNonce cn = (CardNonce)result.getPaymentMethodNonce();
+                    confirmMsg += "Card: " + cn.getDescription() + "\n";
+                    paymentMethod += ", " + cn.getDescription();
+                } else if (result.getPaymentMethodNonce() instanceof PayPalAccountNonce) {
+                    PayPalAccountNonce ppan = (PayPalAccountNonce) result.getPaymentMethodNonce();
+                    confirmMsg += "Account: " + ppan.getEmail() + "\n";
+                    paymentMethod += ", " + ppan.getEmail();
+                } else if (result.getPaymentMethodNonce() instanceof VenmoAccountNonce) {
+                    VenmoAccountNonce van = (VenmoAccountNonce) result.getPaymentMethodNonce();
+                    confirmMsg += "Account: " + van.getUsername()+ "\n";
+                    paymentMethod += ", " + van.getUsername();
                 } else {
-                    makePaymentRequest();
+                    paymentMethod += ", Unknown";
                 }
+
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle(getString(R.string.payment_confirm_title))
+                        .setCancelable(false)
+                        .setMessage(confirmMsg)
+                        .setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                //TODO: M is 23. Currently built for 21 but many fearures require 23. So change to 23???????
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                                        && getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, EXT_STORE_REQUEST_CODE);
+                                } else {
+                                    makePaymentRequest();
+                                }
+                            }
+                        })
+                        .setNegativeButton(getString(R.string.cancel), null)
+                        .show();
+
+
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 Utils.logMsg("CANCELLED");
             } else {

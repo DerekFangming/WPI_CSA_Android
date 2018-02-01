@@ -71,6 +71,7 @@
     <string name="feed_add_calendar">Add to calendar</string>
     <string name="feed_free_ticket">Free - Get ticket</string>
     <string name="get_ticket_again">You have already paid for it. Do you want to download ticket again?</string>
+    <string name="payment_confirm_title">Confirm payment details</string>
 
 
     <string name="ok" tools:ignore="ButtonCase,Typos">Ok</string>
