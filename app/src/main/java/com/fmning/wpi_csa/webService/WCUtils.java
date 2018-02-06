@@ -14,13 +14,13 @@ import org.json.JSONObject;
 public class WCUtils {
 
     //If set to false, all request will go to test server
-    private static final Boolean prodMode = false;
+    private static final Boolean prodMode = true;
     //If enabled, most of the HTTP request will return faked local value, instead of making network calls
     static final Boolean localMode = false;
 
     static final String serviceBase = prodMode ? "https://wcservice.fmning.com/" : "http://wc.fmning.com/";
 
-    public static final String clientToken = "sandbox_bk8pdqf3_wnbj3bx4nwmtyz77";
+    public static final String clientToken = prodMode ? "production_sbqbjrph_vbwwmgd2tn8gkg9m" : "sandbox_bk8pdqf3_wnbj3bx4nwmtyz77";
 
     /*
         Web request URL standard:
