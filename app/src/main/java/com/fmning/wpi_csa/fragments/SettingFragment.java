@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,6 @@ import com.fmning.wpi_csa.helpers.AppMode;
 import com.fmning.wpi_csa.helpers.Utils;
 import com.fmning.wpi_csa.webService.WCService;
 import com.fmning.wpi_csa.webService.WCUserManager;
-import com.fmning.wpi_csa.webService.WCUtils;
 import com.fmning.wpi_csa.webService.objects.WCUser;
 
 /**
@@ -72,6 +72,15 @@ public class SettingFragment extends Fragment {
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     }
                 }
+                if (username.trim().equals("")) {
+                    Utils.showAlertMessage(getActivity(), getString(R.string.login_empty_username));
+                    return;
+                }
+                if (password.trim().equals("")) {
+                    Utils.showAlertMessage(getActivity(), getString(R.string.login_empty_password));
+                    return;
+                }
+
 
                 Utils.showLoadingIndicator(getActivity());
                 WCUserManager.loginUser(getActivity(), username, password, new WCUserManager.OnLoginUserListener() {
@@ -96,6 +105,55 @@ public class SettingFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), RegisterActivity.class);
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+            }
+
+            @Override
+            public void OnForgetClick() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Enter your username (email)");
+                final EditText input = new EditText(getActivity());
+                input.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+                input.setPadding(Utils.padding15, 0, Utils.padding15, Utils.padding15);
+                builder.setView(input);
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        final String email = input.getText().toString().trim();
+                        if(email.equals("")) {
+                            Utils.showAlertMessage(getActivity(), getString(R.string.report_email_hint));
+                        } else {
+                            Utils.showLoadingIndicator(getActivity());
+                            WCUserManager.resetPassword(getActivity(), email, new WCUserManager.OnResetPasswordListener() {
+                                @Override
+                                public void OnResetPasswordDone(String error) {
+                                    Utils.hideLoadingIndicator();
+                                    if (error.equals("")) {
+                                        Utils.showAlertMessage(getActivity(), String.format(getString(R.string.pwd_reset_done_message), email));
+                                    } else {
+                                        Utils.processErrorMessage(getActivity(), error, true);
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+
+                new android.os.Handler().postDelayed(new Runnable() {// TODO IS THIS NEEDE ON REAL DEVICE?
+                    public void run() {
+                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        if (imm != null)
+                            imm.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT);
+                    }
+                }, 200);
             }
 
             @Override
@@ -173,12 +231,6 @@ public class SettingFragment extends Fragment {
                             }
                         })
                         .setNegativeButton(getActivity().getString(R.string.cancel), null).show();
-
-
-//                final AlertDialog dialog = builder.create();
-//                dialog.show();
-
-                //dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 
 
                 new android.os.Handler().postDelayed(new Runnable() {// TODO IS THIS NEEDE ON REAL DEVICE?

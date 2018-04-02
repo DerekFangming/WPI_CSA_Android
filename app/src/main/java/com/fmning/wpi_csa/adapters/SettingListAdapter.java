@@ -148,7 +148,7 @@ public class SettingListAdapter extends RecyclerView.Adapter<ViewHolder> {
                     }
                 });
 
-                Button registerButton = (Button) cell.findViewById(R.id.settingRegisterButton);
+                Button registerButton = cell.findViewById(R.id.settingRegisterButton);
                 registerButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -156,7 +156,7 @@ public class SettingListAdapter extends RecyclerView.Adapter<ViewHolder> {
                     }
                 });
 
-                Button loginButton = (Button) cell.findViewById(R.id.settingLoginButton);
+                Button loginButton = cell.findViewById(R.id.settingLoginButton);
                 loginButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -165,6 +165,15 @@ public class SettingListAdapter extends RecyclerView.Adapter<ViewHolder> {
                         listener.OnLogInClick(username, password);
                     }
                 });
+
+                Button forgetButton = cell.findViewById(R.id.settingForgetButton);
+                forgetButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        listener.OnForgetClick();
+                    }
+                });
+
             } else {
                 WCUser user = WCService.currentUser;
                 ((TextView) cell.findViewById(R.id.settingUserNameText)).setText(user.name);
@@ -305,6 +314,7 @@ public class SettingListAdapter extends RecyclerView.Adapter<ViewHolder> {
         void OnReconnectClick();
         void OnLogInClick(String username, String password);
         void OnRegisterClick();
+        void OnForgetClick();
         void OnUserDetailClick();
         void OnFacebookClick();
         void OnInstagramClick();

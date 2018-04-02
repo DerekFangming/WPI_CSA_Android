@@ -151,8 +151,9 @@ public class WCFeedManager {
                             Date startTime = Utils.iso8601DateUTC(eventDic.getString("startTime"));
                             Date endTime = Utils.iso8601DateUTC(eventDic.getString("endTime"));
                             String location = eventDic.getString("location");
+                            boolean active = eventDic.getBoolean("active");
 
-                            WCEvent event = new WCEvent(eventId, eventTitle, startTime, endTime, location);
+                            WCEvent event = new WCEvent(eventId, eventTitle, startTime, endTime, location, active);
                             event.ownerId = eventDic.getInt("ownerId");
                             event.createdAt = Utils.iso8601DateUTC(eventDic.getString("createdAt"));
                             event.description = eventDic.getString("description");

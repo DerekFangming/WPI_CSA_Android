@@ -47,7 +47,7 @@ class RequestMocker {
 
                 Date sTime = Utils.iso8601DateUTC("2018-04-10T22:00:00Z");
                 Date eTime = Utils.iso8601DateUTC("2018-04-11T02:00:00Z");
-                WCEvent event = new WCEvent(1, "Dragon night 2018", sTime, eTime, "Aldem Hall");
+                WCEvent event = new WCEvent(1, "Dragon night 2018", sTime, eTime, "Aldem Hall", true);
                 event.ownerId = 11;
                 event.createdAt = Utils.iso8601DateUTC("2017-10-15T23:01:31.732580Z");
                 event.description = "This is dragon night event for 2018, hosted by CSA. There will be chinese shows and food.";

@@ -21,6 +21,7 @@
     <string name="setting_reconnect">Reconnect</string>
     <string name="setting_register">Register</string>
     <string name="setting_log_in">Log in</string>
+    <string name="setting_forget">Forget?</string>
     <string name="setting_username_hint"><font size="15">Username</font></string>
     <string name="setting_password_hint"><font size="15">Password</font></string>
     <string name="setting_facebook">Facebook</string>
@@ -70,6 +71,7 @@
     <string name="feed_add_calendar">Add to calendar</string>
     <string name="feed_free_ticket">Free - Get ticket</string>
     <string name="get_ticket_again">You have already paid for it. Do you want to download ticket again?</string>
+    <string name="payment_confirm_title">Confirm payment details</string>
 
 
     <string name="ok" tools:ignore="ButtonCase,Typos">Ok</string>
@@ -113,6 +115,8 @@
     <string name="no_ticket_app_error">The ticket has been saved to your Download folder. You cannot open it yet since you do not seem to have ticket app installed. Please install one and click on the ticket file, or get ticket again. Here are some of the ticket apps: Wallet Passes, Pass2U Wallet, PassAndroid, etc.</string>
     <string name="internal_error">Internal error. Please contact support.</string>
     <string name="brain_tree_error">Unknown error. Please contact support. You are NOT charged.</string>
+    <string name="login_empty_username">Please enter your username.</string>
+    <string name="login_empty_password">Please enter your password.</string>
     <!--Known server side error that needs to be handled-->
     <string name="no_more_feed_error">There are no more feeds.</string>
     <string name="no_event_error">The event you are looking for does not exist.</string>
@@ -135,6 +139,7 @@
     <string name="simple_date">%1$s/%2$s/%3$s</string>
     <string name="register_detail_fail_error">User created but user details are not stored correctly. %1$s</string>
     <string name="register_done_message">An email has been sent to %1$s with a link to confirm your email. Please click on the link in 24 hours. Please check your junk folder if you cannot see the email.</string>
+    <string name="pwd_reset_done_message">An email has been sent to %1$s with a link to reset your password. Please click on the link in 24 hours. Please check your junk folder if you cannot see the email.</string>
     <string name="sg_nav_prev">Previous\n%1$s</string>
     <string name="sg_nav_next">Next\n%1$s</string>
     <string name="feed_type_padding">\u0020%1$s\u0020</string>

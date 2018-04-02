@@ -3,13 +3,8 @@ package com.fmning.wpi_csa.webService;
 import android.content.Context;
 
 import com.fmning.wpi_csa.helpers.Utils;
-import com.fmning.wpi_csa.webService.objects.WCUser;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 /**
  * Created by fangmingning
@@ -19,13 +14,13 @@ import java.security.NoSuchAlgorithmException;
 public class WCUtils {
 
     //If set to false, all request will go to test server
-    private static final Boolean prodMode = false;
+    private static final Boolean prodMode = true;
     //If enabled, most of the HTTP request will return faked local value, instead of making network calls
     static final Boolean localMode = false;
 
     static final String serviceBase = prodMode ? "https://wcservice.fmning.com/" : "http://wc.fmning.com/";
 
-    public static final String clientToken = "sandbox_bk8pdqf3_wnbj3bx4nwmtyz77";
+    public static final String clientToken = prodMode ? "production_sbqbjrph_vbwwmgd2tn8gkg9m" : "sandbox_bk8pdqf3_wnbj3bx4nwmtyz77";
 
     /*
         Web request URL standard:
@@ -52,6 +47,7 @@ public class WCUtils {
     static final String pathGetTicket = "get_ticket";
     static final String pathCheckPaymentStatus = "check_payment_status";
     static final String pathMakePayment = "make_payment";
+    static final String pathResetPassword = "send_change_pwd_email";
 
     public Context context;
 

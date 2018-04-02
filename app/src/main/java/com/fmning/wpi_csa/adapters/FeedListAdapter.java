@@ -206,10 +206,10 @@ public class FeedListAdapter extends RecyclerView.Adapter<ViewHolder> {
             count += article.paragraphs.size();
         }
         if (feed.event != null) {
-            if (feed.event.fee == -1) {
-                count += 1;
-            } else {
+            if (feed.event.active) {
                 count += 2;
+            } else {
+                count += 1;
             }
         }
         return count;
